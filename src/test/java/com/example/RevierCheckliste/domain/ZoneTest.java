@@ -7,6 +7,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class ZoneTest {
     @Test
+    void shouldBeEqualWhenIdAndNameAreTheSame() {
+        Zone zone1 = new Zone(1L, "Zone 1");
+        Zone zone2 = new Zone(1L, "Zone 1");
+
+        assertThat(zone1).isEqualTo(zone2);
+    }
+    @Test
     void shouldCreateZoneWithIdAndName(){
         Zone zone = new Zone(1L,"Zone 1");
         assertThat(zone.getId()).isEqualTo(1L);
