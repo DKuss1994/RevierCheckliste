@@ -6,7 +6,10 @@ import com.example.RevierCheckliste.domain.site.Site;
 import com.example.RevierCheckliste.domain.site.StandardConfiguration;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
