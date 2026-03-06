@@ -1,8 +1,23 @@
 package com.example.RevierCheckliste.domain;
 
+import java.util.Objects;
+
 public class Zone {
     private long id;
     private String name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Zone zone = (Zone) o;
+        return id == zone.id && Objects.equals(name, zone.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+
     public Zone(long id, String name) {
         if(name == null||name.isBlank()){
             throw new IllegalArgumentException("Zone must not be blank");
