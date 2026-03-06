@@ -2,7 +2,7 @@ package com.example.RevierCheckliste.domain;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-public class DriveTest {
+public class DriverTest {
     @Test
     void shouldCreateADriverWithIdAndName(){
         Driver driver = new Driver(1L,"Max","Mustermann");
@@ -55,6 +55,19 @@ public class DriveTest {
         assertThatThrownBy(()->new Driver(1L,"       ",null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Name must not be blank");
+   }
+   @Test
+    void shouldHaveAssignedZoneByDefault(){
+        Driver driver = new Driver(1L,"Max","Mustermann");
+        assertThat(driver.getAssignedZones()).isEmpty();
+   }
+   @Test
+    void shouldAssignedZoneToDriver(){
+       Driver driver = new Driver(1L,"Max","Mustermann");
+Zone zone = new Zone(1L,"Zone 1");
+driver.assignedZones(zone);
+       assertThat(driver.getAssignedZones()).containsExactly(zone);
+
    }
 
 
