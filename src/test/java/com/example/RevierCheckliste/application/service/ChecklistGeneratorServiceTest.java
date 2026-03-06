@@ -31,4 +31,26 @@ public class ChecklistGeneratorServiceTest {
         ServiceChecklist checkliste = generator.generate(service, List.of(site,site2));
         assertEquals(3,checkliste.getControlEntries().size());
     }
+    @Test
+    void generatesControlsOnlyOnAllowedWeekday(){
+
+        StandardConfiguration config =
+                new StandardConfiguration(2);
+        config.setAllowedWeekdays(Set.of(DayOfWeek.MONDAY));
+
+        Site site =
+                new Site("Bank", config);
+
+        PatrolService service =
+                new PatrolService(LocalDate.of(2026,3,7)); // Samstag
+
+        ChecklistGeneratorService generator =
+                new ChecklistGeneratorService();
+
+        ServiceChecklist checklist =
+                generator.generate(service, List.of(site));
+
+        assertEquals(0,
+                checklist.getControlEntries().size());
+    }
 }
