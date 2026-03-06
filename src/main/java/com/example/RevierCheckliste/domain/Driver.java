@@ -10,7 +10,7 @@ public class Driver {
     private List<Zone> assignedZones = new ArrayList<>();
 
     public Driver(long id, String name, String lastName) {
-        if(name == null||name.isBlank()||lastName == null||lastName.isBlank()){
+        if (name == null || name.isBlank() || lastName == null || lastName.isBlank()) {
             throw new IllegalArgumentException("Name must not be blank");
         }
         this.lastName = lastName;
@@ -18,7 +18,8 @@ public class Driver {
         this.id = id;
         this.firstName = name;
     }
-    public void assignedZones(Zone zone){
+
+    public void assignedZones(Zone zone) {
         assignedZones.add(zone);
     }
 
@@ -52,5 +53,9 @@ public class Driver {
 
     public void setAssignedZones(List<Zone> assignedZones) {
         this.assignedZones = assignedZones;
+    }
+
+    public boolean isQualifiedForZone(Zone zone) {
+        return assignedZones.contains(zone);
     }
 }

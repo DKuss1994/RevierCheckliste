@@ -73,12 +73,13 @@ driver.assignedZones(zone);
     void shouldDetectWhenDriverIsNotQualifiedForZone(){
        Driver driver = new Driver(1L,"Max","Mustermann");
        Zone zone = new Zone(1L,"Zone 1");
-assertThat(driver.isQualifiedForZone(zone)).isFale();
+assertThat(driver.isQualifiedForZone(zone)).isFalse();
    }
    @Test
     void shouldDetectWhenDriverIsQualifiedForZone(){
        Driver driver = new Driver(1L,"Max","Mustermann");
        Zone zone = new Zone(1L,"Zone 1");
+       driver.assignedZones(zone);
 assertThat(driver.isQualifiedForZone(zone)).isTrue();
    }
 
