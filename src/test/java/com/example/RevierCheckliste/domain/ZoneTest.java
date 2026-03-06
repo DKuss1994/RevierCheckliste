@@ -1,4 +1,15 @@
 package com.example.RevierCheckliste.domain;
 
-public class RevierTest {
+
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+public class ZoneTest {
+    @Test
+    void shouldCreateZoneWithIdAndName(){
+        Zone zone = new Zone(1L,"Zone 1");
+        assertThat(zone.getId()).isEqualTo(1L);
+        assertThat(zone.getName()).isEqualTo("Zone 1");
+    }
 }
