@@ -3,19 +3,17 @@ package com.example.RevierCheckliste.domain.service;
 import java.time.LocalDate;
 
 public class PatrolService {
-    private LocalDate localDate;
+    private LocalDate serviceDate;
     public PatrolService(){
 
     }
-    public PatrolService(LocalDate localDate){
-        this.localDate = localDate;
+    public PatrolService(LocalDate serviceDate){
+        this.serviceDate = serviceDate;
     }
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    public LocalDate getServiceDate() {
+        return serviceDate;
     }
 
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
-    }
+
 }
