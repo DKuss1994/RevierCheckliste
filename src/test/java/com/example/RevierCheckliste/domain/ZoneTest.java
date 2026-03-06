@@ -2,7 +2,7 @@ package com.example.RevierCheckliste.domain;
 
 
 import org.junit.jupiter.api.Test;
-
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class ZoneTest {
@@ -12,4 +12,17 @@ public class ZoneTest {
         assertThat(zone.getId()).isEqualTo(1L);
         assertThat(zone.getName()).isEqualTo("Zone 1");
     }
+    @Test
+    void shouldThrowExceptionWhenNameIsNull(){
+        assertThatThrownBy(()->new Zone(1L,null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Zone must not be blank");
+    }
+    @Test
+    void shouldThrowExceptionWhenNameIsBlank(){
+        assertThatThrownBy(()->new Zone(1L,"      "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Zone must not be blank");
+    }
+
 }
