@@ -4,6 +4,9 @@ public class Zone {
     private long id;
     private String name;
     public Zone(long id, String name) {
+        if(name == null||name.isBlank()){
+            throw new IllegalArgumentException("Zone must not be blank");
+        }
         this.id = id;
         this.name = name;
     }
