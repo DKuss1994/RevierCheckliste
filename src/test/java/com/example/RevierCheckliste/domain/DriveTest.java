@@ -5,22 +5,57 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class DriveTest {
     @Test
     void shouldCreateADriverWithIdAndName(){
-        Driver driver = new Driver(1L,"Max Mustermann");
+        Driver driver = new Driver(1L,"Max","Mustermann");
         assertThat(driver.getId()).isEqualTo(1L);
-        assertThat(driver.getName()).isEqualTo("Max Mustermann");
+        assertThat(driver.getFirstName()).isEqualTo("Max");
+
+        assertThat(driver.getLastName()).isEqualTo("Mustermann");
     }
     @Test
-    void shouldThrowExceptionWhenNameIsNull(){
-        assertThatThrownBy(()->new Driver(1L,null))
+    void shouldThrowExceptionWhenFirstNameIsNull() {
+        assertThatThrownBy(() -> new Driver(1L, null, "Mustermann"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Name must not be blank");}
+    @Test
+        void shouldThrowExceptionWhenLastNameIsNull(){
+        assertThatThrownBy(()-> new Driver(1L,"Max",null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Name must not be blank");}
+
+        @Test
+        void shouldThrowExceptionWhenFirstNameAndLastNameIsNull(){
+        assertThatThrownBy(()-> new Driver(1L,null,null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Name must not be blank");
+
+    }
+    @Test
+    void shouldThrowExceptionWhenFirstNameIsBlank(){
+        assertThatThrownBy(()->new Driver(1L,"     ","Mustermann"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Name must not be blank");}
+
+    @Test
+    void shouldThrowExceptionWhenLastNameIsBlank(){
+        assertThatThrownBy(()->new Driver(1L,"Max","      "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Name must not be blank");}
+
+    @Test
+    void shouldThrowExceptionWhenFirstNameAndLastNameIsBlank(){
+        assertThatThrownBy(()->new Driver(1L,"     ","               "))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Name must not be blank");
     }
-    @Test
-    void shouldThrowExceptionWhenNameIsBlank(){
-        assertThatThrownBy(()->new Driver(1L,"     "))
+   @Test
+    void shouldThrowExceptionWhenFirstNameAndLastNameIsBlankOrNull(){
+        assertThatThrownBy(()->new Driver(1L,null,"    "))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Name must not be blank");
-    }
+        assertThatThrownBy(()->new Driver(1L,"       ",null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Name must not be blank");
+   }
 
 
 }
