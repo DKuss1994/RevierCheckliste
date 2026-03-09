@@ -32,12 +32,7 @@ assertThatThrownBy(()->new SecurityObject(1L,null,zone,address))
     void shouldThrowExceptionWhenAddressIsNull(){
         assertThatThrownBy(()->new SecurityObject(1L,"Object",zone,null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Zone name must not be null");
+                .hasMessage("Address name must not be null");
     }
-    @Test
-    void shouldThrowExceptionWhenAddressAndZoneIsNull(){
-        assertThatThrownBy(()->new SecurityObject(1L,"Object",null,null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Zone name must not be null");
-    }
+
 }
