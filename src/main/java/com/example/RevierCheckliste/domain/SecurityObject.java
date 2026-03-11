@@ -16,6 +16,8 @@ public class SecurityObject {
             throw new IllegalArgumentException("Zone name must not be null");
         } if (address == null ) {
             throw new IllegalArgumentException("Address name must not be null");
+        }if (config == null ) {
+            throw new IllegalArgumentException("Configuration must not be null");
         }
         this.id = id;
         this.name = name;
