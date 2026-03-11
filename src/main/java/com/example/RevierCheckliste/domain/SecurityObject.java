@@ -7,8 +7,9 @@ public class SecurityObject {
     private final String name;
     private final Zone zone;
     private final Address address;
+    private final StandardConfiguration config;
 
-    public SecurityObject(long id, String name, Zone zone, Address address) {
+    public SecurityObject(long id, String name, Zone zone, Address address, StandardConfiguration config) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Object name must not be blank");
         } if (zone == null ) {
@@ -20,6 +21,7 @@ public class SecurityObject {
         this.name = name;
         this.zone = zone;
         this.address = address;
+        this.config = config;
     }
 
     public long getId() {
@@ -39,4 +41,7 @@ public class SecurityObject {
     }
 
 
+    public StandardConfiguration getStandardCofiguration() {
+        return config;
+    }
 }
