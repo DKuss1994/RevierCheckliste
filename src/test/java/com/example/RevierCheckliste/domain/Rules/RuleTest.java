@@ -1,4 +1,4 @@
-package com.example.RevierCheckliste.domain;
+package com.example.RevierCheckliste.domain.Rules;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
