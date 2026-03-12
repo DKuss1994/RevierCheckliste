@@ -26,35 +26,35 @@ public class ShiftTest {
     void shouldThrowExceptionWhenDriverIsNull(){
         assertThatThrownBy(()->new Shift(1L,null,zone,LocalDate.of(2024,3,11),
                 LocalTime.of(6,0),LocalTime.of(14,0)))
-                .isInstanceOf(IllegalArgumentException.class).
+                .isInstanceOf(NullPointerException.class).
         hasMessage("Shift driver must not be null");
     }
     @Test
     void shouldThrowExceptionWhenZoneIsNull(){
         assertThatThrownBy(()->new Shift(1L,driver,null,LocalDate.of(2024,3,11),
                 LocalTime.of(6,0),LocalTime.of(14,0)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NullPointerException.class)
                 .hasMessage("Shift zone must not be null");
     }
     @Test
     void shouldThrowExceptionWhenDeploymentDayIsNull(){
         assertThatThrownBy(()->new Shift(1L,driver,zone,null,
                 LocalTime.of(6,0),LocalTime.of(14,0)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NullPointerException.class)
                 .hasMessage("Shift deployment day must not be null");
     }
     @Test
     void shouldThrowExceptionWhenStartTimeIsNull(){
         assertThatThrownBy(()-> new Shift(1L,driver,zone,LocalDate.of(2024,3,11),
 null,LocalTime.of(14,0)))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NullPointerException.class)
                 .hasMessage("Shift start time must not be null");
     }
     @Test
     void shouldThrowExceptionWhenEndTimeIsNull(){
         assertThatThrownBy(()-> new Shift(1L,driver,zone,LocalDate.of(2024,3,11),
                 LocalTime.of(6,0),null))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NullPointerException.class)
                 .hasMessage("Shift end time must not be null");
     }
 }

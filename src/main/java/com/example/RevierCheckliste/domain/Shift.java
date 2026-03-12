@@ -2,6 +2,7 @@ package com.example.RevierCheckliste.domain;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Shift {
     private final long id;
@@ -12,11 +13,11 @@ public class Shift {
     private final LocalTime endTime;
     public Shift(long id, Driver driver, Zone zone, LocalDate day, LocalTime start, LocalTime end) {
         this.id = id;
-        this.driver = driver;
-        this.zone = zone;
-        this.deploymentDate = day;
-        this.startTime = start;
-        this.endTime = end;
+        this.driver = Objects.requireNonNull(driver,"Shift driver must not be null");
+        this.zone = Objects.requireNonNull(zone,"Shift zone must not be null");
+        this.deploymentDate = Objects.requireNonNull(day,"Shift deployment day must not be null");
+        this.startTime = Objects.requireNonNull(start,"Shift start time must not be null");
+        this.endTime = Objects.requireNonNull(end,"Shift end time must not be null");
 
     }
 
