@@ -1,6 +1,7 @@
 package com.example.RevierCheckliste.domain;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Rule {
     LocalDate startDay;
@@ -9,10 +10,14 @@ public class Rule {
 
 
 
-    public Rule(LocalDate endDay, LocalDate startDay) {
-        this.endDay = endDay;
-        this.startDay = startDay;
-    }
+    public Rule(LocalDate startDay, LocalDate endDay) {
+        this.startDay =Objects.requireNonNull( startDay,"Rule start day must not be null");
+        this.endDay = Objects.requireNonNull(  endDay,"Rule end day must not be null");
+
+        if (startDay.isAfter(endDay)) {
+            throw new IllegalArgumentException("Rule start day must not be after end day");
+        }
+     }
 
     public LocalDate getEndDay() {
         return endDay;
@@ -23,6 +28,6 @@ public class Rule {
     }
 
     public boolean isActive(LocalDate day)   {
-        return false;
+        return day.isBefore(endDay)&& day.isAfter(startDay);
     }
 }
