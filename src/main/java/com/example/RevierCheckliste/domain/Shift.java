@@ -11,6 +11,8 @@ public class Shift {
     private final LocalDate deploymentDate;
     private final LocalTime startTime;
     private final LocalTime endTime;
+
+
     public Shift(long id, Driver driver, Zone zone, LocalDate day, LocalTime start, LocalTime end) {
         this.id = id;
         this.driver = Objects.requireNonNull(driver,"Shift driver must not be null");
@@ -18,7 +20,6 @@ public class Shift {
         this.deploymentDate = Objects.requireNonNull(day,"Shift deployment day must not be null");
         this.startTime = Objects.requireNonNull(start,"Shift start time must not be null");
         this.endTime = Objects.requireNonNull(end,"Shift end time must not be null");
-
     }
 
     public long getId() {
@@ -46,6 +47,6 @@ public class Shift {
     }
 
     public boolean IsNightShift() {
-        return false;
+        return startTime.isAfter(endTime); //If startTime after endTime is a Night shift
     }
 }
