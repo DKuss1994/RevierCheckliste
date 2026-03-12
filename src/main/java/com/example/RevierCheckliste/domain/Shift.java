@@ -44,4 +44,8 @@ public class Shift {
     public LocalTime getEndTime() {
         return endTime;
     }
+
+    public boolean IsNightShift() {
+        return false;
+    }
 }

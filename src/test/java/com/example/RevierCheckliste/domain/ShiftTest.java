@@ -57,4 +57,16 @@ null,LocalTime.of(14,0)))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("Shift end time must not be null");
     }
+    @Test
+    void shouldDetectNightShift(){
+        Shift shift = new Shift(1L,driver,zone,LocalDate.of(2024,3,11),
+                LocalTime.of(22,0),LocalTime.of(6,0));
+        assertThat(shift.IsNightShift()).isTrue();
+    }
+    @Test
+    void shouldDetectNightShift(){
+        Shift shift = new Shift(1L,driver,zone,LocalDate.of(2024,3,11),
+                LocalTime.of(6,0),LocalTime.of(14,0));
+        assertThat(shift.IsNightShift()).isFalse();
+    }
 }
