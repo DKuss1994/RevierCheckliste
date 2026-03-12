@@ -49,4 +49,8 @@ public class Shift {
     public boolean IsNightShift() {
         return startTime.isAfter(endTime); //If startTime after endTime is a Night shift
     }
+
+    public boolean hasUnqualifiedDriver() {
+            return false;
+    }
 }

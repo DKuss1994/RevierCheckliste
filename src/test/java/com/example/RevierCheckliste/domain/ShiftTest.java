@@ -69,4 +69,21 @@ null,LocalTime.of(14,0)))
                 LocalTime.of(6,0),LocalTime.of(14,0));
         assertThat(shift.IsNightShift()).isFalse();
     }
+    @Test
+    void shouldDetectWhenDriverIsNotQualifiedForZone() {
+        Shift shift = new Shift(1L, driver, zone, LocalDate.of(2024, 3, 11),
+                LocalTime.of(6, 0), LocalTime.of(14, 0));
+
+        assertThat(shift.hasUnqualifiedDriver()).isTrue();
+    }
+
+    @Test
+    void shouldNotWarnWhenDriverIsQualifiedForZone() {
+        driver.assignedZones(zone);
+
+        Shift shift = new Shift(1L, driver, zone, LocalDate.of(2024, 3, 11),
+                LocalTime.of(6, 0), LocalTime.of(14, 0));
+
+        assertThat(shift.hasUnqualifiedDriver()).isFalse();
+    }
 }
