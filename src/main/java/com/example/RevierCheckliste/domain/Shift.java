@@ -51,6 +51,6 @@ public class Shift {
     }
 
     public boolean hasUnqualifiedDriver() {
-            return false;
+       return !driver.isQualifiedForZone(zone);
     }
 }
