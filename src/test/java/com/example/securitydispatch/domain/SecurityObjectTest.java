@@ -1,6 +1,6 @@
-package com.example.RevierCheckliste.domain;
+package com.example.securitydispatch.domain;
 
-import com.example.RevierCheckliste.domain.Rules.OverrideRule;
+import com.example.securitydispatch.domain.Rules.OverrideRule;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;

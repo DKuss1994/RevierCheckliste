@@ -1,4 +1,4 @@
-package com.example.RevierCheckliste.domain;
+package com.example.securitydispatch.domain;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,6 +1,6 @@
-package com.example.RevierCheckliste.domain.Rules;
+package com.example.securitydispatch.domain.Rules;
 
-import com.example.RevierCheckliste.domain.StandardConfiguration;
+import com.example.securitydispatch.domain.StandardConfiguration;
 
 import java.time.LocalDate;
 import java.util.Objects;

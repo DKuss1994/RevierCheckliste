@@ -1,4 +1,4 @@
-package com.example.RevierCheckliste.domain;
+package com.example.securitydispatch.domain;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

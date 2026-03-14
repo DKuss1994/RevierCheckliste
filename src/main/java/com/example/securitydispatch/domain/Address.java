@@ -1,4 +1,4 @@
-package com.example.RevierCheckliste.domain;
+package com.example.securitydispatch.domain;
 
 public class Address {
     private final String street;

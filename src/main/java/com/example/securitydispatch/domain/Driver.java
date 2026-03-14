@@ -1,4 +1,4 @@
-package com.example.RevierCheckliste.domain;
+package com.example.securitydispatch.domain;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,5 @@
-package com.example.RevierCheckliste.domain.Rules;
-import com.example.RevierCheckliste.domain.StandardConfiguration;
+package com.example.securitydispatch.domain.Rules;
+import com.example.securitydispatch.domain.StandardConfiguration;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;

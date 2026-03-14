@@ -1,4 +1,4 @@
-package com.example.RevierCheckliste.domain.Rules;
+package com.example.securitydispatch.domain.Rules;
 
 import java.time.LocalDate;
 import java.util.Objects;

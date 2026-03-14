@@ -1,4 +1,4 @@
-package com.example.RevierCheckliste;
+package com.example.securitydispatch;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
