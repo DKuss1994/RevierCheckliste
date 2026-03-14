@@ -1,5 +1,10 @@
 package com.example.RevierCheckliste.domain;
 
+import com.example.RevierCheckliste.domain.Rules.OverrideRule;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class SecurityObject {
 
 
@@ -8,6 +13,7 @@ public class SecurityObject {
     private final Zone zone;
     private final Address address;
     private final StandardConfiguration config;
+    private final List<OverrideRule> overrideRule = new ArrayList<>();
 
     public SecurityObject(long id, String name, Zone zone, Address address, StandardConfiguration config) {
         if (name == null || name.isBlank()) {
@@ -45,5 +51,13 @@ public class SecurityObject {
 
     public StandardConfiguration getStandardCofiguration() {
         return config;
+    }
+
+    public void addOverrideRule(OverrideRule rule) {
+        this.overrideRule.add(rule);
+
+    }
+    public List <OverrideRule> getOverrideRules(){
+        return this.overrideRule;
     }
 }
