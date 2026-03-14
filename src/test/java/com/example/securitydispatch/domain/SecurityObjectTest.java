@@ -2,6 +2,7 @@ package com.example.securitydispatch.domain;
 
 import com.example.securitydispatch.domain.Rules.AdditionalRule;
 import com.example.securitydispatch.domain.Rules.OverrideRule;
+import com.example.securitydispatch.domain.Rules.ReductionRule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;;
 import java.time.DayOfWeek;
@@ -148,5 +149,38 @@ public class SecurityObjectTest {
         object.addAdditionalRule(rule1);
 
         Assertions.assertDoesNotThrow(() -> object.addAdditionalRule(rule2));
+    }
+    @Test
+    void shouldAddReductionRuleToSecurityObject() {
+        ReductionRule rule = new ReductionRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 4, 30))
+                .inspectionCount(1)
+                .build();
+
+        object.addReductionRule(rule);
+
+        assertThat(object.getReductionRules()).containsExactly(rule);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenReductionRulesOfSameTypeOverlap() {
+        ReductionRule rule1 = new ReductionRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 4, 30))
+                .inspectionCount(1)
+                .build();
+
+        ReductionRule rule2 = new ReductionRule.Builder(
+                LocalDate.of(2024, 4, 1),
+                LocalDate.of(2024, 5, 31))
+                .inspectionCount(1)
+                .build();
+
+        object.addReductionRule(rule1);
+
+        assertThatThrownBy(() -> object.addReductionRule(rule2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Reduction rules of same type must not overlap");
     }
 }
