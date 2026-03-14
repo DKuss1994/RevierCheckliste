@@ -20,11 +20,14 @@ public class SecurityObject {
     public SecurityObject(long id, String name, Zone zone, Address address, StandardConfiguration config) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Object name must not be blank");
-        } if (zone == null ) {
+        }
+        if (zone == null) {
             throw new IllegalArgumentException("Zone name must not be null");
-        } if (address == null ) {
+        }
+        if (address == null) {
             throw new IllegalArgumentException("Address name must not be null");
-        }if (config == null ) {
+        }
+        if (config == null) {
             throw new IllegalArgumentException("Configuration must not be null");
         }
         this.id = id;
@@ -57,8 +60,8 @@ public class SecurityObject {
 
     public void addOverrideRule(OverrideRule rule) {
         for (OverrideRule existing : overrideRule) {
-            if(existing.getStartDay().isBefore(rule.getEndDay())&&
-            existing.getEndDay().isAfter(rule.getStartDay())){
+            if (existing.getStartDay().isBefore(rule.getEndDay()) &&
+                    existing.getEndDay().isAfter(rule.getStartDay())) {
                 throw new IllegalArgumentException("Override rules must not overlap");
             }
         }
@@ -66,21 +69,30 @@ public class SecurityObject {
         this.overrideRule.add(rule);
 
     }
+
     public void addAdditionalRule(AdditionalRule rule) {
         for (AdditionalRule existing : additionalRules) {
-            if(existing.getStartDay().isBefore(rule.getEndDay())&&
-            existing.getEndDay().isAfter(rule.getStartDay())){
-                throw new IllegalArgumentException("Override rules must not overlap");
+            boolean overlap = existing.getStartDay().isBefore(rule.getEndDay()) &&
+                    existing.getEndDay().isAfter(rule.getStartDay());
+            boolean sameType = (existing.getInspectionCount().isPresent() && rule.getInspectionCount().isPresent()) ||
+                    (existing.getClosingTime().isPresent() && rule.getClosingTime().isPresent()) ||
+                    (existing.getOpeningTime().isPresent() && rule.getOpeningTime().isPresent());
+            if (overlap && sameType) {
+                throw new IllegalArgumentException("Additional rules of same type must not overlap");
+
+
             }
         }
 
         this.additionalRules.add(rule);
 
     }
-    public List <OverrideRule> getOverrideRules(){
+
+    public List<OverrideRule> getOverrideRules() {
         return this.overrideRule;
     }
-    public List <AdditionalRule> getAdditionalRules(){
+
+    public List<AdditionalRule> getAdditionalRules() {
         return this.additionalRules;
     }
 }
