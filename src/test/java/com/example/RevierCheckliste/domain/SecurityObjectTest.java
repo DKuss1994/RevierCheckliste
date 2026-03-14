@@ -61,7 +61,7 @@ public class SecurityObjectTest {
                 .inspectionDays(Set.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY))
                 .build();
         SecurityObject object = new SecurityObject(1L, "Object", zone, address, config);
-        assertThat(object.getStandardCofiguration()).isEqualTo(config);
+        assertThat(object.getStandardConfiguration()).isEqualTo(config);
     }
 
     @Test

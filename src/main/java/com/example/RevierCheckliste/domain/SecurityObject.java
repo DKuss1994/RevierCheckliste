@@ -49,11 +49,18 @@ public class SecurityObject {
     }
 
 
-    public StandardConfiguration getStandardCofiguration() {
+    public StandardConfiguration getStandardConfiguration() {
         return config;
     }
 
     public void addOverrideRule(OverrideRule rule) {
+        for (OverrideRule existing : overrideRule) {
+            if(existing.getStartDay().isBefore(rule.getEndDay())&&
+            existing.getEndDay().isAfter(rule.getStartDay())){
+                throw new IllegalArgumentException("Override rules must not overlap");
+            }
+        }
+
         this.overrideRule.add(rule);
 
     }
