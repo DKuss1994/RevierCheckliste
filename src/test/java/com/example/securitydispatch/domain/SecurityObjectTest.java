@@ -1,10 +1,12 @@
 package com.example.securitydispatch.domain;
 
+import com.example.securitydispatch.domain.Rules.AdditionalRule;
 import com.example.securitydispatch.domain.Rules.OverrideRule;
-import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,6 +80,7 @@ public class SecurityObjectTest {
         object.addOverrideRule(rule);
         assertThat(object.getOverrideRules()).containsExactly(rule);
     }
+
     @Test
     void shouldThrowExceptionWhenOverrideRulesOverlap() {
         OverrideRule rule1 = new OverrideRule(
@@ -97,4 +100,53 @@ public class SecurityObjectTest {
                 .hasMessage("Override rules must not overlap");
     }
 
+    @Test
+    void shouldAddAdditionalRuleToSecurityObject() {
+        AdditionalRule rule = new AdditionalRule.Builder(LocalDate.of(2024, 01, 01)
+                , LocalDate.of(2024, 2, 1))
+                .inspectionCount(2)
+                .inspectionDays(Set.of(DayOfWeek.MONDAY))
+                .build();
+        object.addAdditionalRule(rule);
+        assertThat(object.getAdditionalRules()).containsExactly(rule);
+
+    }
+
+    @Test
+    void shouldThrowExceptionWhenAdditionalRuleOfSameTypeOverlap() {
+        AdditionalRule rule = new AdditionalRule.Builder(LocalDate.of(2024, 01, 01)
+                , LocalDate.of(2024, 2, 1))
+                .inspectionCount(2)
+                .build();
+        AdditionalRule rule2 = new AdditionalRule.Builder(LocalDate.of(2024, 01, 01)
+                , LocalDate.of(2024, 1, 15))
+                .inspectionCount(2)
+                .build();
+        object.addAdditionalRule(rule);
+
+        assertThatThrownBy(() -> object.addAdditionalRule(rule2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Additional rules of same type must not overlap");
+
+
+        }
+    @Test
+    void shouldAllowAdditionalRulesOfDifferentTypeToOverlap() {
+        AdditionalRule rule1 = new AdditionalRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 4, 30))
+                .inspectionCount(2)
+                .build();
+
+        AdditionalRule rule2 = new AdditionalRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 5, 31))
+                .closingTime(LocalTime.of(22, 0))
+                .closingDays(Set.of(DayOfWeek.MONDAY))
+                .build();
+
+        object.addAdditionalRule(rule1);
+
+        Assertions.assertDoesNotThrow(() -> object.addAdditionalRule(rule2));
+    }
 }

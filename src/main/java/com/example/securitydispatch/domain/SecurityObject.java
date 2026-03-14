@@ -1,5 +1,6 @@
 package com.example.securitydispatch.domain;
 
+import com.example.securitydispatch.domain.Rules.AdditionalRule;
 import com.example.securitydispatch.domain.Rules.OverrideRule;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class SecurityObject {
     private final Address address;
     private final StandardConfiguration config;
     private final List<OverrideRule> overrideRule = new ArrayList<>();
+    private final List<AdditionalRule> additionalRules = new ArrayList<>();
 
     public SecurityObject(long id, String name, Zone zone, Address address, StandardConfiguration config) {
         if (name == null || name.isBlank()) {
@@ -64,7 +66,21 @@ public class SecurityObject {
         this.overrideRule.add(rule);
 
     }
+    public void addAdditionalRule(AdditionalRule rule) {
+        for (AdditionalRule existing : additionalRules) {
+            if(existing.getStartDay().isBefore(rule.getEndDay())&&
+            existing.getEndDay().isAfter(rule.getStartDay())){
+                throw new IllegalArgumentException("Override rules must not overlap");
+            }
+        }
+
+        this.additionalRules.add(rule);
+
+    }
     public List <OverrideRule> getOverrideRules(){
         return this.overrideRule;
+    }
+    public List <AdditionalRule> getAdditionalRules(){
+        return this.additionalRules;
     }
 }
