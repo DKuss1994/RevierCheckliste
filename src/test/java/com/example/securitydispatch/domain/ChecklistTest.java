@@ -16,9 +16,10 @@ Driver driver = new Driver(1L,"Max","Mustermann");
 return new Shift(1L,driver,zone, LocalDate.of(2026,3,15),
         LocalTime.of(19,0),LocalTime.of(6,0));
     }
+    Shift shift = buildShift();
     @Test
     void shouldCreateAChecklistAsSnap(){
-        Shift shift = buildShift();
+
         StandardConfiguration config = new StandardConfiguration.Builder()
                 .inspectionCount(2)
                 .build();
@@ -26,6 +27,7 @@ return new Shift(1L,driver,zone, LocalDate.of(2026,3,15),
         assertThat(checklist.getId()).isEqualTo(1L);
         assertThat(checklist.getShift()).isEqualTo(shift);
         assertThat(checklist.getConfig()).isEqualTo(config);
+        assertThat(checklist.getGeneratedAt()).isNotNull();
     }
     @Test
     void shouldThrowExceptionWhenShiftIsNull() {
@@ -33,5 +35,19 @@ return new Shift(1L,driver,zone, LocalDate.of(2026,3,15),
                 new StandardConfiguration.Builder().build(), LocalDateTime.now()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Checklist shift must not be null");
+    }
+    @Test
+    void shouldThrowExceptionWhenConfigIsNull() {
+        assertThatThrownBy(() -> new Checklist(1L, shift,
+                null, LocalDateTime.now()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Checklist configuration must not be null");
+    }
+    @Test
+    void shouldThrowExceptionWhenGeneratedAtIsNull() {
+        assertThatThrownBy(() -> new Checklist(1L, shift,
+                new StandardConfiguration.Builder().build(), null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Checklist generatedAt must not be null");
     }
 }

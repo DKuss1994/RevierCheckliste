@@ -6,13 +6,17 @@ public class Checklist {
     private final long id;
     private final Shift shift;
     private final StandardConfiguration config;
-    LocalDateTime today;
+    LocalDateTime generatedAt;
 
-    public Checklist(long id,Shift shift,StandardConfiguration config,LocalDateTime today) {
+    public Checklist(long id,Shift shift,StandardConfiguration config,LocalDateTime generatedAt) {
         if(shift == null){
            throw new IllegalArgumentException("Checklist shift must not be null");
+        }if(config == null){
+           throw new IllegalArgumentException("Checklist configuration must not be null");
+        }if(generatedAt == null){
+           throw new IllegalArgumentException("Checklist generatedAt must not be null");
         }
-        this.today = today;
+        this.generatedAt = generatedAt;
         this.config = config;
         this.shift = shift;
         this.id = id;
@@ -30,7 +34,7 @@ public class Checklist {
         return config;
     }
 
-    public LocalDateTime getToday() {
-        return today;
+    public LocalDateTime getGeneratedAt() {
+        return generatedAt;
     }
 }
