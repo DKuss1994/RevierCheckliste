@@ -97,7 +97,7 @@ public class SecurityObject {
             boolean sameType = (existing.getInspectionCount().isPresent() && rule.getInspectionCount().isPresent()) ||
                     (existing.isRemoveClosing() == rule.isRemoveClosing()) ||
                     (existing.isRemoveOpening() == rule.isRemoveOpening());
-            if(sameType &&overlap){
+            if (sameType && overlap) {
                 throw new IllegalArgumentException("Reduction rules of same type must not overlap");
             }
         }
