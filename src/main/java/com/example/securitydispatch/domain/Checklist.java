@@ -1,5 +1,7 @@
 package com.example.securitydispatch.domain;
 
+import com.example.securitydispatch.domain.Rules.ReductionRule;
+
 import java.time.LocalDateTime;
 
 public class Checklist {
@@ -37,4 +39,5 @@ public class Checklist {
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
     }
+
 }
