@@ -2,6 +2,7 @@ package com.example.securitydispatch.domain;
 
 import com.example.securitydispatch.domain.Rules.AdditionalRule;
 import com.example.securitydispatch.domain.Rules.OverrideRule;
+import com.example.securitydispatch.domain.Rules.ReductionRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class SecurityObject {
     private final StandardConfiguration config;
     private final List<OverrideRule> overrideRule = new ArrayList<>();
     private final List<AdditionalRule> additionalRules = new ArrayList<>();
+    private final List<ReductionRule> reductionRules = new ArrayList<>();
 
     public SecurityObject(long id, String name, Zone zone, Address address, StandardConfiguration config) {
         if (name == null || name.isBlank()) {
@@ -88,11 +90,30 @@ public class SecurityObject {
 
     }
 
+    public void addReductionRule(ReductionRule rule) {
+        for (ReductionRule existing : reductionRules) {
+            boolean overlap = existing.getStartDay().isBefore(rule.getEndDay()) &&
+                    existing.getEndDay().isAfter(rule.getStartDay());
+            boolean sameType = (existing.getInspectionCount().isPresent() && rule.getInspectionCount().isPresent()) ||
+                    (existing.isRemoveClosing() == rule.isRemoveClosing()) ||
+                    (existing.isRemoveOpening() == rule.isRemoveOpening());
+            if(sameType &&overlap){
+                throw new IllegalArgumentException("Reduction rules of same type must not overlap");
+            }
+        }
+
+        this.reductionRules.add(rule);
+    }
+
     public List<OverrideRule> getOverrideRules() {
         return this.overrideRule;
     }
 
     public List<AdditionalRule> getAdditionalRules() {
         return this.additionalRules;
+    }
+
+    public List<ReductionRule> getReductionRules() {
+        return reductionRules;
     }
 }
