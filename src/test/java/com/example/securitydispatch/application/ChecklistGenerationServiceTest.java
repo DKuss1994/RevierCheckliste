@@ -1,6 +1,8 @@
 package com.example.securitydispatch.application;
 import com.example.securitydispatch.domain.*;
+import com.example.securitydispatch.domain.Rules.AdditionalRule;
 import com.example.securitydispatch.domain.Rules.OverrideRule;
+import com.example.securitydispatch.domain.Rules.ReductionRule;
 import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,12 +21,12 @@ public class ChecklistGenerationServiceTest {
             1L, "Object A", zone, address, standardConfig);
 
     private final ChecklistGenerationService service = new ChecklistGenerationService();
-
+    private final Shift shift = new Shift(1L, driver, zone,
+            LocalDate.of(2024, 3, 11),
+            LocalTime.of(6, 0), LocalTime.of(14, 0));
     @Test
     void shouldGenerateChecklistWithStandardConfigWhenNoRulesAreActive() {
-        Shift shift = new Shift(1L, driver, zone,
-                LocalDate.of(2024, 3, 11),
-                LocalTime.of(6, 0), LocalTime.of(14, 0));
+
 
         Checklist checklist = service.generate(shift, securityObject);
 
@@ -50,5 +52,29 @@ public class ChecklistGenerationServiceTest {
         Checklist checklist = service.generate(shift, securityObject);
 
         assertThat(checklist.getConfig().getInspectionCount()).hasValue(3);
+    }
+    @Test
+    void shouldApplyAdditionalRuleWhenActive(){
+        AdditionalRule rule = new AdditionalRule.Builder(
+                LocalDate.of(2024,2,2),
+                LocalDate.of(2024,3,3)
+        ).inspectionCount(3)
+                .build();
+        securityObject.addAdditionalRule(rule);
+        Checklist checklist = service.generate(shift,securityObject);
+        // Standard 2 + Additional 3 = 5
+        assertThat(checklist.getConfig().getInspectionCount()).isEqualTo(5);
+    }
+    @Test
+    void shouldApplyReductionRuleWhenActive(){
+        ReductionRule rule = new ReductionRule.Builder(
+                LocalDate.of(2024,2,2),
+                LocalDate.of(2024,3,3)
+        ).inspectionCount(2)
+                .build();
+        securityObject.addReductionRule(rule);
+        Checklist checklist = service.generate(shift,securityObject);
+        // Standard 2 - Reduction 2 = 0
+        assertThat(checklist.getConfig().getInspectionCount()).isEqualTo(0);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.*;
+import com.example.securitydispatch.domain.Rules.AdditionalRule;
 import com.example.securitydispatch.domain.Rules.OverrideRule;
+import com.example.securitydispatch.domain.Rules.ReductionRule;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +19,19 @@ public class ChecklistGenerationService {
                 return rule.getConfiguration();
             }
 
+        }/*
+        for (AdditionalRule rule : securityObject.getAdditionalRules()) {
+            if (rule.isActive(shift.getDeploymentDate())) {
+                return rule.getConfiguration();
+            }
+
         }
+        for (ReductionRule rule : securityObject.getReductionRules()) {
+            if (rule.isActive(shift.getDeploymentDate())) {
+                return rule.getConfiguration();
+            }
+
+        }*/
         return securityObject.getStandardConfiguration();
     }
 }
