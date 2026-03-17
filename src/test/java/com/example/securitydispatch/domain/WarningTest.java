@@ -22,7 +22,7 @@ public class WarningTest {
     @Test
     void shouldThrowExceptionWhenMessageIsNull(){
         assertThatThrownBy(()->new Warning(null))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NullPointerException.class)
                 .hasMessage("Warning message must not blank");
     }
 }
