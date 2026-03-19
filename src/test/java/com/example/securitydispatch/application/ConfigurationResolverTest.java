@@ -1,8 +1,7 @@
 package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.*;
-import com.example.securitydispatch.domain.Rules.OverrideRule;
-import com.example.securitydispatch.domain.Rules.ReductionRule;
+import com.example.securitydispatch.domain.Rules.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
@@ -18,7 +17,7 @@ public class ConfigurationResolverTest {
     private final StandardConfiguration standardConfig = new StandardConfiguration.Builder()
             .inspectionCount(2)
             .inspectionDays(Set.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY))
-            .closingTime(LocalTime.of(22,0))
+            .closingTime(LocalTime.of(22, 0))
             .closingDays(Set.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY))
             .build();
     private final SecurityObject securityObject = new SecurityObject(
@@ -66,7 +65,8 @@ public class ConfigurationResolverTest {
         assertThat(result.getConfiguration().getInspectionCount()).hasValue(0);
         assertThat(result.getWarnings()).hasSize(1);
     }
-@Test
+
+    @Test
     void shouldKeepStandardFieldsNotOverriddenByOverrideRule() {
         StandardConfiguration overrideConfig = new StandardConfiguration.Builder()
                 .inspectionCount(3)
@@ -82,5 +82,65 @@ public class ConfigurationResolverTest {
 
         assertThat(result.getConfiguration().getInspectionCount()).hasValue(3);
         assertThat(result.getConfiguration().getClosingTime()).hasValue(LocalTime.of(22, 0));
+    }
+
+    @Test
+    void shouldApplyAdditionalRuleInspectionCount() {
+        securityObject.addAdditionalRule(new AdditionalRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .inspectionCount(2)
+                .build());
+
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024, 3, 11), securityObject);
+
+        // Standard 2 + Additional 2 = 4
+        assertThat(result.getConfiguration().getInspectionCount()).hasValue(4);
+        assertThat(result.getWarnings()).isEmpty();
+    }
+    @Test
+    void shouldApplyAdditionalRuleClosingTime() {
+        securityObject.addAdditionalRule(new AdditionalRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .closingTime(LocalTime.of(23, 0))
+                .closingDays(Set.of(DayOfWeek.TUESDAY))
+                .build());
+
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024, 3, 11), securityObject);
+
+        assertThat(result.getConfiguration().getClosingTime()).hasValue(LocalTime.of(23, 0));
+        assertThat(result.getConfiguration().getClosingDays()).hasValue(Set.of(DayOfWeek.TUESDAY));
+    }
+    @Test
+    void shouldApplyReductionRuleRemoveClosing() {
+        securityObject.addReductionRule(new ReductionRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .removeClosing(true)
+                .build());
+
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024, 3, 11), securityObject);
+
+        assertThat(result.getConfiguration().getClosingTime()).isEmpty();
+        assertThat(result.getConfiguration().getClosingDays()).isEmpty();
+    }
+
+    @Test
+    void shouldApplyReductionRuleRemoveOpening() {
+        securityObject.addReductionRule(new ReductionRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .removeOpening(true)
+                .build());
+
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024, 3, 11), securityObject);
+
+        assertThat(result.getConfiguration().getOpeningTime()).isEmpty();
+        assertThat(result.getConfiguration().getOpeningDays()).isEmpty();
     }
 }
