@@ -99,6 +99,7 @@ public class ConfigurationResolverTest {
         assertThat(result.getConfiguration().getInspectionCount()).hasValue(4);
         assertThat(result.getWarnings()).isEmpty();
     }
+
     @Test
     void shouldApplyAdditionalRuleClosingTime() {
         securityObject.addAdditionalRule(new AdditionalRule.Builder(
@@ -114,6 +115,7 @@ public class ConfigurationResolverTest {
         assertThat(result.getConfiguration().getClosingTime()).hasValue(LocalTime.of(23, 0));
         assertThat(result.getConfiguration().getClosingDays()).hasValue(Set.of(DayOfWeek.TUESDAY));
     }
+
     @Test
     void shouldApplyReductionRuleRemoveClosing() {
         securityObject.addReductionRule(new ReductionRule.Builder(
@@ -143,4 +145,42 @@ public class ConfigurationResolverTest {
         assertThat(result.getConfiguration().getOpeningTime()).isEmpty();
         assertThat(result.getConfiguration().getOpeningDays()).isEmpty();
     }
+
+    @Test
+    void shouldWarningWhenRemovingClosingTimeDoesNotExist() {
+        SecurityObject securityObjectWithoutClosing = new SecurityObject
+                (2L, "Object B", zone, address, new StandardConfiguration.Builder()
+                        .inspectionCount(2)
+                        .build());
+        securityObjectWithoutClosing.addReductionRule(new ReductionRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .removeClosing(true)
+                .build());
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024,3,15),securityObjectWithoutClosing
+        );
+        assertThat(result.getWarnings()).hasSize(1);
+        assertThat(result.getWarnings().get(0).getMessage()).isEqualTo
+                ("Cannot remove closing time that does not exist");
+    }
+    @Test
+    void shouldWarningWhenRemovingOpeningTimeDoesNotExist() {
+        SecurityObject securityObjectWithoutClosing = new SecurityObject
+                (2L, "Object B", zone, address, new StandardConfiguration.Builder()
+                        .inspectionCount(2)
+                        .build());
+        securityObjectWithoutClosing.addReductionRule(new ReductionRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .removeOpening(true)
+                .build());
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024,3,15),securityObjectWithoutClosing
+        );
+        assertThat(result.getWarnings()).hasSize(1);
+        assertThat(result.getWarnings().get(0).getMessage()).isEqualTo
+                ("Cannot remove opening time that does not exist");
+    }
+
 }
