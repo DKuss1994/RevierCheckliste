@@ -42,6 +42,24 @@ public class ConfigurationResolver {
                 inspectionCount += rule.getInspectionCount().orElse(0);
             }
         }
+        // Additional: closingTime und closingDays
+        LocalTime additionalClosingTime = closingTime;
+        Set<DayOfWeek> additionalClosingDays = closingDays;
+        for (AdditionalRule rule : securityObject.getAdditionalRules()) {
+            if (rule.isActive(deploymentDate)) {
+                additionalClosingTime = rule.getClosingTime().orElse(additionalClosingTime);
+                additionalClosingDays = rule.getClosingDays().orElse(additionalClosingDays);
+            }
+        }
+        //Additional: openingTime and openingDays
+        LocalTime additionalOpeningTime = openingTime;
+        Set<DayOfWeek> additionalOpeningDays = openingDays;
+        for (AdditionalRule rule : securityObject.getAdditionalRules()) {
+            if (rule.isActive(deploymentDate)) {
+                additionalOpeningTime = rule.getOpeningTime().orElse(additionalOpeningTime);
+                additionalOpeningDays = rule.getOpeningDays().orElse(additionalOpeningDays);
+            }
+        }
         // Schritt 5: Reduction abziehen
         for (ReductionRule rule : securityObject.getReductionRules()) {
             if (rule.isActive(deploymentDate)) {
@@ -49,6 +67,20 @@ public class ConfigurationResolver {
             }
 
         }
+        // Reduction: removeClosing
+        if (securityObject.getReductionRules().stream()
+                .anyMatch(rule -> rule.isActive(deploymentDate) && rule.isRemoveClosing())) {
+            additionalClosingTime = null;
+            additionalClosingDays = null;
+        }
+
+// Reduction: removeOpening
+        if (securityObject.getReductionRules().stream()
+                .anyMatch(rule -> rule.isActive(deploymentDate) && rule.isRemoveOpening())) {
+            additionalOpeningTime = null;
+            additionalOpeningDays = null;
+        }
+
         // Schritt 6: Warnung wenn negativ
         if (inspectionCount < 0) {
             warnings.add(new Warning("Inspection count cannot be negative, set to 0"));
@@ -58,10 +90,10 @@ public class ConfigurationResolver {
         StandardConfiguration finalConfig = new StandardConfiguration.Builder()
                 .inspectionCount(inspectionCount)
                 .inspectionDays(inspectionDays)
-                .openingTime(openingTime)
-                .openingDays(openingDays)
-                .closingTime(closingTime)
-                .closingDays(closingDays)
+                .openingTime(additionalOpeningTime)
+                .openingDays(additionalOpeningDays)
+                .closingTime(additionalClosingTime)
+                .closingDays(additionalClosingDays)
                 .build();
 
         return new ResolutionResult(finalConfig, warnings);
