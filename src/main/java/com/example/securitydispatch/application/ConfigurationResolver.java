@@ -70,15 +70,23 @@ public class ConfigurationResolver {
         // Reduction: removeClosing
         if (securityObject.getReductionRules().stream()
                 .anyMatch(rule -> rule.isActive(deploymentDate) && rule.isRemoveClosing())) {
-            additionalClosingTime = null;
-            additionalClosingDays = null;
+            if (additionalClosingTime == null) {
+                warnings.add(new Warning("Cannot remove closing time that does not exist"));
+            } else {
+                additionalClosingTime = null;
+                additionalClosingDays = null;
+            }
         }
 
 // Reduction: removeOpening
         if (securityObject.getReductionRules().stream()
                 .anyMatch(rule -> rule.isActive(deploymentDate) && rule.isRemoveOpening())) {
-            additionalOpeningTime = null;
-            additionalOpeningDays = null;
+            if (additionalOpeningTime == null) {
+                warnings.add(new Warning("Cannot remove opening time that does not exist"));
+            } else {
+                additionalOpeningTime = null;
+                additionalOpeningDays = null;
+            }
         }
 
         // Schritt 6: Warnung wenn negativ
