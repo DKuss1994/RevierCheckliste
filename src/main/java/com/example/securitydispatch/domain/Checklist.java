@@ -10,8 +10,9 @@ public class Checklist {
     private final Shift shift;
     private final StandardConfiguration config;
     LocalDateTime generatedAt;
+    private final List<Warning> warnings;
 
-    public Checklist(long id,Shift shift,StandardConfiguration config,LocalDateTime generatedAt) {
+    public Checklist(long id,Shift shift,StandardConfiguration config,LocalDateTime generatedAt,List<Warning> warnings) {
         if(shift == null){
            throw new IllegalArgumentException("Checklist shift must not be null");
         }if(config == null){
@@ -19,10 +20,14 @@ public class Checklist {
         }if(generatedAt == null){
            throw new IllegalArgumentException("Checklist generatedAt must not be null");
         }
+        if(warnings==null){
+            throw new IllegalArgumentException("Checklist warnings must not be null");
+        }
         this.generatedAt = generatedAt;
         this.config = config;
         this.shift = shift;
         this.id = id;
+        this.warnings = warnings;
     }
 
     public long getId() {
@@ -42,6 +47,6 @@ public class Checklist {
     }
 
     public List<Warning> getWarnings() {
-            return null;
+            return warnings;
     }
 }
