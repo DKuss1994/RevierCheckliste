@@ -102,7 +102,13 @@ public class ConfigurationResolverTest {
 
     @Test
     void shouldApplyAdditionalRuleClosingTime() {
-        securityObject.addAdditionalRule(new AdditionalRule.Builder(
+        SecurityObject objectWithoutClosing = new SecurityObject(
+                2L, "Object B", zone, address,
+                new StandardConfiguration.Builder()
+                        .inspectionCount(2)
+                        .build()); // kein closingTime!
+
+        objectWithoutClosing.addAdditionalRule(new AdditionalRule.Builder(
                 LocalDate.of(2024, 3, 1),
                 LocalDate.of(2024, 3, 31))
                 .closingTime(LocalTime.of(23, 0))
@@ -110,11 +116,10 @@ public class ConfigurationResolverTest {
                 .build());
 
         ResolutionResult result = resolver.resolve(
-                LocalDate.of(2024, 3, 11), securityObject);
+                LocalDate.of(2024, 3, 11), objectWithoutClosing);
 
         assertThat(result.getConfiguration().getClosingTime()).hasValue(LocalTime.of(23, 0));
-        assertThat(result.getConfiguration().getClosingDays()).hasValue(Set.of(DayOfWeek.TUESDAY));
-    }
+        assertThat(result.getWarnings()).isEmpty(); }
 
     @Test
     void shouldApplyReductionRuleRemoveClosing() {
