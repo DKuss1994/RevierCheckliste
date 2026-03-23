@@ -11,6 +11,6 @@ public class ChecklistGenerationService {
         ResolutionResult result = resolver.resolve(
                 shift.getDeploymentDate(), securityObject);
 
-        return new Checklist(1L, shift, result.getConfiguration(), LocalDateTime.now());
+        return new Checklist(1L, shift, result.getConfiguration(), LocalDateTime.now(),result.getWarnings());
     }
 }
