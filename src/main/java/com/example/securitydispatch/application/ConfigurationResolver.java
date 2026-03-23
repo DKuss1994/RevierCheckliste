@@ -42,24 +42,33 @@ public class ConfigurationResolver {
                 inspectionCount += rule.getInspectionCount().orElse(0);
             }
         }
+        //Additional: openingTime and openingDays
+        LocalTime additionalOpeningTime = openingTime;
+        Set<DayOfWeek> additionalOpeningDays = openingDays;
         // Additional: closingTime und closingDays
         LocalTime additionalClosingTime = closingTime;
         Set<DayOfWeek> additionalClosingDays = closingDays;
         for (AdditionalRule rule : securityObject.getAdditionalRules()) {
             if (rule.isActive(deploymentDate)) {
-                additionalClosingTime = rule.getClosingTime().orElse(additionalClosingTime);
-                additionalClosingDays = rule.getClosingDays().orElse(additionalClosingDays);
+                if (rule.getClosingTime().isPresent()) {
+                    if (additionalClosingTime != null) {
+                        warnings.add(new Warning("Cannot add closing time that already exists"));
+                    } else {
+                        additionalClosingTime = rule.getClosingTime().orElse(null);
+                        additionalClosingDays = rule.getClosingDays().orElse(null);
+                    }
+                }
+                if (rule.getOpeningTime().isPresent()) {
+                    if (additionalOpeningTime != null) {
+                        warnings.add(new Warning("Cannot add opening time that already exists"));
+                    } else {
+                        additionalOpeningTime = rule.getOpeningTime().orElse(null);
+                        additionalOpeningDays = rule.getOpeningDays().orElse(null);
+                    }
+                }
             }
         }
-        //Additional: openingTime and openingDays
-        LocalTime additionalOpeningTime = openingTime;
-        Set<DayOfWeek> additionalOpeningDays = openingDays;
-        for (AdditionalRule rule : securityObject.getAdditionalRules()) {
-            if (rule.isActive(deploymentDate)) {
-                additionalOpeningTime = rule.getOpeningTime().orElse(additionalOpeningTime);
-                additionalOpeningDays = rule.getOpeningDays().orElse(additionalOpeningDays);
-            }
-        }
+
         // Schritt 5: Reduction abziehen
         for (ReductionRule rule : securityObject.getReductionRules()) {
             if (rule.isActive(deploymentDate)) {
