@@ -56,25 +56,25 @@ public class ChecklistGenerationServiceTest {
     @Test
     void shouldApplyAdditionalRuleWhenActive(){
         AdditionalRule rule = new AdditionalRule.Builder(
-                LocalDate.of(2024,2,2),
-                LocalDate.of(2024,3,3)
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31)
         ).inspectionCount(3)
                 .build();
         securityObject.addAdditionalRule(rule);
         Checklist checklist = service.generate(shift,securityObject);
         // Standard 2 + Additional 3 = 5
-        assertThat(checklist.getConfig().getInspectionCount()).isEqualTo(5);
+        assertThat(checklist.getConfig().getInspectionCount()).hasValue(5);
     }
     @Test
     void shouldApplyReductionRuleWhenActive(){
         ReductionRule rule = new ReductionRule.Builder(
                 LocalDate.of(2024,2,2),
-                LocalDate.of(2024,3,3)
+                LocalDate.of(2024, 3, 31)
         ).inspectionCount(2)
                 .build();
         securityObject.addReductionRule(rule);
         Checklist checklist = service.generate(shift,securityObject);
-        // Standard 2 - Reduction 2 = 0
-        assertThat(checklist.getConfig().getInspectionCount()).isEqualTo(0);
+        // Standard 2 - Reduction 2 =
+        assertThat(checklist.getConfig().getInspectionCount()).hasValue(0);
     }
 }
