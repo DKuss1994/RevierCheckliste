@@ -182,5 +182,47 @@ public class ConfigurationResolverTest {
         assertThat(result.getWarnings().get(0).getMessage()).isEqualTo
                 ("Cannot remove opening time that does not exist");
     }
+    @Test
+    void shouldWarnWhenAddingClosingTimeThatAlreadyExists() {
+        securityObject.addAdditionalRule(new AdditionalRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .closingTime(LocalTime.of(23, 0))
+                .closingDays(Set.of(DayOfWeek.TUESDAY))
+                .build());
+
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024, 3, 11), securityObject);
+
+        assertThat(result.getWarnings()).hasSize(1);
+        assertThat(result.getWarnings().get(0).getMessage())
+                .isEqualTo("Cannot add closing time that already exists");
+    }
+
+    @Test
+    void shouldWarnWhenAddingOpeningTimeThatAlreadyExists() {
+        StandardConfiguration configWithOpening = new StandardConfiguration.Builder()
+                .inspectionCount(2)
+                .openingTime(LocalTime.of(8, 0))
+                .openingDays(Set.of(DayOfWeek.MONDAY))
+                .build();
+
+        SecurityObject objectWithOpening = new SecurityObject(
+                2L, "Object B", zone, address, configWithOpening);
+
+        objectWithOpening.addAdditionalRule(new AdditionalRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .openingTime(LocalTime.of(9, 0))
+                .openingDays(Set.of(DayOfWeek.TUESDAY))
+                .build());
+
+        ResolutionResult result = resolver.resolve(
+                LocalDate.of(2024, 3, 11), objectWithOpening);
+
+        assertThat(result.getWarnings()).hasSize(1);
+        assertThat(result.getWarnings().get(0).getMessage())
+                .isEqualTo("Cannot add opening time that already exists");
+    }
 
 }
