@@ -74,7 +74,30 @@ public class ChecklistGenerationServiceTest {
                 .build();
         securityObject.addReductionRule(rule);
         Checklist checklist = service.generate(shift,securityObject);
-        // Standard 2 - Reduction 2 =
+        // Standard 2 - Reduction 2 =0
         assertThat(checklist.getConfig().getInspectionCount()).hasValue(0);
+    }
+    @Test
+    void shouldReturnWarningsWhenInspectionCountIsNegative() {
+        ReductionRule rule = new ReductionRule.Builder(
+                LocalDate.of(2024, 3, 1),
+                LocalDate.of(2024, 3, 31))
+                .inspectionCount(5)
+                .build();
+
+        securityObject.addReductionRule(rule);
+
+        Checklist checklist = service.generate(shift, securityObject);
+
+        assertThat(checklist.getWarnings()).hasSize(1);
+        assertThat(checklist.getWarnings().get(0).getMessage())
+                .isEqualTo("Inspection count cannot be negative, set to 0");
+    }
+
+    @Test
+    void shouldReturnNoWarningsWhenEverythingIsValid() {
+        Checklist checklist = service.generate(shift, securityObject);
+
+        assertThat(checklist.getWarnings()).isEmpty();
     }
 }

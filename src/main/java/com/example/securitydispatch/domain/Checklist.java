@@ -3,6 +3,7 @@ package com.example.securitydispatch.domain;
 import com.example.securitydispatch.domain.Rules.ReductionRule;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Checklist {
     private final long id;
@@ -40,4 +41,7 @@ public class Checklist {
         return generatedAt;
     }
 
+    public List<Warning> getWarnings() {
+            return null;
+    }
 }
