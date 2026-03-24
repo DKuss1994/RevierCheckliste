@@ -19,7 +19,7 @@ public class Driver {
         this.firstName = name;
     }
 
-    public void assignedZones(Zone zone) {
+    public void addAssignedZone(Zone zone) {
         assignedZones.add(zone);
     }
 

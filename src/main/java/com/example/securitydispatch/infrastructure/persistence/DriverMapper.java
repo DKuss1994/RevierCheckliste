@@ -5,10 +5,26 @@ import com.example.securitydispatch.domain.Zone;
 
 public class DriverMapper {
     public static DriverEntity toEntity(Driver driver) {
-        return new DriverEntity(driver.getId(), driver.getFirstName(), driver.getLastName());
+        DriverEntity entity = new DriverEntity(
+                driver.getId(),
+                driver.getFirstName(),
+                driver.getLastName());
+        for (Zone zone : driver.getAssignedZones()) {
+            entity.addAssignedZone(ZoneMapper.toEntity(zone));
+        }
+        return entity;
     }
 
-    public static Driver toDomain(DriverEntity driver) {
-        return new Driver(driver.getId(), driver.getFirstName(), driver.getLastName());
+    public static Driver toDomain(DriverEntity entity) {
+        Driver driver= new Driver(
+                entity.getId(),
+                entity.getFirstName(),
+                entity.getLastName());
+        for (ZoneEntity zone : entity.getAssignedZones()) {
+            driver.addAssignedZone(ZoneMapper.toDomain(zone));
+        }
+        return driver;
     }
+
+
 }

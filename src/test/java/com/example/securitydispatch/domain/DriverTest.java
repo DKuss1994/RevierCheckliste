@@ -65,7 +65,7 @@ public class DriverTest {
     void shouldAssignedZoneToDriver(){
        Driver driver = new Driver(1L,"Max","Mustermann");
 Zone zone = new Zone(1L,"Zone 1");
-driver.assignedZones(zone);
+driver.addAssignedZone(zone);
        assertThat(driver.getAssignedZones()).containsExactly(zone);
 
    }
@@ -79,7 +79,7 @@ assertThat(driver.isQualifiedForZone(zone)).isFalse();
     void shouldDetectWhenDriverIsQualifiedForZone(){
        Driver driver = new Driver(1L,"Max","Mustermann");
        Zone zone = new Zone(1L,"Zone 1");
-       driver.assignedZones(zone);
+       driver.addAssignedZone(zone);
 assertThat(driver.isQualifiedForZone(zone)).isTrue();
    }
 

@@ -79,7 +79,7 @@ null,LocalTime.of(14,0)))
 
     @Test
     void shouldNotWarnWhenDriverIsQualifiedForZone() {
-        driver.assignedZones(zone);
+        driver.addAssignedZone(zone);
 
         Shift shift = new Shift(1L, driver, zone, LocalDate.of(2024, 3, 11),
                 LocalTime.of(6, 0), LocalTime.of(14, 0));
