@@ -7,8 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-public class ZoneRepositoryTest {
+@DataJpaTest
+class ZoneRepositoryTest {
     @Autowired
     private ZoneRepository zoneRepository;
 
@@ -28,6 +28,7 @@ public class ZoneRepositoryTest {
         zoneRepository.save(zone);
         zoneRepository.deleteById(1L);
         Optional<ZoneEntity> found = zoneRepository.findById(1L);
+
         assertThat(found).isEmpty();
     }
 }
