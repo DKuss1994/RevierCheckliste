@@ -66,16 +66,16 @@ public class StandardConfigurationEmbeddable {
         return openingTime;
     }
 
-    public String getOpeningDays() {
-        return openingDays;
+    public Set<DayOfWeek> getOpeningDays() {
+        return stringToDays(openingDays);
     }
 
     public LocalTime getClosingTime() {
         return closingTime;
     }
 
-    public String getClosingDays() {
-        return closingDays;
+    public Set<DayOfWeek> getClosingDays() {
+        return stringToDays(closingDays);
     }
 
     public LocalTime getInspectionWindowStart() {

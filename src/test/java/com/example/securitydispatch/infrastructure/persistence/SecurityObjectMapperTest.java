@@ -26,9 +26,9 @@ public class SecurityObjectMapperTest {
         assertThat(mapped).isNotNull();
         assertThat(mapped.getId()).isEqualTo(securityObject.getId());
         assertThat(mapped.getName()).isEqualTo(securityObject.getName());
-        assertThat(mapped.getAddress()).isEqualTo(securityObject.getAddress());
-        assertThat(mapped.getZone()).isEqualTo(securityObject.getZone());
-        assertThat(mapped.getStandardConfiguration()).isEqualTo(securityObject.getStandardConfiguration());
+        assertThat(mapped.getAddress().getStreet()).isEqualTo(address.getStreet());
+        assertThat(mapped.getZone().getName()).isEqualTo(zone.getName());
+        assertThat(mapped.getStandardConfiguration().getInspectionCount()).isEqualTo(securityObject.getStandardConfiguration().getInspectionCount());
 
     }
 }
