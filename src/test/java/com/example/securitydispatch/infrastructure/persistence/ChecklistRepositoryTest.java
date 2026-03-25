@@ -66,6 +66,9 @@ public class ChecklistRepositoryTest {
         assertThat(found.get().getConfiguration().getInspectionDays()).isEqualTo(config.getInspectionDays());
         assertThat(found.get().getShift().getDriver().getFirstName())
                 .isEqualTo(driver.getFirstName());
+        assertThat(found.get().getWarnings().get(0).getMessage()).isEqualTo("Stop");
+        assertThat(found.get().getWarnings()).hasSize(1);
+
 
     }
 
