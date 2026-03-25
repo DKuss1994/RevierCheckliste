@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShiftMapperTest {
     @Test
-    void shouldMapDriverToDomainAndBack(){
+    void shouldMapShiftToDomainAndBack(){
         Driver driver = new Driver(1L,"Max","Muster");
         Zone zone = new Zone(1L,"Zone 1");
         LocalDate startDay = LocalDate.of(2026,3,3);
@@ -23,5 +23,9 @@ public class ShiftMapperTest {
         Shift toDomain = ShiftMapper.toDomain(entity);
         assertThat(toDomain.getId()).isEqualTo(shift.getId());
         assertThat(toDomain.getDeploymentDate()).isEqualTo(startDay);
+        assertThat(toDomain.getDriver().getFirstName()).isEqualTo("Max");
+        assertThat(toDomain.getZone().getName()).isEqualTo("Zone 1");
+        assertThat(toDomain.getStartTime()).isEqualTo(startTime);
+        assertThat(toDomain.getEndTime()).isEqualTo(endTime);
     }
 }
