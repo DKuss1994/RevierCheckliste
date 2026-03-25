@@ -36,6 +36,8 @@ public class ChecklistMapperTest {
         assertThat(toDomain.getConfig().getInspectionCount()).isEqualTo(config.getInspectionCount());
         assertThat(toDomain.getShift().getDriver().getFirstName()).isEqualTo(driver.getFirstName());
         assertThat(toDomain.getShift().getZone().getName()).isEqualTo(zone.getName());
+        assertThat(toDomain.getWarnings()).hasSize(1);
+        assertThat(toDomain.getWarnings().get(0).getMessage()).isEqualTo("Stop");
 
     }
 
