@@ -1,11 +1,12 @@
 package com.example.securitydispatch.infrastructure.web;
+
 import com.example.securitydispatch.application.ChecklistGenerationService;
 import com.example.securitydispatch.domain.*;
 import com.example.securitydispatch.infrastructure.persistence.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
@@ -16,26 +17,25 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @WebMvcTest(ChecklistController.class)
 public class ChecklistControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private ChecklistGenerationService checklistGenerationService;
 
-    @MockBean
+    @MockitoBean
     private ShiftRepository shiftRepository;
 
-    @MockBean
+    @MockitoBean
     private SecurityObjectRepository securityObjectRepository;
 
-    @MockBean
+    @MockitoBean
     private ChecklistRepository checklistRepository;
 
     @Test
-    void shouldGenerateChecklistAndReturnResponse() throws Exception{
+    void shouldGenerateChecklistAndReturnResponse() throws Exception {
         Zone zone = new Zone(1L, "Zone 1");
         Driver driver = new Driver(1L, "Max", "Mustermann");
         Shift shift = new Shift(1L, driver, zone,
@@ -48,13 +48,13 @@ public class ChecklistControllerTest {
 
         Checklist checklist = new Checklist(1L, shift, config,
                 LocalDateTime.now(), List.of());
-        when(checklistGenerationService.generate(any(),any()))
+        when(checklistGenerationService.generate(any(), any()))
                 .thenReturn(checklist);
         mockMvc.perform(post("/checklists/generate")
-                .content("{\"shiftId\": 1, \"securityObjectId\": 1}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"shiftId\": 1, \"securityObjectId\": 1}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.inspectionCount").value(2));
-
     }
 }

@@ -30,7 +30,7 @@ public class ChecklistGenerationServiceTest {
 
         Checklist checklist = service.generate(shift, securityObject);
 
-        assertThat(checklist.getConfig().getInspectionCount()).hasValue(2);
+        assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(2);
     }
     @Test
     void shouldApplyOverrideRuleWhenActive() {
@@ -51,7 +51,7 @@ public class ChecklistGenerationServiceTest {
 
         Checklist checklist = service.generate(shift, securityObject);
 
-        assertThat(checklist.getConfig().getInspectionCount()).hasValue(3);
+        assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(3);
     }
     @Test
     void shouldApplyAdditionalRuleWhenActive(){
@@ -63,7 +63,7 @@ public class ChecklistGenerationServiceTest {
         securityObject.addAdditionalRule(rule);
         Checklist checklist = service.generate(shift,securityObject);
         // Standard 2 + Additional 3 = 5
-        assertThat(checklist.getConfig().getInspectionCount()).hasValue(5);
+        assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(5);
     }
     @Test
     void shouldApplyReductionRuleWhenActive(){
@@ -75,7 +75,7 @@ public class ChecklistGenerationServiceTest {
         securityObject.addReductionRule(rule);
         Checklist checklist = service.generate(shift,securityObject);
         // Standard 2 - Reduction 2 =0
-        assertThat(checklist.getConfig().getInspectionCount()).hasValue(0);
+        assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(0);
     }
     @Test
     void shouldReturnWarningsWhenInspectionCountIsNegative() {

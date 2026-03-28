@@ -1,7 +1,5 @@
 package com.example.securitydispatch.domain;
 
-import com.example.securitydispatch.domain.Rules.ReductionRule;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class Checklist {
         return shift;
     }
 
-    public StandardConfiguration getConfig() {
+    public StandardConfiguration getConfiguration() {
         return config;
     }
 

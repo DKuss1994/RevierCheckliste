@@ -1,14 +1,13 @@
 package com.example.securitydispatch.infrastructure.persistence;
 
 import com.example.securitydispatch.domain.Checklist;
-import com.example.securitydispatch.domain.Driver;
 import com.example.securitydispatch.domain.Shift;
 import com.example.securitydispatch.domain.StandardConfiguration;
 
 public class ChecklistMapper {
     public static ChecklistEntity toEntity(Checklist checklist) {
         ShiftEntity shift = ShiftMapper.toEntity(checklist.getShift());
-        StandardConfiguration config = checklist.getConfig();
+        StandardConfiguration config = checklist.getConfiguration();
         StandardConfigurationEmbeddable standardConfiguration = new StandardConfigurationEmbeddable(
                 config.getInspectionCount().orElse(null),
                 config.getInspectionDays().orElse(null),

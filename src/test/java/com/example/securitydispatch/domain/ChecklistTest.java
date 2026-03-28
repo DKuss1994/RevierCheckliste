@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +28,7 @@ return new Shift(1L,driver,zone, LocalDate.of(2026,3,15),
         Checklist checklist = new Checklist(1L,shift,config,LocalDateTime.now(),warningList);
         assertThat(checklist.getId()).isEqualTo(1L);
         assertThat(checklist.getShift()).isEqualTo(shift);
-        assertThat(checklist.getConfig()).isEqualTo(config);
+        assertThat(checklist.getConfiguration()).isEqualTo(config);
         assertThat(checklist.getGeneratedAt()).isNotNull();
     }
     @Test

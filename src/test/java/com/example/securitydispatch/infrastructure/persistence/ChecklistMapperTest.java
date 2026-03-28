@@ -33,7 +33,7 @@ public class ChecklistMapperTest {
         ChecklistEntity entity = ChecklistMapper.toEntity(checklist);
         Checklist toDomain = ChecklistMapper.toDomain(entity);
         assertThat(toDomain.getId()).isEqualTo(checklist.getId());
-        assertThat(toDomain.getConfig().getInspectionCount()).isEqualTo(config.getInspectionCount());
+        assertThat(toDomain.getConfiguration().getInspectionCount()).isEqualTo(config.getInspectionCount());
         assertThat(toDomain.getShift().getDriver().getFirstName()).isEqualTo(driver.getFirstName());
         assertThat(toDomain.getShift().getZone().getName()).isEqualTo(zone.getName());
         assertThat(toDomain.getWarnings()).hasSize(1);
