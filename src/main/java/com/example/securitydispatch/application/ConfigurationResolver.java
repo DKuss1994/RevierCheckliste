@@ -2,6 +2,7 @@ package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.*;
 import com.example.securitydispatch.domain.Rules.*;
+import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
+@Component
 public class ConfigurationResolver {
     public ResolutionResult resolve(LocalDate deploymentDate, SecurityObject securityObject) {
         List<Warning> warnings = new ArrayList<>();

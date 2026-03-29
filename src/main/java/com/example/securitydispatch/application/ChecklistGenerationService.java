@@ -1,8 +1,10 @@
 package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.*;
-import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+@Service
 public class ChecklistGenerationService {
 
     private final ConfigurationResolver resolver = new ConfigurationResolver();
