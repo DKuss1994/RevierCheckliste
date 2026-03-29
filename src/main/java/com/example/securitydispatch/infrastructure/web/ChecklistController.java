@@ -2,6 +2,9 @@ package com.example.securitydispatch.infrastructure.web;
 
 import com.example.securitydispatch.application.ChecklistGenerationService;
 import com.example.securitydispatch.domain.Checklist;
+import com.example.securitydispatch.domain.SecurityObject;
+import com.example.securitydispatch.domain.Shift;
+import com.example.securitydispatch.domain.Warning;
 import com.example.securitydispatch.infrastructure.persistence.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +32,23 @@ public class ChecklistController {
     public ResponseEntity<ChecklistResponse> generate(
             @RequestBody ChecklistRequest request) {
 
-        Checklist checklist = checklistGenerationService.generate(null, null);
+        Shift shift = shiftRepository.findById(request.getShiftId())
+                .map(ShiftMapper::toDomain)
+                .orElseThrow (()-> new RuntimeException("Shift not found: " + request.getShiftId()));
+
+        SecurityObject securityObject = securityObjectRepository.findById(request.getSecurityObjectId())
+                .map(SecurityObjectMapper::toDomain)
+                .orElseThrow(()-> new RuntimeException("Security object not found: " + request.getSecurityObjectId()));
+
+        Checklist checklist = checklistGenerationService.generate(shift, securityObject);
+        checklistRepository.save(ChecklistMapper.toEntity(checklist));
 
         ChecklistResponse response = new ChecklistResponse(
                 checklist.getId(),
                 checklist.getGeneratedAt(),
                 checklist.getConfiguration().getInspectionCount().orElse(null),
                 checklist.getWarnings().stream()
-                        .map(w -> w.getMessage())
+                        .map(Warning::getMessage)
                         .toList());
 
         return ResponseEntity.ok(response);
