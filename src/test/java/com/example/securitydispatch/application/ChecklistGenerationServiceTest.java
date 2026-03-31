@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 public class ChecklistGenerationServiceTest {
+
     private final Zone zone = new Zone(1L, "Zone 1");
     private final Address address = new Address("Musterstraße 1", "Berlin", "10115");
     private final Driver driver = new Driver(1L, "Max", "Mustermann");
