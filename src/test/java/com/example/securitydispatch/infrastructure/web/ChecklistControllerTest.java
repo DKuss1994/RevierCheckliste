@@ -1,7 +1,6 @@
 package com.example.securitydispatch.infrastructure.web;
 
 import com.example.securitydispatch.application.ChecklistApplicationService;
-import com.example.securitydispatch.application.ChecklistGenerationService;
 import com.example.securitydispatch.domain.*;
 import com.example.securitydispatch.infrastructure.persistence.*;
 import org.junit.jupiter.api.Test;
@@ -11,11 +10,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 import java.util.List;
-import java.util.Optional;
+
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
