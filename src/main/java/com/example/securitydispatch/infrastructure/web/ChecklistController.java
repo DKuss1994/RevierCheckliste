@@ -1,5 +1,6 @@
 package com.example.securitydispatch.infrastructure.web;
 
+import com.example.securitydispatch.application.ChecklistApplicationService;
 import com.example.securitydispatch.application.ChecklistGenerationService;
 import com.example.securitydispatch.domain.Checklist;
 import com.example.securitydispatch.domain.SecurityObject;
@@ -13,44 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/checklists")
 public class ChecklistController {
 
-    private final ChecklistGenerationService checklistGenerationService;
-    private final ShiftRepository shiftRepository;
-    private final SecurityObjectRepository securityObjectRepository;
-    private final ChecklistRepository checklistRepository;
+    private final ChecklistApplicationService checklistApplicationService;
 
-    public ChecklistController(ChecklistGenerationService checklistGenerationService,
-                               ShiftRepository shiftRepository,
-                               SecurityObjectRepository securityObjectRepository,
-                               ChecklistRepository checklistRepository) {
-        this.checklistGenerationService = checklistGenerationService;
-        this.shiftRepository = shiftRepository;
-        this.securityObjectRepository = securityObjectRepository;
-        this.checklistRepository = checklistRepository;
+    public ChecklistController(ChecklistApplicationService checklistApplicationService) {
+        this.checklistApplicationService = checklistApplicationService;
     }
 
     @PostMapping("/generate")
-    public ResponseEntity<ChecklistResponse> generate(
-            @RequestBody ChecklistRequest request) {
-
-        Shift shift = shiftRepository.findById(request.getShiftId())
-                .map(ShiftMapper::toDomain)
-                .orElseThrow (()-> new RuntimeException("Shift not found: " + request.getShiftId()));
-
-        SecurityObject securityObject = securityObjectRepository.findById(request.getSecurityObjectId())
-                .map(SecurityObjectMapper::toDomain)
-                .orElseThrow(()-> new RuntimeException("Security object not found: " + request.getSecurityObjectId()));
-
-        Checklist checklist = checklistGenerationService.generate(shift, securityObject);
-        checklistRepository.save(ChecklistMapper.toEntity(checklist));
-
-        ChecklistResponse response = new ChecklistResponse(
-                checklist.getId(),
-                checklist.getGeneratedAt(),
-                checklist.getConfiguration().getInspectionCount().orElse(null),
-                checklist.getWarnings().stream()
-                        .map(Warning::getMessage)
-                        .toList());
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ChecklistResponse> generate(@RequestBody ChecklistRequest request) {
+        return ResponseEntity.ok(checklistApplicationService.generate(request));
     }
 }
