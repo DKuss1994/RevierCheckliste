@@ -1,5 +1,6 @@
 package com.example.securitydispatch.infrastructure.web;
 
+import com.example.securitydispatch.application.ChecklistApplicationService;
 import com.example.securitydispatch.application.ChecklistGenerationService;
 import com.example.securitydispatch.domain.*;
 import com.example.securitydispatch.infrastructure.persistence.*;
@@ -27,52 +28,20 @@ public class ChecklistControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private ChecklistGenerationService checklistGenerationService;
-
-    @MockitoBean
-    private ShiftRepository shiftRepository;
-
-    @MockitoBean
-    private SecurityObjectRepository securityObjectRepository;
-
-    @MockitoBean
-    private ChecklistRepository checklistRepository;
+    private ChecklistApplicationService checklistApplicationService;
 
     @Test
     void shouldGenerateChecklistAndReturnResponse() throws Exception {
 
-        Zone zone = new Zone(1L, "Zone 1");
-        Driver driver = new Driver(1L, "Max", "Mustermann");
-        Shift shift = new Shift(1L, driver, zone,
-                LocalDate.of(2024, 3, 11),
-                LocalTime.of(6, 0), LocalTime.of(14, 0));
+        ChecklistResponse response = new ChecklistResponse(
+                1L,
+                LocalDateTime.now(),
+                2,
+                List.of());
 
-        StandardConfiguration config = new StandardConfiguration.Builder()
-                .inspectionCount(2)
-                .build();
+        when(checklistApplicationService.generate(any()))
+                .thenReturn(response);
 
-        // Shift Repository mocken
-        ShiftEntity shiftEntity = new ShiftEntity(1L,
-                new DriverEntity(1L, "Max", "Mustermann"),
-                new ZoneEntity(1L, "Zone 1"),
-                LocalDate.of(2024, 3, 11),
-                LocalTime.of(6, 0), LocalTime.of(14, 0));
-
-        when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
-
-// SecurityObject Repository mocken
-        AddressEmbeddable address = new AddressEmbeddable("Musterstraße 1", "Berlin", "10115");
-        StandardConfigurationEmbeddable configurationEmbeddable = new StandardConfigurationEmbeddable(
-                2, null, null, null, null, null, null, null, null);
-        SecurityObjectEntity securityObjectEntity = new SecurityObjectEntity(
-                1L, "Object A", new ZoneEntity(1L, "Zone 1"), address, configurationEmbeddable);
-
-        when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
-
-        Checklist checklist = new Checklist(1L, shift, config,
-                LocalDateTime.now(), List.of());
-        when(checklistGenerationService.generate(any(), any()))
-                .thenReturn(checklist);
         mockMvc.perform(post("/checklists/generate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"shiftId\": 1, \"securityObjectId\": 1}"))
