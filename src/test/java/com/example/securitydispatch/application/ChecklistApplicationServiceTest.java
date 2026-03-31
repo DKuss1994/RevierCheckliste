@@ -67,7 +67,7 @@ public class ChecklistApplicationServiceTest {
         when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(),any())).thenReturn(checklist);
 
-        ChecklistResponse response = ChecklistApplicationService.generate
+        ChecklistResponse response = checklistApplicationService.generate
                 (new ChecklistRequest(1L,1L));
 
         assertThat(response.getId()).isEqualTo(1L);
@@ -78,7 +78,7 @@ public class ChecklistApplicationServiceTest {
     void shouldThrowExceptionWhenShiftNotFound() {
         when(shiftRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> ChecklistApplicationService.generate(
+        assertThatThrownBy(() -> checklistApplicationService.generate(
                 new ChecklistRequest(99L, 1L)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Shift not found: 99");
@@ -89,7 +89,7 @@ public class ChecklistApplicationServiceTest {
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
         when(securityObjectRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> ChecklistApplicationService.generate(
+        assertThatThrownBy(() -> checklistApplicationService.generate(
                 new ChecklistRequest(1L, 99L)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("SecurityObject not found: 99");
