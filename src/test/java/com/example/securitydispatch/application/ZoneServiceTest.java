@@ -66,8 +66,8 @@ public class ZoneServiceTest {
         ZoneEntity update = new ZoneEntity(1L,"Zone 1 Updated");
         when(zoneRepository.findById(1L)).thenReturn(Optional.of(new ZoneEntity(1L,"Zone 1")));
         when(zoneRepository.save(any())).thenReturn(update);
-        Zone result = zoneService.update(1L,"Zone 1 Update");
-        assertThat(result.getName()).isEqualTo("Zone 1 Update");
+        Zone result = zoneService.update(1L,"Zone 1 Updated");
+        assertThat(result.getName()).isEqualTo("Zone 1 Updated");
     }
     @Test
     void shouldDeleteZone(){
