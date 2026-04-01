@@ -9,14 +9,14 @@ public class Driver {
     private String lastName;
     private List<Zone> assignedZones = new ArrayList<>();
 
-    public Driver(long id, String name, String lastName) {
-        if (name == null || name.isBlank() || lastName == null || lastName.isBlank()) {
+    public Driver(long id, String firstName, String lastName) {
+        if (firstName == null || firstName.isBlank() || lastName == null || lastName.isBlank()) {
             throw new IllegalArgumentException("Name must not be blank");
         }
         this.lastName = lastName;
 
         this.id = id;
-        this.firstName = name;
+        this.firstName = firstName;
     }
 
     public void addAssignedZone(Zone zone) {
