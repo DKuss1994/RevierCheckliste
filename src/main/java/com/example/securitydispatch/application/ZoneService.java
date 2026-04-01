@@ -33,4 +33,11 @@ public class ZoneService {
             .stream().map(ZoneMapper::toDomain)
             .toList();
     }
+
+    public Zone update(long id, String name) {
+        return null;
+    }
+
+    public void delete(long id)  {
+    }
 }

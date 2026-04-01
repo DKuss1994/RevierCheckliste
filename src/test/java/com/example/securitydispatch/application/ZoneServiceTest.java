@@ -61,5 +61,25 @@ public class ZoneServiceTest {
         assertThat(result.getFirst().getName()).isEqualTo("Zone 1");
         assertThat(result.get(1).getName()).isEqualTo("Zone 2");
     }
+    @Test
+    void shouldUpdateZone(){
+        ZoneEntity update = new ZoneEntity(1L,"Zone 1 Updated");
+        when(zoneRepository.findById(1L)).thenReturn(Optional.of(new ZoneEntity(1L,"Zone 1")));
+        when(zoneRepository.save(any())).thenReturn(update);
+        Zone result = zoneService.update(1L,"Zone 1 Update");
+        assertThat(result.getName()).isEqualTo("Zone 1 Update");
+    }
+    @Test
+    void shouldDeleteZone(){
+        when(zoneRepository.findById(1L)).thenReturn(Optional.of(new ZoneEntity(1L,"Zone 1")));
+        zoneService.delete(1L);
+    }
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistingZone(){
+when(zoneRepository.findById(99L)).thenReturn(Optional.empty());
+assertThatThrownBy(()->zoneService.delete(99L))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Zone not found: 99");
+    }
 }
 
