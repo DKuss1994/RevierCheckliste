@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
     }
 
     @Test
-    void shouldDriverFindById() {
+    void shouldFindDriverById() {
         when(driverRepository.findById(1L)).
                 thenReturn(Optional.of(new DriverEntity(1L, "Max","Mustermann")));
         Driver result = driverService.findById(1L);
@@ -79,7 +79,7 @@ import static org.mockito.Mockito.when;
         assertThat(result.getFirstName()).isEqualTo("Moritz");
     }
     @Test
-    void shouldDeleteZone(){
+    void shouldDeleteDriver(){
         when(driverRepository.findById(1L)).thenReturn(Optional.of(new DriverEntity(1L,"Max","Mustermann")));
         driverService.delete(1L);
     }
