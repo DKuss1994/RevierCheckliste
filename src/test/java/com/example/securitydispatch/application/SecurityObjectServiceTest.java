@@ -47,7 +47,6 @@ public class SecurityObjectServiceTest {
                 "Object A",
                 1L,
                 address,
-
                 standardConfiguration);
         assertThat(result.getName()).isEqualTo("Object A");
     }
