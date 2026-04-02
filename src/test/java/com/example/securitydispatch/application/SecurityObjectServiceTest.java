@@ -115,5 +115,17 @@ public class SecurityObjectServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("SecurityObject not found: 99");
     }
+    @Test
+    void shouldThrowExceptionWhenUpdatingWithNonExistingZone() {
+        when(securityObjectRepository.findById(1L))
+                .thenReturn(Optional.of(new SecurityObjectEntity(
+                        1L, "Object A", zoneEntity, address, standardConfiguration)));
+        when(zoneRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> securityObjectService.update(
+                1L, "New Name", 99L, address, standardConfiguration))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Zone not found: 99");
+    }
 
 }
