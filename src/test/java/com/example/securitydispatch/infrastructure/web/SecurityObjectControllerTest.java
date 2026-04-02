@@ -63,7 +63,7 @@ class SecurityObjectControllerTest {
     void shouldGetSecurityObjectById() throws Exception {
         when(securityObjectService.findById(1L))
                 .thenReturn(securityObject);
-        mockMvc.perform(get("/securtiy-objects/1"))
+        mockMvc.perform(get("/security-objects/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Object A"));
@@ -78,7 +78,7 @@ class SecurityObjectControllerTest {
                         securityObject,
                         securityObjectB));
 
-        mockMvc.perform(get("/securtiy-objects"))
+        mockMvc.perform(get("/security-objects"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
