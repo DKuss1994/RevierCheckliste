@@ -14,7 +14,7 @@ import com.lowagie.text.pdf.*;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-
+@Service
 public class PdfService {
 
     private static final float[] OBJECT_TABLE_COLUMNS = {3, 2, 1}; // Objekt | Geplant | Eingetragen

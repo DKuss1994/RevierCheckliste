@@ -3,9 +3,10 @@ package com.example.securitydispatch.application;
 import com.example.securitydispatch.domain.Driver;
 import com.example.securitydispatch.domain.Zone;
 import com.example.securitydispatch.infrastructure.persistence.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class DriverService {
     private final ZoneRepository zoneRepository;
     private final DriverRepository driverRepository;

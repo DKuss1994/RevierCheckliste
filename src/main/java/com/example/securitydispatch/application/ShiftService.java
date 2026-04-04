@@ -2,11 +2,12 @@ package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.Shift;
 import com.example.securitydispatch.infrastructure.persistence.*;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
+@Service
 public class ShiftService {
     private final DriverRepository driverRepository;
     private final ZoneRepository zoneRepository;

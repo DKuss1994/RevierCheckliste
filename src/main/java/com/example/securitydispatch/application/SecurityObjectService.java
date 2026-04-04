@@ -4,9 +4,10 @@ import com.example.securitydispatch.domain.SecurityObject;
 import com.example.securitydispatch.domain.Zone;
 import com.example.securitydispatch.infrastructure.persistence.*;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class SecurityObjectService {
     private final ZoneRepository zoneRepository;
     private final SecurityObjectRepository securityObjectRepository;
