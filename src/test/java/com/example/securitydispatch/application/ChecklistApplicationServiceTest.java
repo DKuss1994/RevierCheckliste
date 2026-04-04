@@ -38,42 +38,44 @@ public class ChecklistApplicationServiceTest {
     @InjectMocks
     private ChecklistApplicationService checklistApplicationService;
 
-    private final ZoneEntity zoneEntity = new ZoneEntity(1L,"Zone1");
-    private final DriverEntity driverEntity = new DriverEntity(1L,"Max","Mustermann");
+    private final ZoneEntity zoneEntity = new ZoneEntity(1L, "Zone1");
+    private final DriverEntity driverEntity = new DriverEntity(1L, "Max", "Mustermann");
     private final ShiftEntity shiftEntity = new ShiftEntity(
             1L,
             driverEntity,
             zoneEntity,
-            LocalDate.of(2026,3,30),
-            LocalTime.of(18,0),
-            LocalTime.of(6,0));
+            LocalDate.of(2026, 3, 30),
+            LocalTime.of(18, 0),
+            LocalTime.of(6, 0));
     private final StandardConfigurationEmbeddable configurationEmbeddable = new StandardConfigurationEmbeddable(2,
-            null,null,null,null,null,null,null,null);
-    private final AddressEmbeddable addressEmbeddable = new AddressEmbeddable("Musterstraße 1","Musterstadt","00000");
+            null, null, null, null, null, null, null, null);
+    private final AddressEmbeddable addressEmbeddable = new AddressEmbeddable("Musterstraße 1", "Musterstadt", "00000");
     private final SecurityObjectEntity securityObjectEntity = new SecurityObjectEntity(
-            1L,"Object 1",zoneEntity,addressEmbeddable,configurationEmbeddable
+            1L, "Object 1", zoneEntity, addressEmbeddable, configurationEmbeddable
     );
+
     @Test
-    void shouldGenerateChecklistSuccessfully(){
-        Zone zone = new Zone (1L,"Zone1");
-        Driver driver = new Driver(1L,"Max","Mustermann");
-        Shift shift = new Shift(1L,driver,zone,
-                LocalDate.of(2026,3,30),
-                LocalTime.of(18,0),
-                LocalTime.of(6,0));
+    void shouldGenerateChecklistSuccessfully() {
+        Zone zone = new Zone(1L, "Zone1");
+        Driver driver = new Driver(1L, "Max", "Mustermann");
+        Shift shift = new Shift(1L, driver, zone,
+                LocalDate.of(2026, 3, 30),
+                LocalTime.of(18, 0),
+                LocalTime.of(6, 0));
         StandardConfiguration configuration = new StandardConfiguration.Builder().inspectionCount(2).build();
-        Checklist checklist = new Checklist(1L,shift,configuration,LocalDateTime.now(),List.of());
+        Checklist checklist = new Checklist(1L, shift, configuration, LocalDateTime.now(), List.of());
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
         when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
-        when(checklistGenerationService.generate(any(),any())).thenReturn(checklist);
+        when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
 
         ChecklistResponse response = checklistApplicationService.generate
-                (new ChecklistRequest(1L,1L));
+                (new ChecklistRequest(1L, 1L));
 
         assertThat(response.getId()).isEqualTo(1L);
         assertThat(response.getInspectionCount()).isEqualTo(2);
 
     }
+
     @Test
     void shouldThrowExceptionWhenShiftNotFound() {
         when(shiftRepository.findById(99L)).thenReturn(Optional.empty());
@@ -93,6 +95,28 @@ public class ChecklistApplicationServiceTest {
                 new ChecklistRequest(1L, 99L)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("SecurityObject not found: 99");
+    }
+
+    @Test
+    void shouldReturnChecklistDomain() {
+        Zone zone = new Zone(1L, "Zone 1");
+        Driver driver = new Driver(1L, "Max", "Mustermann");
+        Shift shift = new Shift(1L, driver, zone,
+                LocalDate.of(2024, 3, 11),
+                LocalTime.of(6, 0), LocalTime.of(14, 0));
+        StandardConfiguration config = new StandardConfiguration.Builder()
+                .inspectionCount(2).build();
+        Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of());
+        when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
+        when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
+        when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
+
+        Checklist result = checklistApplicationService.generateChecklist(
+                new ChecklistRequest(1L, 1L));
+
+        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.getConfiguration().getInspectionCount()).hasValue(2);
+
     }
 
 
