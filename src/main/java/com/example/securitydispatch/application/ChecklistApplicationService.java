@@ -57,4 +57,12 @@ public class ChecklistApplicationService {
                         "Shift not found: "+ id));
 
     }
+
+    public Checklist generateChecklist(ChecklistRequest checklistRequest) {
+        Shift shift = loadShift(checklistRequest.getShiftId());
+        SecurityObject securityObject = loadSecurityObject(checklistRequest.getSecurityObjectId());
+        Checklist checklist = checklistGenerationService.generate(shift,securityObject);
+        saveChecklist(checklist);
+        return checklist;
+    }
 }
