@@ -61,13 +61,13 @@ null,LocalTime.of(14,0)))
     void shouldDetectNightShift(){
         Shift shift = new Shift(1L,driver,zone,LocalDate.of(2024,3,11),
                 LocalTime.of(22,0),LocalTime.of(6,0));
-        assertThat(shift.IsNightShift()).isTrue();
+        assertThat(shift.isNightShift()).isTrue();
     }
     @Test
     void shouldNotDetectNightShift(){
         Shift shift = new Shift(1L,driver,zone,LocalDate.of(2024,3,11),
                 LocalTime.of(6,0),LocalTime.of(14,0));
-        assertThat(shift.IsNightShift()).isFalse();
+        assertThat(shift.isNightShift()).isFalse();
     }
     @Test
     void shouldDetectWhenDriverIsNotQualifiedForZone() {

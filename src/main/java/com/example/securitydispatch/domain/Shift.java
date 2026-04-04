@@ -46,7 +46,7 @@ public class Shift {
         return endTime;
     }
 
-    public boolean IsNightShift() {
+    public boolean isNightShift() {
         return startTime.isAfter(endTime); //If startTime after endTime is a Night shift
     }
 
