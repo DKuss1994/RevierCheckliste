@@ -101,4 +101,47 @@ public class ChecklistGenerationServiceTest {
 
         assertThat(checklist.getWarnings()).isEmpty();
     }
+    @Test
+    void shouldWarnWhenOpeningTimeIsOutsideShift(){
+        StandardConfiguration config = new StandardConfiguration.Builder()
+                .openingTime(LocalTime.of(7, 0)) // außerhalb der Schicht!
+                .openingDays(Set.of(DayOfWeek.MONDAY))
+                .build();
+
+
+        Shift shift = new Shift(1L, driver, zone,
+                LocalDate.of(2024, 3, 11),
+                LocalTime.of(22, 0), LocalTime.of(6, 0)); // Nachtschicht
+
+        SecurityObject securityObject = new SecurityObject(
+                1L, "Object A", zone,
+                new Address("Musterstraße 1", "Berlin", "10115"),
+                config);
+        Checklist checklist = service.generate(shift,securityObject);
+        assertThat(checklist.getWarnings()).hasSize(1);
+        assertThat(checklist.getWarnings().getFirst().getMessage())
+                .isEqualTo("Opening time 07:00 is outside shift hours");
+
+    } @Test
+    void shouldWarnWhenClosingTimeIsOutsideShift(){
+        StandardConfiguration config = new StandardConfiguration.Builder()
+                .closingTime(LocalTime.of(7, 0)) // außerhalb der Schicht!
+                .closingDays(Set.of(DayOfWeek.MONDAY))
+                .build();
+
+
+        Shift shift = new Shift(1L, driver, zone,
+                LocalDate.of(2024, 3, 11),
+                LocalTime.of(22, 0), LocalTime.of(6, 0)); // Nachtschicht
+
+        SecurityObject securityObject = new SecurityObject(
+                1L, "Object A", zone,
+                new Address("Musterstraße 1", "Berlin", "10115"),
+                config);
+        Checklist checklist = service.generate(shift,securityObject);
+        assertThat(checklist.getWarnings()).hasSize(1);
+        assertThat(checklist.getWarnings().getFirst().getMessage())
+                .isEqualTo("Closing time 07:00 is outside shift hours");
+
+    }
 }
