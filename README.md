@@ -85,6 +85,7 @@ The `ConfigurationResolver` processes rules in this order:
 | Spring Data JPA | — | Persistence |
 | H2 | — | In-memory database (development) |
 | MariaDB | — | Production database (planned) |
+| OpenPDF | — | PDF generation (in progress) |
 | JUnit 5 | — | Testing |
 | AssertJ | — | Test assertions |
 | Maven | — | Build tool |
@@ -101,7 +102,7 @@ This project was built strictly following **Test Driven Development (TDD)**:
 
 Every feature starts with a test. Business logic is tested independently of the framework.
 
-**Test coverage:** 108 tests — all green.
+**Test coverage:** 161 tests — all green.
 
 ---
 
@@ -129,30 +130,62 @@ Test data is loaded automatically from `src/main/resources/data.sql`.
 
 ---
 
-## API
+## API Endpoints
 
-### Generate a Checklist
-
+### Zones
 ```
-POST /checklists/generate
-Content-Type: application/json
-
-{
-    "shiftId": 1,
-    "securityObjectId": 1
-}
+POST   /zones          → Create zone
+GET    /zones          → Get all zones
+GET    /zones/{id}     → Get zone by id
+PUT    /zones/{id}     → Update zone
+DELETE /zones/{id}     → Delete zone
 ```
 
-**Response:**
-
-```json
-{
-    "id": 1,
-    "generatedAt": "2026-03-29T09:31:33.038105849",
-    "inspectionCount": 2,
-    "warnings": []
-}
+### Drivers
 ```
+POST   /drivers                      → Create driver
+GET    /drivers                      → Get all drivers
+GET    /drivers/{id}                 → Get driver by id
+PUT    /drivers/{id}                 → Update driver
+DELETE /drivers/{id}                 → Delete driver
+POST   /drivers/{id}/zones/{zoneId}  → Assign zone to driver
+```
+
+### Security Objects
+```
+POST   /security-objects          → Create security object
+GET    /security-objects          → Get all security objects
+GET    /security-objects/{id}     → Get security object by id
+PUT    /security-objects/{id}     → Update security object
+DELETE /security-objects/{id}     → Delete security object
+```
+
+### Shifts
+```
+POST   /shifts          → Create shift
+GET    /shifts          → Get all shifts
+GET    /shifts/{id}     → Get shift by id
+DELETE /shifts/{id}     → Delete shift
+```
+
+### Checklists
+```
+POST   /checklists/generate   → Generate checklist for a shift
+```
+
+---
+
+## Checklist PDF Layout (in progress)
+
+The generated PDF follows DIN A4 landscape format:
+
+**Header:** Driver name, Zone, Date, Shift time
+
+**Inspections:** Object name with inspection times and one empty checkbox per inspection — the driver fills in the actual time by hand
+
+**Closing:** Object name, scheduled closing time, empty checkbox for handwritten confirmation
+
+**Opening:** Object name, scheduled opening time, empty checkbox — night shifts crossing midnight are handled separately so the driver knows which openings belong to the next morning
 
 ---
 
@@ -162,13 +195,14 @@ Content-Type: application/json
 - ✅ Complete domain model
 - ✅ Rule engine with conflict detection
 - ✅ Checklist generation as immutable snapshot
-- ✅ REST API
+- ✅ Full REST API with CRUD for all entities
 - ✅ Persistence layer with JPA
 
-**Version 2 — planned:**
-- ⬜ Additional REST endpoints (Zone, Driver, SecurityObject, Shift)
-- ⬜ Frontend (React or Thymeleaf)
-- ⬜ PDF generation (DIN A4 landscape format)
+**Version 2 — in progress:**
+- 🔄 PDF generation (DIN A4 landscape format)
+
+**Version 3 — planned:**
+- ⬜ Frontend (Thymeleaf)
 - ⬜ Production database (MariaDB)
 
 ---
@@ -179,5 +213,3 @@ Built by a career changer transitioning from security operations to software dev
 Six months of Java experience. Learning by building real-world domain problems.
 
 GitHub: [github.com/DKuss1994](https://github.com/DKuss1994)
-
-LinkedIn: [linkedin.com/in/dennis-kuß-06a040320](https://linkedin.com/in/dennis-kuß-06a040320)
