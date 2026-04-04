@@ -1,6 +1,7 @@
 package com.example.securitydispatch.infrastructure.web;
 
 import com.example.securitydispatch.application.ChecklistApplicationService;
+import com.example.securitydispatch.application.PdfService;
 import com.example.securitydispatch.domain.*;
 import com.example.securitydispatch.infrastructure.persistence.*;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -27,6 +30,9 @@ public class ChecklistControllerTest {
 
     @MockitoBean
     private ChecklistApplicationService checklistApplicationService;
+
+    @MockitoBean
+    private PdfService pdfService;
 
     @Test
     void shouldGenerateChecklistAndReturnResponse() throws Exception {
@@ -46,5 +52,34 @@ public class ChecklistControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.inspectionCount").value(2));
+    }
+    @Test
+    void shouldDownloadChecklistAsPdf() throws Exception {
+        Zone zone = new Zone(1L, "Zone 1");
+        Driver driver = new Driver(1L, "Max", "Mustermann");
+        Shift shift = new Shift(1L, driver, zone,
+                LocalDate.of(2024, 3, 11),
+                LocalTime.of(6, 0), LocalTime.of(14, 0));
+        StandardConfiguration config = new StandardConfiguration.Builder()
+                .inspectionCount(2).build();
+        Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of());
+
+        when(checklistApplicationService.generateChecklist(any()))
+                .thenReturn(checklist);
+        when(pdfService.generateChecklistPdf(any()))
+                .thenReturn("%PDF-test".getBytes());
+        mockMvc.perform(post("/checklists/generate/pdf")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                        "shiftId": 1,
+                        "securityObjectId": 1
+                        }
+                        """
+
+                ))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Type", "application/pdf"));
+
     }
 }
