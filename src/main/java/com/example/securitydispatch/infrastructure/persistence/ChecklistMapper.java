@@ -4,6 +4,8 @@ import com.example.securitydispatch.domain.Checklist;
 import com.example.securitydispatch.domain.Shift;
 import com.example.securitydispatch.domain.StandardConfiguration;
 
+import java.util.List;
+
 public class ChecklistMapper {
     public static ChecklistEntity toEntity(Checklist checklist) {
         ShiftEntity shift = ShiftMapper.toEntity(checklist.getShift());
@@ -37,6 +39,6 @@ public class ChecklistMapper {
                 .inspectionWindowEnd(config.getInspectionWindowEnd())
                 .notes(config.getNotes())
                 .build();
-        return new Checklist(entity.getId(),shift,standardConfiguration,entity.getGeneratedAt(),entity.getWarnings());
+        return new Checklist(entity.getId(),shift,standardConfiguration,entity.getGeneratedAt(),entity.getWarnings(), List.of());
     }
 }

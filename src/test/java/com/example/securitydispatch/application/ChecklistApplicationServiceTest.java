@@ -63,7 +63,7 @@ public class ChecklistApplicationServiceTest {
                 LocalTime.of(18, 0),
                 LocalTime.of(6, 0));
         StandardConfiguration configuration = new StandardConfiguration.Builder().inspectionCount(2).build();
-        Checklist checklist = new Checklist(1L, shift, configuration, LocalDateTime.now(), List.of());
+        Checklist checklist = new Checklist(1L, shift, configuration, LocalDateTime.now(), List.of(), List.of());
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
         when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
@@ -106,7 +106,7 @@ public class ChecklistApplicationServiceTest {
                 LocalTime.of(6, 0), LocalTime.of(14, 0));
         StandardConfiguration config = new StandardConfiguration.Builder()
                 .inspectionCount(2).build();
-        Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of());
+        Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of(), List.of());
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
         when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);

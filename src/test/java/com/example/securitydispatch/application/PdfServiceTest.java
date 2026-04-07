@@ -30,7 +30,7 @@ public class PdfServiceTest {
             .openingTime(LocalTime.of(5, 0))
             .build();
     private final Checklist checklist = new Checklist(
-            1L, shift, standardConfiguration, LocalDateTime.now(), List.of());
+            1L, shift, standardConfiguration, LocalDateTime.now(), List.of(), List.of());
 
     private final PdfService pdfService = new PdfService();
 
@@ -46,7 +46,7 @@ public class PdfServiceTest {
     void shouldGeneratePdfWithWarnings() {
         Checklist checklistWithWarnings = new Checklist(
                 2L, shift, standardConfiguration, LocalDateTime.now(),
-                List.of(new Warning("Friday rule active")));
+                List.of(new Warning("Friday rule active")), List.of());
 
         byte[] result = pdfService.generateChecklistPdf(checklistWithWarnings);
 

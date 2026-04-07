@@ -62,7 +62,7 @@ public class ChecklistControllerTest {
                 LocalTime.of(6, 0), LocalTime.of(14, 0));
         StandardConfiguration config = new StandardConfiguration.Builder()
                 .inspectionCount(2).build();
-        Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of());
+        Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of(), List.of());
 
         when(checklistApplicationService.generateChecklist(any()))
                 .thenReturn(checklist);

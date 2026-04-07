@@ -27,7 +27,7 @@ public class ChecklistGenerationService {
             }
         });
 
-        return new Checklist(1L, shift, result.getConfiguration(), LocalDateTime.now(), warnings);
+        return new Checklist(1L, shift, result.getConfiguration(), LocalDateTime.now(), warnings, List.of());
     }
 
     private boolean isWithinShiftHours(LocalTime time, Shift shift) {

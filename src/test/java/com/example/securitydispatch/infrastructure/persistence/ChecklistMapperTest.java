@@ -29,7 +29,7 @@ public class ChecklistMapperTest {
         Shift shift = new Shift(1L,driver,zone,startDay,startTime,endTime);
         Warning warning = new Warning("Stop");
         List<Warning> warnings = List.of(warning);
-        Checklist checklist = new Checklist(1L,shift,config,generatedAt,warnings);
+        Checklist checklist = new Checklist(1L,shift,config,generatedAt,warnings, List.of());
         ChecklistEntity entity = ChecklistMapper.toEntity(checklist);
         Checklist toDomain = ChecklistMapper.toDomain(entity);
         assertThat(toDomain.getId()).isEqualTo(checklist.getId());
