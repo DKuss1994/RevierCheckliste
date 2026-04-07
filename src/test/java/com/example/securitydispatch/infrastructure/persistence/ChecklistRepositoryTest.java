@@ -66,10 +66,35 @@ public class ChecklistRepositoryTest {
         assertThat(found.get().getConfiguration().getInspectionDays()).isEqualTo(config.getInspectionDays());
         assertThat(found.get().getShift().getDriver().getFirstName())
                 .isEqualTo(driver.getFirstName());
-        assertThat(found.get().getWarnings().get(0).getMessage()).isEqualTo("Stop");
+        assertThat(found.get().getWarnings().getFirst().getMessage()).isEqualTo("Stop");
         assertThat(found.get().getWarnings()).hasSize(1);
 
 
+    }
+    @Test
+    void shouldFindSecurityObjectsByZoneId(){
+        ZoneEntity zone = new ZoneEntity(1L,"Zone 1");
+        zoneRepository.save(zone);
+        AddressEmbeddable address = new AddressEmbeddable
+                ("Musterstraße 1", "Berlin", "10115");
+        StandardConfigurationEmbeddable config = new StandardConfigurationEmbeddable(
+                2,
+                Set.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Test notes"
+        );
+        securityObjectRepository.save(
+                new SecurityObjectEntity(1L, "Object A", zone, address, config));
+        securityObjectRepository.save(
+                new SecurityObjectEntity(2L, "Object B", zone, address, config));
+        List<SecurityObjectEntity> result = securityObjectRepository.findByZoneId(1L);
+
+        assertThat(result).hasSize(2);
     }
 
 }
