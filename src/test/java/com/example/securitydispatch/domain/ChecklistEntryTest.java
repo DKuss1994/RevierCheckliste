@@ -1,5 +1,4 @@
 package com.example.securitydispatch.domain;
-import com.example.securitydispatch.infrastructure.persistence.ChecklistEntity;
 import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.util.Set;

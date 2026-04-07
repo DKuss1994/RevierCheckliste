@@ -59,4 +59,23 @@ return new Shift(1L,driver,zone, LocalDate.of(2026,3,15),
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Checklist warnings must not be null");
     }
+    @Test
+    void shouldCreateChecklistWithEntries(){
+        Zone zone = new Zone(1L,"Zone 1");
+        Address address = new Address("Musterstraße 1","Bielefeld","33649");
+        Driver driver = new Driver(1L,"Max","Mustermann");
+        Shift shift = buildShift();
+        StandardConfiguration config = new StandardConfiguration.Builder()
+                .inspectionCount(2)
+                .build();
+        SecurityObject securityObject = new SecurityObject(
+                1L, "Object A", zone, address, config);
+        ChecklistEntry entry = new ChecklistEntry(securityObject, config);
+        Checklist checklist = new Checklist(1L, shift, config,
+                LocalDateTime.now(), List.of(), List.of(entry));
+        assertThat(checklist.getEntries()).hasSize(1);
+        assertThat(checklist.getEntries().get(0).getSecurityObject().getName())
+                .isEqualTo("Object A");
+
+    }
 }
