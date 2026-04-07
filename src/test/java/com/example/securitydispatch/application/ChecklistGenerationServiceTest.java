@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 public class ChecklistGenerationServiceTest {
@@ -23,7 +24,7 @@ public class ChecklistGenerationServiceTest {
 
     private final ChecklistGenerationService service = new ChecklistGenerationService();
     private final Shift shift = new Shift(1L, driver, zone,
-            LocalDate.of(2024, 3, 11),
+            LocalDate.of(2024, 3, 11),//Monday
             LocalTime.of(6, 0), LocalTime.of(14, 0));
     @Test
     void shouldGenerateChecklistWithStandardConfigWhenNoRulesAreActive() {
@@ -143,5 +144,24 @@ public class ChecklistGenerationServiceTest {
         assertThat(checklist.getWarnings().getFirst().getMessage())
                 .isEqualTo("Closing time 07:00 is outside shift hours");
 
+    }
+    @Test
+    void shouldGenerateChecklistWithEntriesForAllObjectsInZone(){
+        StandardConfiguration configA = new StandardConfiguration.Builder()
+                .inspectionCount(2)
+                .inspectionDays(Set.of(DayOfWeek.MONDAY))
+                .build();
+
+        StandardConfiguration configB = new StandardConfiguration.Builder()
+                .inspectionCount(1)
+                .inspectionDays(Set.of(DayOfWeek.FRIDAY)) // nicht Montag!
+                .build();
+
+        SecurityObject objectA = new SecurityObject(1L, "Object A", zone, address, configA);
+        SecurityObject objectB = new SecurityObject(2L, "Object B", zone, address, configB);
+
+        Checklist checklist = service.generate(shift, List.of(objectA, objectB));
+assertThat(checklist.getEntries()).hasSize(1);
+assertThat(checklist.getEntries().getFirst().getSecurityObject().getName()).isEqualTo("Object A");
     }
 }
