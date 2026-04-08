@@ -6,6 +6,9 @@ import com.example.securitydispatch.infrastructure.persistence.*;
 import com.example.securitydispatch.infrastructure.web.ChecklistRequest;
 import com.example.securitydispatch.infrastructure.web.ChecklistResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class ChecklistApplicationService {
 
@@ -23,8 +26,8 @@ public class ChecklistApplicationService {
 
     public ChecklistResponse generate(ChecklistRequest checklistRequest) {
         Shift shift = loadShift(checklistRequest.getShiftId());
-        SecurityObject securityObject = loadSecurityObject(checklistRequest.getSecurityObjectId());
-        Checklist checklist = checklistGenerationService.generate(shift,securityObject);
+        List<SecurityObject> securityObjects = loadListOfSecurityObjectByZoneId(shift.getZone().getId());
+        Checklist checklist = checklistGenerationService.generate(shift,securityObjects);
         saveChecklist(checklist);
         return toResponse(checklist);
     }
@@ -43,6 +46,11 @@ public class ChecklistApplicationService {
         checklistRepository.save(ChecklistMapper.toEntity(checklist));
     }
 
+    private List<SecurityObject> loadListOfSecurityObjectByZoneId(Long zoneId){
+        return securityObjectRepository.findByZoneId(zoneId)
+                .stream().map(SecurityObjectMapper::toDomain)
+                .toList();
+    }
     private SecurityObject loadSecurityObject(Long id) {
      return securityObjectRepository.findById(id).
                 map(SecurityObjectMapper::toDomain)
@@ -60,8 +68,8 @@ public class ChecklistApplicationService {
 
     public Checklist generateChecklist(ChecklistRequest checklistRequest) {
         Shift shift = loadShift(checklistRequest.getShiftId());
-        SecurityObject securityObject = loadSecurityObject(checklistRequest.getSecurityObjectId());
-        Checklist checklist = checklistGenerationService.generate(shift,securityObject);
+        List<SecurityObject> securityObjects = loadListOfSecurityObjectByZoneId(shift.getZone().getId());
+        Checklist checklist = checklistGenerationService.generate(shift,securityObjects);
         saveChecklist(checklist);
         return checklist;
     }

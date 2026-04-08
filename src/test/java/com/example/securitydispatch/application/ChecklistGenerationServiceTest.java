@@ -21,6 +21,10 @@ public class ChecklistGenerationServiceTest {
             .build();
     private final SecurityObject securityObject = new SecurityObject(
             1L, "Object A", zone, address, standardConfig);
+    private final SecurityObject securityObjectB = new SecurityObject(
+            1L, "Object B", zone, address, standardConfig);
+    private final List<SecurityObject> securityObjects = List.of(securityObject,securityObjectB);
+
 
     private final ChecklistGenerationService service = new ChecklistGenerationService();
     private final Shift shift = new Shift(1L, driver, zone,
@@ -30,7 +34,7 @@ public class ChecklistGenerationServiceTest {
     void shouldGenerateChecklistWithStandardConfigWhenNoRulesAreActive() {
 
 
-        Checklist checklist = service.generate(shift, securityObject);
+        Checklist checklist = service.generate(shift, securityObjects);
 
         assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(2);
     }
@@ -51,7 +55,7 @@ public class ChecklistGenerationServiceTest {
                 LocalDate.of(2024, 3, 11),
                 LocalTime.of(6, 0), LocalTime.of(14, 0));
 
-        Checklist checklist = service.generate(shift, securityObject);
+        Checklist checklist = service.generate(shift, securityObjects);
 
         assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(3);
     }
@@ -63,7 +67,7 @@ public class ChecklistGenerationServiceTest {
         ).inspectionCount(3)
                 .build();
         securityObject.addAdditionalRule(rule);
-        Checklist checklist = service.generate(shift,securityObject);
+        Checklist checklist = service.generate(shift, securityObjects);
         // Standard 2 + Additional 3 = 5
         assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(5);
     }
@@ -75,7 +79,7 @@ public class ChecklistGenerationServiceTest {
         ).inspectionCount(2)
                 .build();
         securityObject.addReductionRule(rule);
-        Checklist checklist = service.generate(shift,securityObject);
+        Checklist checklist = service.generate(shift, securityObjects);
         // Standard 2 - Reduction 2 =0
         assertThat(checklist.getConfiguration().getInspectionCount()).hasValue(0);
     }
@@ -89,16 +93,16 @@ public class ChecklistGenerationServiceTest {
 
         securityObject.addReductionRule(rule);
 
-        Checklist checklist = service.generate(shift, securityObject);
+        Checklist checklist = service.generate(shift, securityObjects);
 
         assertThat(checklist.getWarnings()).hasSize(1);
-        assertThat(checklist.getWarnings().get(0).getMessage())
+        assertThat(checklist.getWarnings().getFirst().getMessage())
                 .isEqualTo("Inspection count cannot be negative, set to 0");
     }
 
     @Test
     void shouldReturnNoWarningsWhenEverythingIsValid() {
-        Checklist checklist = service.generate(shift, securityObject);
+        Checklist checklist = service.generate(shift, securityObjects);
 
         assertThat(checklist.getWarnings()).isEmpty();
     }
@@ -118,7 +122,8 @@ public class ChecklistGenerationServiceTest {
                 1L, "Object A", zone,
                 new Address("Musterstraße 1", "Berlin", "10115"),
                 config);
-        Checklist checklist = service.generate(shift,securityObject);
+        List<SecurityObject> newSecurityObjects = List.of(securityObject);
+        Checklist checklist = service.generate(shift,newSecurityObjects);
         assertThat(checklist.getWarnings()).hasSize(1);
         assertThat(checklist.getWarnings().getFirst().getMessage())
                 .isEqualTo("Opening time 07:00 is outside shift hours");
@@ -139,7 +144,8 @@ public class ChecklistGenerationServiceTest {
                 1L, "Object A", zone,
                 new Address("Musterstraße 1", "Berlin", "10115"),
                 config);
-        Checklist checklist = service.generate(shift,securityObject);
+        List<SecurityObject> newSecurityObjects = List.of(securityObject);
+        Checklist checklist = service.generate(shift,newSecurityObjects);
         assertThat(checklist.getWarnings()).hasSize(1);
         assertThat(checklist.getWarnings().getFirst().getMessage())
                 .isEqualTo("Closing time 07:00 is outside shift hours");

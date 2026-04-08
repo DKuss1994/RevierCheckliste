@@ -65,7 +65,7 @@ public class ChecklistApplicationServiceTest {
         StandardConfiguration configuration = new StandardConfiguration.Builder().inspectionCount(2).build();
         Checklist checklist = new Checklist(1L, shift, configuration, LocalDateTime.now(), List.of(), List.of());
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
-        when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
+        when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
 
         ChecklistResponse response = checklistApplicationService.generate
@@ -87,14 +87,24 @@ public class ChecklistApplicationServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenSecurityObjectNotFound() {
-        when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
-        when(securityObjectRepository.findById(99L)).thenReturn(Optional.empty());
+    void shouldGenerateEmptyChecklistWhenNoObjectsInZone() {
+        Zone zone = new Zone(1L, "Zone1");
+        Driver driver = new Driver(1L, "Max", "Mustermann");
+        Shift shift = new Shift(1L, driver, zone,
+                LocalDate.of(2026, 3, 30),
+                LocalTime.of(18, 0), LocalTime.of(6, 0));
+        StandardConfiguration configuration = new StandardConfiguration.Builder().build();
+        Checklist checklist = new Checklist(1L, shift, configuration,
+                LocalDateTime.now(), List.of(), List.of());
 
-        assertThatThrownBy(() -> checklistApplicationService.generate(
-                new ChecklistRequest(1L, 99L)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("SecurityObject not found: 99");
+        when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
+        when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of());
+        when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
+
+        ChecklistResponse response = checklistApplicationService.generate(
+                new ChecklistRequest(1L, 1L));
+
+        assertThat(response).isNotNull();
     }
 
     @Test
@@ -108,7 +118,7 @@ public class ChecklistApplicationServiceTest {
                 .inspectionCount(2).build();
         Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of(), List.of());
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
-        when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(securityObjectEntity));
+        when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
 
         Checklist result = checklistApplicationService.generateChecklist(
