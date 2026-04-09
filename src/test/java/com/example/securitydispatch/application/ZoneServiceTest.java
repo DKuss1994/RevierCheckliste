@@ -80,5 +80,16 @@ assertThatThrownBy(()->zoneService.delete(99L))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("Zone not found: 99");
     }
+    @Test
+    void shouldSearchZonesByName() {
+        when(zoneRepository.findByNameContainingIgnoreCase("zone"))
+                .thenReturn(List.of(
+                        new ZoneEntity("Zone 1"),
+                        new ZoneEntity("Zone 2")));
+
+        List<Zone> result = zoneService.search("zone");
+
+        assertThat(result).hasSize(2);
+    }
 }
 
