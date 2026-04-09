@@ -3,6 +3,7 @@ package com.example.securitydispatch.infrastructure.web;
 import com.example.securitydispatch.application.DriverService;
 import com.example.securitydispatch.application.ZoneService;
 import com.example.securitydispatch.domain.Driver;
+import com.example.securitydispatch.domain.SecurityObject;
 import com.example.securitydispatch.domain.Zone;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,10 @@ public class DriverController {
     @GetMapping("{id}")
     public ResponseEntity<Driver> findById(@PathVariable long id){
         return ResponseEntity.ok(driverService.findById(id));
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Driver>> search(@RequestParam String name) {
+        return ResponseEntity.ok(driverService.search(name,name));
     }
     @GetMapping
     public ResponseEntity<List<Driver>>findAll(){

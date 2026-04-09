@@ -54,4 +54,10 @@ public class DriverService {
         driverRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Driver not found: " + id));
     }
+
+    public List<Driver> search(String firstName,String lastName) {
+        return driverRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase
+                (firstName,lastName).stream().map(DriverMapper::toDomain)
+                .toList();
+    }
 }
