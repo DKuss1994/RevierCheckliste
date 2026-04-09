@@ -52,4 +52,10 @@ public class SecurityObjectService {
         securityObjectRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("SecurityObject not found: "+ id));
         securityObjectRepository.deleteById(id);
     }
+
+    public List<SecurityObject> search(String name) {
+        return securityObjectRepository.findByNameContainingIgnoreCase(name)
+                .stream().map(SecurityObjectMapper::toDomain)
+                .toList();
+    }
 }

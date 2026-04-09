@@ -32,6 +32,10 @@ public class SecurityObjectController {
     public ResponseEntity<SecurityObject> findById(@PathVariable long id){
         return ResponseEntity.ok(securityObjectService.findById(id));
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<SecurityObject>> search(@RequestParam String name) {
+        return ResponseEntity.ok(securityObjectService.search(name));
+    }
     @GetMapping
     public ResponseEntity<List<SecurityObject>>findAll(){
         return ResponseEntity.ok(securityObjectService.findAll());
