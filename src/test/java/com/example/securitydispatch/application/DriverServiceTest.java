@@ -1,11 +1,9 @@
 package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.Driver;
+import com.example.securitydispatch.domain.SecurityObject;
 import com.example.securitydispatch.domain.Zone;
-import com.example.securitydispatch.infrastructure.persistence.DriverEntity;
-import com.example.securitydispatch.infrastructure.persistence.DriverRepository;
-import com.example.securitydispatch.infrastructure.persistence.ZoneEntity;
-import com.example.securitydispatch.infrastructure.persistence.ZoneRepository;
+import com.example.securitydispatch.infrastructure.persistence.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -110,6 +108,17 @@ import static org.mockito.Mockito.when;
         assertThatThrownBy(()->driverService.assignZone(1L,99L))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Zone not found: 99");
+    }
+    @Test
+    void shouldSearchDriverByName() {
+        when(driverRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("max","max"))
+                .thenReturn(List.of(
+                        new DriverEntity("Max","Mustermann"),
+                        new DriverEntity("Mo","Maximilan")));
+
+        List<Driver> result = driverService.search("max","max");
+
+        assertThat(result).hasSize(2);
     }
 
 }
