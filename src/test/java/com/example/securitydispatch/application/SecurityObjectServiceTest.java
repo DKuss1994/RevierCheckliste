@@ -3,6 +3,7 @@ package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.SecurityObject;
 
+import com.example.securitydispatch.domain.Zone;
 import com.example.securitydispatch.infrastructure.persistence.*;
 import org.junit.jupiter.api.Test;
 
@@ -126,5 +127,15 @@ public class SecurityObjectServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Zone not found: 99");
     }
+    @Test
+    void shouldSearchSecurityObjectByName() {
+        when(securityObjectRepository.findByNameContainingIgnoreCase("object"))
+                .thenReturn(List.of(
+                        new SecurityObjectEntity("Object 1", zoneEntity, address, standardConfiguration),
+                        new SecurityObjectEntity("Object 2", zoneEntity, address, standardConfiguration)));
 
+        List<SecurityObject> result = securityObjectService.search("object");
+
+        assertThat(result).hasSize(2);
+    }
 }
