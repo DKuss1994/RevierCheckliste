@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,11 +33,37 @@ public class DriverRepositoryTest {
         ZoneEntity zone = zoneRepository.save(new ZoneEntity("Zone 1"));
         DriverEntity driver = driverRepository.save(new DriverEntity("Max", "Mustermann"));
         driver.addAssignedZone(zone);
+        driverRepository.save(driver);
         Optional<DriverEntity> found = driverRepository.findById(driver.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getAssignedZones()).hasSize(1);
         assertThat(found.get().getAssignedZones().getFirst().getName()).isEqualTo("Zone 1");
 
     }
+    @Test
+    void shouldFindDriverByFirstNameContaining() {
+        driverRepository.save(new DriverEntity("Max", "Mustermann"));
+        driverRepository.save(new DriverEntity("Maria", "Schmidt"));
+
+        List<DriverEntity> result = driverRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+                        "ma", "ma");
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
+    void shouldFindDriverByLastNameContaining() {
+        driverRepository.save(new DriverEntity("Max", "Mustermann"));
+        driverRepository.save(new DriverEntity("Anna", "Schmidt"));
+
+        List<DriverEntity> result = driverRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+                        "muster", "muster");
+
+        assertThat(result).hasSize(1);
+        assertThat(result.getFirst().getLastName()).isEqualTo("Mustermann");
+    }
+
 
 }

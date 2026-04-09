@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface SecurityObjectRepository extends JpaRepository<SecurityObjectEntity,Long> {
     List<SecurityObjectEntity> findByZoneId(long zoneId);
+    List<SecurityObjectEntity> findByNameContainingIgnoreCase(String name);
 }
