@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "checklists")
 public class ChecklistEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @OneToOne
@@ -31,9 +32,8 @@ public class ChecklistEntity {
     protected ChecklistEntity() {
     }
 
-    public ChecklistEntity(long id, ShiftEntity shift, StandardConfigurationEmbeddable configuration,
+    public ChecklistEntity( ShiftEntity shift, StandardConfigurationEmbeddable configuration,
                            LocalDateTime generatedAt, List<Warning> warnings) {
-        this.id = id;
         this.shift = shift;
         this.configuration = configuration;
         this.generatedAt = generatedAt;

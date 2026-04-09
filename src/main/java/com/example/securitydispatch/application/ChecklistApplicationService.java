@@ -27,9 +27,9 @@ public class ChecklistApplicationService {
     public ChecklistResponse generate(ChecklistRequest checklistRequest) {
         Shift shift = loadShift(checklistRequest.getShiftId());
         List<SecurityObject> securityObjects = loadListOfSecurityObjectByZoneId(shift.getZone().getId());
-        Checklist checklist = checklistGenerationService.generate(shift,securityObjects);
-        saveChecklist(checklist);
-        return toResponse(checklist);
+        Checklist checklist = checklistGenerationService.generate(shift, securityObjects);
+        Checklist savedChecklist = saveAndReturnWithId(checklist);
+        return toResponse(savedChecklist);
     }
 
     private static ChecklistResponse toResponse(Checklist checklist) {
@@ -41,10 +41,19 @@ public class ChecklistApplicationService {
                         .map(Warning::getMessage)
                         .toList());
     }
-
-    private void saveChecklist(Checklist checklist) {
-        checklistRepository.save(ChecklistMapper.toEntity(checklist));
+    private Checklist saveAndReturnWithId(Checklist checklist) {
+        ChecklistEntity saved = checklistRepository.save(
+                ChecklistMapper.toEntity(checklist));
+        // echte ID von der Datenbank
+        return new Checklist(
+                saved.getId(),
+                checklist.getShift(),
+                checklist.getConfiguration(),
+                checklist.getGeneratedAt(),
+                checklist.getWarnings(),
+                checklist.getEntries());
     }
+
 
     private List<SecurityObject> loadListOfSecurityObjectByZoneId(Long zoneId){
         return securityObjectRepository.findByZoneId(zoneId)
@@ -69,8 +78,7 @@ public class ChecklistApplicationService {
     public Checklist generateChecklist(ChecklistRequest checklistRequest) {
         Shift shift = loadShift(checklistRequest.getShiftId());
         List<SecurityObject> securityObjects = loadListOfSecurityObjectByZoneId(shift.getZone().getId());
-        Checklist checklist = checklistGenerationService.generate(shift,securityObjects);
-        saveChecklist(checklist);
-        return checklist;
+        Checklist checklist = checklistGenerationService.generate(shift, securityObjects);
+        return saveAndReturnWithId(checklist);
     }
 }

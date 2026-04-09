@@ -58,7 +58,7 @@ public class ChecklistRepositoryTest {
         Warning warning = new Warning("Stop");
         List<Warning> warnings = List.of(warning);
         LocalDateTime generatedAt = LocalDateTime.now();
-        ChecklistEntity checklist = new ChecklistEntity(1L,shift,config,generatedAt,warnings);
+        ChecklistEntity checklist = new ChecklistEntity(shift,config,generatedAt,warnings);
         checklistRepository.save(checklist);
         Optional<ChecklistEntity> found = checklistRepository.findById(1L);
         assertThat(found).isPresent();

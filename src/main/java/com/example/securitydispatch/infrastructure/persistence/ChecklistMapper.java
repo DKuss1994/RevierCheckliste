@@ -21,7 +21,7 @@ public class ChecklistMapper {
                 config.getInspectionWindowEnd().orElse(null),
                 config.getNotes().orElse(null));
 
-        return new ChecklistEntity(checklist.getId(),shift,standardConfiguration,
+        return new ChecklistEntity(shift,standardConfiguration,
                 checklist.getGeneratedAt(),checklist.getWarnings());
     }
 

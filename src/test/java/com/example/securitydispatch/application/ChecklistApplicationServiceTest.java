@@ -67,11 +67,13 @@ public class ChecklistApplicationServiceTest {
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
         when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
-
+        ChecklistEntity savedEntity = new ChecklistEntity(shiftEntity, configurationEmbeddable,
+                LocalDateTime.now(), List.of());
+        when(checklistRepository.save(any())).thenReturn(savedEntity);
         ChecklistResponse response = checklistApplicationService.generate
                 (new ChecklistRequest(1L, 1L));
 
-        assertThat(response.getId()).isEqualTo(1L);
+
         assertThat(response.getInspectionCount()).isEqualTo(2);
 
     }
@@ -99,6 +101,9 @@ public class ChecklistApplicationServiceTest {
 
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
         when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of());
+        ChecklistEntity savedEntity = new ChecklistEntity( shiftEntity, configurationEmbeddable,
+                LocalDateTime.now(), List.of());
+        when(checklistRepository.save(any())).thenReturn(savedEntity);
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
 
         ChecklistResponse response = checklistApplicationService.generate(
@@ -121,10 +126,13 @@ public class ChecklistApplicationServiceTest {
         when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
 
+        ChecklistEntity savedEntity = new ChecklistEntity( shiftEntity,
+                configurationEmbeddable, LocalDateTime.now(), List.of());
+        when(checklistRepository.save(any())).thenReturn(savedEntity);
         Checklist result = checklistApplicationService.generateChecklist(
                 new ChecklistRequest(1L, 1L));
 
-        assertThat(result.getId()).isEqualTo(1L);
+
         assertThat(result.getConfiguration().getInspectionCount()).hasValue(2);
 
     }
