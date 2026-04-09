@@ -26,6 +26,10 @@ public class ZoneController {
     public ResponseEntity<List<Zone>>findAll(){
         return ResponseEntity.ok(zoneService.findAll());
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Zone>> search(@RequestParam String name) {
+        return ResponseEntity.ok(zoneService.search(name));
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Zone> update(@PathVariable long id,
                                        @RequestBody ZoneRequest request){

@@ -51,4 +51,10 @@ public class ZoneService {
         existZoneById(id);
         zoneRepository.deleteById(id);
     }
+
+    public List<Zone> search(String name) {
+        return zoneRepository.findByNameContainingIgnoreCase(name)
+                .stream().map(ZoneMapper::toDomain)
+                .toList();
+    }
 }
