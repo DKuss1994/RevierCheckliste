@@ -22,7 +22,7 @@ public class SecurityObjectController {
         AddressEmbeddable addressEmbeddable = getAddressEmbeddable(request);
         StandardConfigurationEmbeddable standardConfigurationEmbeddable = getStandardConfigurationEmbeddable(request);
         SecurityObject securityObject = securityObjectService.create
-                (request.getId(),request.getName(),request.getZoneId(),addressEmbeddable,standardConfigurationEmbeddable);
+                (request.getName(),request.getZoneId(),addressEmbeddable,standardConfigurationEmbeddable);
         return ResponseEntity.status(HttpStatus.CREATED).body(securityObject);
     }
 

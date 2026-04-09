@@ -8,6 +8,7 @@ import jdk.jfr.Enabled;
 @Table(name = "security_objects")
 public class SecurityObjectEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     @ManyToOne
@@ -22,18 +23,14 @@ public class SecurityObjectEntity {
 
     protected SecurityObjectEntity(){}
 
-    public SecurityObjectEntity(long id,String name,ZoneEntity zone,
+    public SecurityObjectEntity(String name,ZoneEntity zone,
                                 AddressEmbeddable address,StandardConfigurationEmbeddable standardConfiguration   ){
-        this.id = id;
         this.name = name;
         this.zone = zone;
         this.address = address;
         this.standardConfiguration = standardConfiguration;
     }
 
-    public long getId() {
-        return id;
-    }
 
     public String getName() {
         return name;
@@ -49,5 +46,13 @@ public class SecurityObjectEntity {
 
     public StandardConfigurationEmbeddable getStandardConfiguration() {
         return standardConfiguration;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

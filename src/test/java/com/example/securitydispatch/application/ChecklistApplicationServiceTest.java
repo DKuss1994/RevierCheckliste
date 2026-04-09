@@ -52,7 +52,7 @@ public class ChecklistApplicationServiceTest {
             null, null, null, null, null, null, null, null);
     private final AddressEmbeddable addressEmbeddable = new AddressEmbeddable("Musterstraße 1", "Musterstadt", "00000");
     private final SecurityObjectEntity securityObjectEntity = new SecurityObjectEntity(
-            1L, "Object 1", zoneEntity, addressEmbeddable, configurationEmbeddable
+             "Object 1", zoneEntity, addressEmbeddable, configurationEmbeddable
     );
 
     @Test

@@ -48,7 +48,7 @@ public class ChecklistRepositoryTest {
                 "Test notes"
         );
         SecurityObjectEntity object = new SecurityObjectEntity(
-                1L, "Object 1", zone, address, config);
+                "Object 1", zone, address, config);
         securityObjectRepository.save(object);
 
 
@@ -89,9 +89,9 @@ public class ChecklistRepositoryTest {
                 "Test notes"
         );
         securityObjectRepository.save(
-                new SecurityObjectEntity(1L, "Object A", zone, address, config));
+                new SecurityObjectEntity( "Object A", zone, address, config));
         securityObjectRepository.save(
-                new SecurityObjectEntity(2L, "Object B", zone, address, config));
+                new SecurityObjectEntity( "Object B", zone, address, config));
         List<SecurityObjectEntity> result = securityObjectRepository.findByZoneId(zone.getId());
 
         assertThat(result).hasSize(2);

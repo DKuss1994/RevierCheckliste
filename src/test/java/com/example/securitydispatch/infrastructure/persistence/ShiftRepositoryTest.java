@@ -50,7 +50,7 @@ public class ShiftRepositoryTest {
                 "Test notes"
         );
         SecurityObjectEntity object = new SecurityObjectEntity(
-                1L, "Object 1", zone, address, config);
+                 "Object 1", zone, address, config);
         securityObjectRepository.save(object);
 
 

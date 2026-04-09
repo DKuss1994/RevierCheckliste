@@ -17,11 +17,11 @@ public class SecurityObjectService {
         this.securityObjectRepository = securityObjectRepository;
     }
 
-    public SecurityObject create(long objectId, String name, long zoneId, AddressEmbeddable address, StandardConfigurationEmbeddable standardConfiguration) {
+    public SecurityObject create(String name, long zoneId, AddressEmbeddable address, StandardConfigurationEmbeddable standardConfiguration) {
         ZoneEntity zoneEntity = zoneRepository.findById(zoneId)
                 .orElseThrow(()->new IllegalArgumentException("Zone not found: " + zoneId));
 
-        SecurityObjectEntity objectEntity = new SecurityObjectEntity(objectId,name,zoneEntity,address,standardConfiguration);
+        SecurityObjectEntity objectEntity = new SecurityObjectEntity(name,zoneEntity,address,standardConfiguration);
         return SecurityObjectMapper.toDomain(securityObjectRepository.save(objectEntity));
     }
     public SecurityObject findById(long id){
@@ -43,7 +43,7 @@ public class SecurityObjectService {
         ZoneEntity zoneEntity = zoneRepository.findById(zoneId)
                 .orElseThrow(()->new IllegalArgumentException("Zone not found: " + zoneId));
         SecurityObjectEntity securityObject = new SecurityObjectEntity(
-                id,name,zoneEntity,address,standardConfiguration
+                name,zoneEntity,address,standardConfiguration
         );
         return SecurityObjectMapper.toDomain(securityObjectRepository.save(securityObject));
     }

@@ -5,7 +5,6 @@ import java.time.LocalTime;
 import java.util.Set;
 
 public class SecurityObjectRequest {
-    private long id;
     private String name;
     private long zoneId;
 
@@ -26,9 +25,6 @@ public class SecurityObjectRequest {
     private String notes;
     public SecurityObjectRequest(){}
 
-    public long getId() {
-        return id;
-    }
 
     public String getName() {
         return name;

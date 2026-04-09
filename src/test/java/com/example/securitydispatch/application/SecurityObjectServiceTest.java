@@ -38,12 +38,12 @@ public class SecurityObjectServiceTest {
     @Test
     void shouldCreateSecurityObject() {
         SecurityObjectEntity saved =
-                new SecurityObjectEntity(1L, "Object A", zoneEntity, address, standardConfiguration);
+                new SecurityObjectEntity("Object A", zoneEntity, address, standardConfiguration);
         when(zoneRepository.findById(1L)).thenReturn(Optional.of(zoneEntity));
         when(securityObjectRepository.save(any())).thenReturn(saved);
 
         SecurityObject result = securityObjectService.create(
-                1L,
+
                 "Object A",
                 1L,
                 address,
@@ -56,7 +56,7 @@ public class SecurityObjectServiceTest {
         when(securityObjectRepository.findById(1L)).
                 thenReturn(Optional.of(
                         new SecurityObjectEntity
-                                (1L, "Object A", zoneEntity, address, standardConfiguration)));
+                                ("Object A", zoneEntity, address, standardConfiguration)));
         SecurityObject result = securityObjectService.findById(1L);
         assertThat(result.getName()).isEqualTo("Object A");
     }
@@ -73,8 +73,8 @@ public class SecurityObjectServiceTest {
     @Test
     void shouldFindAllSecurityObjects() {
         when(securityObjectRepository.findAll()).thenReturn(List.of(
-                new SecurityObjectEntity(1L, "Object A", zoneEntity, address, standardConfiguration),
-                new SecurityObjectEntity(2L, "Object B", zoneEntity, address, standardConfiguration)
+                new SecurityObjectEntity("Object A", zoneEntity, address, standardConfiguration),
+                new SecurityObjectEntity( "Object B", zoneEntity, address, standardConfiguration)
         ));
         List<SecurityObject> result = securityObjectService.findAll();
         assertThat(result).hasSize(2);
@@ -86,9 +86,9 @@ public class SecurityObjectServiceTest {
     void shouldUpdateSecurityObject() {
         ZoneEntity oldZone = new ZoneEntity("Zone 1");
         ZoneEntity newZone = new ZoneEntity("Zone 2");
-        SecurityObjectEntity existing = new SecurityObjectEntity(1L, "Object A", oldZone, address, standardConfiguration);
+        SecurityObjectEntity existing = new SecurityObjectEntity( "Object A", oldZone, address, standardConfiguration);
         SecurityObjectEntity update = new SecurityObjectEntity(
-                1L, "New Name", newZone, address, standardConfiguration
+                 "New Name", newZone, address, standardConfiguration
         );
         when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(zoneRepository.findById(2L)).thenReturn(Optional.of(newZone));
@@ -103,7 +103,7 @@ public class SecurityObjectServiceTest {
     @Test
     void shouldDeleteSecurityObject(){
         when(securityObjectRepository.findById(1L)).thenReturn(Optional.of(new SecurityObjectEntity
-                (1L,"Object A",zoneEntity,address,standardConfiguration)));
+                ("Object A",zoneEntity,address,standardConfiguration)));
         securityObjectService.delete(1L);
     }
 
@@ -118,7 +118,7 @@ public class SecurityObjectServiceTest {
     void shouldThrowExceptionWhenUpdatingWithNonExistingZone() {
         when(securityObjectRepository.findById(1L))
                 .thenReturn(Optional.of(new SecurityObjectEntity(
-                        1L, "Object A", zoneEntity, address, standardConfiguration)));
+                        "Object A", zoneEntity, address, standardConfiguration)));
         when(zoneRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> securityObjectService.update(

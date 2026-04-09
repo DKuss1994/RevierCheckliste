@@ -30,11 +30,11 @@ class SecurityObjectRepositoryTest {
                 null,
                 "Test notes"
         );
-        SecurityObjectEntity object = new SecurityObjectEntity(
-                1L,"Object 1",zone,address,config);
-        securityObjectRepository.save(object);
+        SecurityObjectEntity object = securityObjectRepository.save(
+                new SecurityObjectEntity("Object 1",zone,address,config));
+
         Optional<SecurityObjectEntity> found =
-                securityObjectRepository.findById(1L);
+                securityObjectRepository.findById(object.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getName()).isEqualTo(object.getName());
         assertThat(found.get().getZone().getName()).isEqualTo(zone.getName());

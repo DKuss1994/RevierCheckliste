@@ -24,7 +24,6 @@ public class SecurityObjectMapperTest {
         SecurityObjectEntity entity = SecurityObjectMapper.toEntity(securityObject);
         SecurityObject mapped = SecurityObjectMapper.toDomain(entity);
         assertThat(mapped).isNotNull();
-        assertThat(mapped.getId()).isEqualTo(securityObject.getId());
         assertThat(mapped.getName()).isEqualTo(securityObject.getName());
         assertThat(mapped.getAddress().getStreet()).isEqualTo(address.getStreet());
         assertThat(mapped.getZone().getName()).isEqualTo(zone.getName());

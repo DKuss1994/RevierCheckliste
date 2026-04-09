@@ -37,7 +37,7 @@ class SecurityObjectControllerTest {
 
     @Test
     void shouldCreateSecurityObject() throws Exception {
-        when(securityObjectService.create(anyLong(), any(), anyLong(), any(), any()))
+        when(securityObjectService.create( any(), anyLong(), any(), any()))
                 .thenReturn(securityObject);
 
         mockMvc.perform(post("/security-objects")

@@ -13,7 +13,7 @@ public class SecurityObjectMapper {
                 securityObject.getAddress().getZIPCode()
         );
         StandardConfigurationEmbeddable configEmbeddable = getStandardConfigurationEmbeddable(securityObject);
-        return new SecurityObjectEntity(securityObject.getId(),
+        return new SecurityObjectEntity(
         securityObject.getName(),
         zone,
         address,
