@@ -93,7 +93,7 @@ import static org.mockito.Mockito.when;
     @Test
     void shouldAssignZoneToDriver(){
         DriverEntity driver = new DriverEntity(1L,"Max","Mustermann");
-        ZoneEntity zone = new ZoneEntity(1L,"Zone 1");
+        ZoneEntity zone = new ZoneEntity("Zone 1");
 
         when(driverRepository.findById(1L)).thenReturn(Optional.of(driver));
         when(zoneRepository.findById(1L)).thenReturn(Optional.of(zone));

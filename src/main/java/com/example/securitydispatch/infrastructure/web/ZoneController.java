@@ -15,7 +15,7 @@ public class ZoneController {
     }
     @PostMapping
     public ResponseEntity<Zone> create(@RequestBody ZoneRequest request){
-        Zone zone = zoneService.create(request.getId(),request.getName());
+        Zone zone = zoneService.create(request.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(zone);
     }
     @GetMapping("{id}")

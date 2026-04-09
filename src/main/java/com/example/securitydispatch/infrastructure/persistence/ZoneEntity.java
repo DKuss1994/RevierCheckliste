@@ -1,24 +1,29 @@
 package com.example.securitydispatch.infrastructure.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "zones")
 public class ZoneEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
 
-    protected ZoneEntity() {} // JPA braucht leeren Konstruktor
+    protected ZoneEntity() {
+    } // JPA braucht leeren Konstruktor
 
-    public ZoneEntity(long id, String name) {
-        this.id = id;
+    public ZoneEntity(String name) {
+
         this.name = name;
     }
 
-    public long getId() { return id; }
-    public String getName() { return name; }
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

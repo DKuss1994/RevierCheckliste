@@ -31,7 +31,7 @@ public class ShiftRepositoryTest {
         LocalDate startDay = LocalDate.of(2026, 3, 3);
         LocalTime startTime = LocalTime.of(22, 0);
         LocalTime endTime = LocalTime.of(6, 0);
-        ZoneEntity zone = new ZoneEntity(1L, "Zone 1");
+        ZoneEntity zone = new ZoneEntity( "Zone 1");
         zoneRepository.save(zone);
         DriverEntity driver = new DriverEntity(1L, "Max", "Mustermann");
         driver.addAssignedZone(zone);

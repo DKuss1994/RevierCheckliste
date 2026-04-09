@@ -15,7 +15,7 @@ class SecurityObjectRepositoryTest {
 
     @Test
     void shouldSaveAndLoadSecurityObject(){
-        ZoneEntity zone = new ZoneEntity(1L,"Zone 1");
+        ZoneEntity zone = new ZoneEntity("Zone 1");
         zoneRepository.save(zone);
         AddressEmbeddable address = new AddressEmbeddable
                 ("Musterstraße 1","Berlin","10115");

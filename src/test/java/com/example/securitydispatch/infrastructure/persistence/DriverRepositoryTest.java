@@ -30,15 +30,14 @@ public class DriverRepositoryTest {
 
     @Test
     void shouldSaveDriverWithAssignedZone() {
-        ZoneEntity zone = new ZoneEntity(1L, "Zone 1");
-        zoneRepository.save(zone);
+        ZoneEntity zone = zoneRepository.save(new ZoneEntity("Zone 1"));
         DriverEntity driver = new DriverEntity(1L, "Max", "Mustermann");
         driver.addAssignedZone(zone);
         driverRepository.save(driver);
         Optional<DriverEntity> found = driverRepository.findById(1L);
         assertThat(found).isPresent();
         assertThat(found.get().getAssignedZones()).hasSize(1);
-        assertThat(found.get().getAssignedZones().get(0).getName()).isEqualTo("Zone 1");
+        assertThat(found.get().getAssignedZones().getFirst().getName()).isEqualTo("Zone 1");
 
     }
 

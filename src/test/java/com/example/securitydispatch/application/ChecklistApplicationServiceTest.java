@@ -19,6 +19,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +39,7 @@ public class ChecklistApplicationServiceTest {
     @InjectMocks
     private ChecklistApplicationService checklistApplicationService;
 
-    private final ZoneEntity zoneEntity = new ZoneEntity(1L, "Zone1");
+    private final ZoneEntity zoneEntity = new ZoneEntity("Zone 1");
     private final DriverEntity driverEntity = new DriverEntity(1L, "Max", "Mustermann");
     private final ShiftEntity shiftEntity = new ShiftEntity(
             1L,
@@ -65,7 +66,7 @@ public class ChecklistApplicationServiceTest {
         StandardConfiguration configuration = new StandardConfiguration.Builder().inspectionCount(2).build();
         Checklist checklist = new Checklist(1L, shift, configuration, LocalDateTime.now(), List.of(), List.of());
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
-        when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of(securityObjectEntity));
+        when(securityObjectRepository.findByZoneId(anyLong())).thenReturn(List.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
         ChecklistEntity savedEntity = new ChecklistEntity(shiftEntity, configurationEmbeddable,
                 LocalDateTime.now(), List.of());
@@ -100,7 +101,7 @@ public class ChecklistApplicationServiceTest {
                 LocalDateTime.now(), List.of(), List.of());
 
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
-        when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of());
+        when(securityObjectRepository.findByZoneId(anyLong())).thenReturn(List.of());
         ChecklistEntity savedEntity = new ChecklistEntity( shiftEntity, configurationEmbeddable,
                 LocalDateTime.now(), List.of());
         when(checklistRepository.save(any())).thenReturn(savedEntity);
@@ -123,7 +124,7 @@ public class ChecklistApplicationServiceTest {
                 .inspectionCount(2).build();
         Checklist checklist = new Checklist(1L, shift, config, LocalDateTime.now(), List.of(), List.of());
         when(shiftRepository.findById(1L)).thenReturn(Optional.of(shiftEntity));
-        when(securityObjectRepository.findByZoneId(1L)).thenReturn(List.of(securityObjectEntity));
+        when(securityObjectRepository.findByZoneId(anyLong())).thenReturn(List.of(securityObjectEntity));
         when(checklistGenerationService.generate(any(), any())).thenReturn(checklist);
 
         ChecklistEntity savedEntity = new ChecklistEntity( shiftEntity,

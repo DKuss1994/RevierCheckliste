@@ -30,9 +30,9 @@ public class SecurityObjectServiceTest {
     @InjectMocks
     private SecurityObjectService securityObjectService;
 
-    private ZoneEntity zoneEntity = new ZoneEntity(1L, "Zone 1");
-    private AddressEmbeddable address = new AddressEmbeddable("Musterstraße 1", "Musterstadt", "123456");
-    private StandardConfigurationEmbeddable standardConfiguration = new StandardConfigurationEmbeddable(2,
+    private final ZoneEntity zoneEntity = new ZoneEntity( "Zone 1");
+    private final AddressEmbeddable address = new AddressEmbeddable("Musterstraße 1", "Musterstadt", "123456");
+    private final StandardConfigurationEmbeddable standardConfiguration = new StandardConfigurationEmbeddable(2,
             null, null, null, null, null, null, null, null);
 
     @Test
@@ -84,8 +84,8 @@ public class SecurityObjectServiceTest {
 
     @Test
     void shouldUpdateSecurityObject() {
-        ZoneEntity oldZone = new ZoneEntity(1L, "Zone 1");
-        ZoneEntity newZone = new ZoneEntity(2L, "Zone 2");
+        ZoneEntity oldZone = new ZoneEntity("Zone 1");
+        ZoneEntity newZone = new ZoneEntity("Zone 2");
         SecurityObjectEntity existing = new SecurityObjectEntity(1L, "Object A", oldZone, address, standardConfiguration);
         SecurityObjectEntity update = new SecurityObjectEntity(
                 1L, "New Name", newZone, address, standardConfiguration

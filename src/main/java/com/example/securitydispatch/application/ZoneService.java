@@ -18,8 +18,8 @@ public class ZoneService {
     }
 
 
-    public Zone create(long id, String name) {
-        ZoneEntity entity = new ZoneEntity(id, name);
+    public Zone create(String name) {
+        ZoneEntity entity = new ZoneEntity( name);
         return ZoneMapper.toDomain(zoneRepository.save(entity));
     }
 
@@ -37,7 +37,7 @@ public class ZoneService {
 
     public Zone update(long id, String name) {
         existZoneById(id);
-        ZoneEntity update = new ZoneEntity(id, name);
+        ZoneEntity update = new ZoneEntity(name);
         return ZoneMapper.toDomain(zoneRepository.save(update));
 
     }

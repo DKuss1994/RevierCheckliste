@@ -29,7 +29,7 @@ public class ChecklistRepositoryTest {
         LocalDate startDay = LocalDate.of(2026, 3, 3);
         LocalTime startTime = LocalTime.of(22, 0);
         LocalTime endTime = LocalTime.of(6, 0);
-        ZoneEntity zone = new ZoneEntity(1L, "Zone 1");
+        ZoneEntity zone = new ZoneEntity("Zone 1");
         zoneRepository.save(zone);
         DriverEntity driver = new DriverEntity(1L, "Max", "Mustermann");
         driver.addAssignedZone(zone);
@@ -73,7 +73,7 @@ public class ChecklistRepositoryTest {
     }
     @Test
     void shouldFindSecurityObjectsByZoneId(){
-        ZoneEntity zone = new ZoneEntity(1L,"Zone 1");
+        ZoneEntity zone = new ZoneEntity("Zone 1");
         zoneRepository.save(zone);
         AddressEmbeddable address = new AddressEmbeddable
                 ("Musterstraße 1", "Berlin", "10115");
@@ -92,7 +92,7 @@ public class ChecklistRepositoryTest {
                 new SecurityObjectEntity(1L, "Object A", zone, address, config));
         securityObjectRepository.save(
                 new SecurityObjectEntity(2L, "Object B", zone, address, config));
-        List<SecurityObjectEntity> result = securityObjectRepository.findByZoneId(1L);
+        List<SecurityObjectEntity> result = securityObjectRepository.findByZoneId(zone.getId());
 
         assertThat(result).hasSize(2);
     }

@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 class ZoneRepositoryTest {
     @Autowired
@@ -14,17 +15,16 @@ class ZoneRepositoryTest {
 
     @Test
     void shouldFindAndSaveZone() {
-        ZoneEntity zone = new ZoneEntity(1L, "Zone 1");
-        zoneRepository.save(zone);
-        Optional<ZoneEntity> found = zoneRepository.findById(1L);
+        ZoneEntity zone = zoneRepository.save(new ZoneEntity("Zone 1"));
+        Optional<ZoneEntity> found = zoneRepository.findById(zone.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getName()).isEqualTo("Zone 1");
-        assertThat(found.get().getId()).isEqualTo(1L);
+        assertThat(found.get().getId()).isEqualTo(zone.getId());
     }
 
     @Test
     void shouldDeleteZone() {
-        ZoneEntity zone = new ZoneEntity(1L, "Zone 1");
+        ZoneEntity zone = new ZoneEntity("Zone 1");
         zoneRepository.save(zone);
         zoneRepository.deleteById(1L);
         Optional<ZoneEntity> found = zoneRepository.findById(1L);

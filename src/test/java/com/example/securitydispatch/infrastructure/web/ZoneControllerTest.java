@@ -26,7 +26,7 @@ class ZoneControllerTest {
 
     @Test
     void shouldCreateZone()throws Exception{
-        when(zoneService.create(anyLong(),any()))
+        when(zoneService.create(any()))
                 .thenReturn(new Zone(1L,"Zone 1"));
 
         mockMvc.perform(post("/zones")

@@ -27,18 +27,17 @@ import static org.mockito.Mockito.when;
 
     @Test
     void shouldCreateZone() {
-        ZoneEntity saved = new ZoneEntity(1L, "Zone 1");
+        ZoneEntity saved = new ZoneEntity("Zone 1");
         when(zoneRepository.save(any())).thenReturn(saved);
-        Zone result = zoneService.create(1L, "Zone 1");
+        Zone result = zoneService.create("Zone 1");
 
-        assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getName()).isEqualTo("Zone 1");
     }
 
     @Test
     void shouldZoneFindById() {
         when(zoneRepository.findById(1L)).
-                thenReturn(Optional.of(new ZoneEntity(1L, "Zone 1")));
+                thenReturn(Optional.of(new ZoneEntity("Zone 1")));
         Zone result = zoneService.findById(1L);
         assertThat(result.getName()).isEqualTo("Zone 1");
     }
@@ -53,8 +52,8 @@ import static org.mockito.Mockito.when;
     @Test
     void shouldFindAllZones(){
         when(zoneRepository.findAll()).thenReturn(List.of(
-                new ZoneEntity(1L,"Zone 1"),
-                new ZoneEntity(2L,"Zone 2")
+                new ZoneEntity("Zone 1"),
+                new ZoneEntity("Zone 2")
         ));
         List<Zone> result = zoneService.findAll();
         assertThat(result).hasSize(2);
@@ -63,15 +62,15 @@ import static org.mockito.Mockito.when;
     }
     @Test
     void shouldUpdateZone(){
-        ZoneEntity update = new ZoneEntity(1L,"Zone 1 Updated");
-        when(zoneRepository.findById(1L)).thenReturn(Optional.of(new ZoneEntity(1L,"Zone 1")));
+        ZoneEntity update = new ZoneEntity("Zone 1 Updated");
+        when(zoneRepository.findById(1L)).thenReturn(Optional.of(new ZoneEntity("Zone 1")));
         when(zoneRepository.save(any())).thenReturn(update);
         Zone result = zoneService.update(1L,"Zone 1 Updated");
         assertThat(result.getName()).isEqualTo("Zone 1 Updated");
     }
     @Test
     void shouldDeleteZone(){
-        when(zoneRepository.findById(1L)).thenReturn(Optional.of(new ZoneEntity(1L,"Zone 1")));
+        when(zoneRepository.findById(1L)).thenReturn(Optional.of(new ZoneEntity("Zone 1")));
         zoneService.delete(1L);
     }
     @Test
