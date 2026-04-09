@@ -9,6 +9,7 @@ import java.util.List;
 @Table(name = "drivers")
 public class DriverEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String firstName;
     private String lastName;
@@ -23,8 +24,7 @@ public class DriverEntity {
     protected DriverEntity() {
     }
 
-    public DriverEntity(long id, String firstName, String lastName) {
-        this.id = id;
+    public DriverEntity(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }

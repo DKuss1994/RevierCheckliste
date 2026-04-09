@@ -18,7 +18,7 @@ public class DriverController {
     }
     @PostMapping
     public ResponseEntity<Driver> create(@RequestBody DriverRequest request){
-        Driver driver = driverService.create(request.getId(),request.getFirstName(), request.getLastName());
+        Driver driver = driverService.create(request.getFirstName(), request.getLastName());
         return ResponseEntity.status(HttpStatus.CREATED).body(driver);
     }
     @PostMapping("/{driverId}/zones/{zoneId}")

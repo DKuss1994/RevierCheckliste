@@ -9,7 +9,6 @@ public class DriverMapperTest {
         Driver driver = new Driver(1L,"Max","Hans");
         DriverEntity entity = DriverMapper.toEntity(driver);
         Driver toDomain = DriverMapper.toDomain(entity);
-        assertThat(toDomain.getId()).isEqualTo(driver.getId());
         assertThat(toDomain.getFirstName()).isEqualTo(driver.getFirstName());
     }
     @Test

@@ -31,7 +31,7 @@ public class ChecklistRepositoryTest {
         LocalTime endTime = LocalTime.of(6, 0);
         ZoneEntity zone = new ZoneEntity("Zone 1");
         zoneRepository.save(zone);
-        DriverEntity driver = new DriverEntity(1L, "Max", "Mustermann");
+        DriverEntity driver = new DriverEntity( "Max", "Mustermann");
         driver.addAssignedZone(zone);
         driverRepository.save(driver);
         AddressEmbeddable address = new AddressEmbeddable

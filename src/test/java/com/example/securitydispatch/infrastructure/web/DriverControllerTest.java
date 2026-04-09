@@ -30,7 +30,7 @@ public class DriverControllerTest {
 
     @Test
     void shouldCreateDriver()throws Exception{
-        when(driverService.create(anyLong(),any(),any()))
+        when(driverService.create(any(),any()))
                 .thenReturn(driver);
 
         mockMvc.perform(post("/drivers")

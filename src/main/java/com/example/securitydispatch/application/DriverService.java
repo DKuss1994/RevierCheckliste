@@ -16,8 +16,8 @@ public class DriverService {
         this.driverRepository = driverRepository;
     }
 
-    public Driver create(long id, String firstName, String lastName) {
-        DriverEntity driver = new DriverEntity(id, firstName, lastName);
+    public Driver create(String firstName, String lastName) {
+        DriverEntity driver = new DriverEntity(firstName, lastName);
         return DriverMapper.toDomain(driverRepository.save(driver));
     }
 
@@ -32,7 +32,7 @@ public class DriverService {
 
     public Driver update(long id, String firstName, String lastName) {
         existDriverById(id);
-        DriverEntity update = new DriverEntity(id, firstName, lastName);
+        DriverEntity update = new DriverEntity(firstName, lastName);
         return DriverMapper.toDomain(driverRepository.save(update));
     }
 

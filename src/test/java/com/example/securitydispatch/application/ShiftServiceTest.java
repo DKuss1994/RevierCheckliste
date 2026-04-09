@@ -33,7 +33,7 @@ public class ShiftServiceTest {
     @InjectMocks
     private ShiftService shiftService;
 
-    private final DriverEntity driverEntity = new DriverEntity(1L,"Max","Mustermann");
+    private final DriverEntity driverEntity = new DriverEntity("Max","Mustermann");
     private final ZoneEntity zoneEntity = new ZoneEntity("Zone 1");
     private final LocalDate deploymentDate = LocalDate.of(2024, 3, 11);
     private final LocalTime startTime = LocalTime.of(6, 0);

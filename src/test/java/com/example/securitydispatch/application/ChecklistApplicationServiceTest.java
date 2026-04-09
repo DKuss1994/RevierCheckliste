@@ -40,7 +40,7 @@ public class ChecklistApplicationServiceTest {
     private ChecklistApplicationService checklistApplicationService;
 
     private final ZoneEntity zoneEntity = new ZoneEntity("Zone 1");
-    private final DriverEntity driverEntity = new DriverEntity(1L, "Max", "Mustermann");
+    private final DriverEntity driverEntity = new DriverEntity("Max", "Mustermann");
     private final ShiftEntity shiftEntity = new ShiftEntity(
             1L,
             driverEntity,

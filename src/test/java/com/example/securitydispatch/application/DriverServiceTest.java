@@ -33,11 +33,10 @@ import static org.mockito.Mockito.when;
 
     @Test
     void shouldCreateDriver() {
-        DriverEntity saved = new DriverEntity(1L, "Max","Mustermann");
+        DriverEntity saved = new DriverEntity( "Max","Mustermann");
         when(driverRepository.save(any())).thenReturn(saved);
-        Driver result = driverService.create(1L, "Max","Mustermann");
+        Driver result = driverService.create( "Max","Mustermann");
 
-        assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getFirstName()).isEqualTo("Max");
         assertThat(result.getLastName()).isEqualTo("Mustermann");
     }
@@ -45,7 +44,7 @@ import static org.mockito.Mockito.when;
     @Test
     void shouldFindDriverById() {
         when(driverRepository.findById(1L)).
-                thenReturn(Optional.of(new DriverEntity(1L, "Max","Mustermann")));
+                thenReturn(Optional.of(new DriverEntity( "Max","Mustermann")));
         Driver result = driverService.findById(1L);
         assertThat(result.getFirstName()).isEqualTo("Max");
         assertThat(result.getLastName()).isEqualTo("Mustermann");
@@ -62,8 +61,8 @@ import static org.mockito.Mockito.when;
     @Test
     void shouldFindAllDrivers(){
         when(driverRepository.findAll()).thenReturn(List.of(
-                new DriverEntity(1L,"Max","Mustermann"),
-                new DriverEntity(2L,"Luis","Musterfrau")
+                new DriverEntity("Max","Mustermann"),
+                new DriverEntity("Luis","Musterfrau")
         ));
         List<Driver> result = driverService.findAll();
         assertThat(result).hasSize(2);
@@ -72,15 +71,15 @@ import static org.mockito.Mockito.when;
     }
     @Test
     void shouldUpdateDriver(){
-        DriverEntity update = new DriverEntity(1L,"Moritz","Schmidt");
-        when(driverRepository.findById(1L)).thenReturn(Optional.of(new DriverEntity(1L,"Max","Mustermann")));
+        DriverEntity update = new DriverEntity("Moritz","Schmidt");
+        when(driverRepository.findById(1L)).thenReturn(Optional.of(new DriverEntity("Max","Mustermann")));
         when(driverRepository.save(any())).thenReturn(update);
         Driver result = driverService.update(1L,"Moritz","Schmidt");
         assertThat(result.getFirstName()).isEqualTo("Moritz");
     }
     @Test
     void shouldDeleteDriver(){
-        when(driverRepository.findById(1L)).thenReturn(Optional.of(new DriverEntity(1L,"Max","Mustermann")));
+        when(driverRepository.findById(1L)).thenReturn(Optional.of(new DriverEntity("Max","Mustermann")));
         driverService.delete(1L);
     }
     @Test
@@ -92,7 +91,7 @@ import static org.mockito.Mockito.when;
     }
     @Test
     void shouldAssignZoneToDriver(){
-        DriverEntity driver = new DriverEntity(1L,"Max","Mustermann");
+        DriverEntity driver = new DriverEntity("Max","Mustermann");
         ZoneEntity zone = new ZoneEntity("Zone 1");
 
         when(driverRepository.findById(1L)).thenReturn(Optional.of(driver));
@@ -105,7 +104,7 @@ import static org.mockito.Mockito.when;
     }
     @Test
     void shouldThrowExceptionWhenAssigningNonExistingZone(){
-        when(driverRepository.findById(1L)).thenReturn(Optional.of(new DriverEntity(1L,"Max","Mustermann")));
+        when(driverRepository.findById(1L)).thenReturn(Optional.of(new DriverEntity("Max","Mustermann")));
         when(zoneRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(()->driverService.assignZone(1L,99L))

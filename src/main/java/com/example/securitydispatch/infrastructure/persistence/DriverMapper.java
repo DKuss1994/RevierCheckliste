@@ -6,7 +6,6 @@ import com.example.securitydispatch.domain.Zone;
 public class DriverMapper {
     public static DriverEntity toEntity(Driver driver) {
         DriverEntity entity = new DriverEntity(
-                driver.getId(),
                 driver.getFirstName(),
                 driver.getLastName());
         for (Zone zone : driver.getAssignedZones()) {

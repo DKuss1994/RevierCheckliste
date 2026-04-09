@@ -6,16 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DriverRequest {
-    private long id;
+
     private String firstName;
     private String lastName;
     private final List<Zone> assignedZones = new ArrayList<>();
 
     public DriverRequest(){}
 
-    public long getId() {
-        return id;
-    }
 
     public String getFirstName() {
         return firstName;

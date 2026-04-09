@@ -18,23 +18,21 @@ public class DriverRepositoryTest {
 
     @Test
     void shouldSaveAndFindDriver() {
-        DriverEntity driver = new DriverEntity(1L, "Max", "Mustermann");
-        driverRepository.save(driver);
-        Optional<DriverEntity> found = driverRepository.findById(1L);
+        DriverEntity driver = driverRepository.save(new DriverEntity("Max", "Mustermann"));
+        Optional<DriverEntity> found = driverRepository.findById(driver.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getFirstName()).isEqualTo("Max");
         assertThat(found.get().getLastName()).isEqualTo("Mustermann");
-        assertThat(found.get().getId()).isEqualTo(1L);
+        assertThat(found.get().getId()).isEqualTo(driver.getId());
         assertThat(found.get().getAssignedZones()).isEmpty();
     }
 
     @Test
     void shouldSaveDriverWithAssignedZone() {
         ZoneEntity zone = zoneRepository.save(new ZoneEntity("Zone 1"));
-        DriverEntity driver = new DriverEntity(1L, "Max", "Mustermann");
+        DriverEntity driver = driverRepository.save(new DriverEntity("Max", "Mustermann"));
         driver.addAssignedZone(zone);
-        driverRepository.save(driver);
-        Optional<DriverEntity> found = driverRepository.findById(1L);
+        Optional<DriverEntity> found = driverRepository.findById(driver.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getAssignedZones()).hasSize(1);
         assertThat(found.get().getAssignedZones().getFirst().getName()).isEqualTo("Zone 1");
