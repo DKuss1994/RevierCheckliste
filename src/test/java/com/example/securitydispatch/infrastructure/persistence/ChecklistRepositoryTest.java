@@ -53,7 +53,7 @@ public class ChecklistRepositoryTest {
 
 
         ShiftEntity shift = new ShiftEntity(
-                1L, driver, zone, startDay, startTime, endTime);
+                driver, zone, startDay, startTime, endTime);
         shiftRepository.save(shift);
         Warning warning = new Warning("Stop");
         List<Warning> warnings = List.of(warning);

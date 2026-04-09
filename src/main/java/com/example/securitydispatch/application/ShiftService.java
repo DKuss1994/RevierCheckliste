@@ -19,12 +19,12 @@ public class ShiftService {
         this.shiftRepository = shiftRepository;
     }
 
-    public Shift create(long id, long driverId, long zoneId, LocalDate deploymentDate, LocalTime startTime, LocalTime endTime) {
+    public Shift create( long driverId, long zoneId, LocalDate deploymentDate, LocalTime startTime, LocalTime endTime) {
         DriverEntity driverEntity = driverRepository.findById(driverId)
                 .orElseThrow(() -> new IllegalArgumentException("Driver not found: " + driverId));
         ZoneEntity zoneEntity = zoneRepository.findById(driverId)
                 .orElseThrow(() -> new IllegalArgumentException("Zone not found: " + zoneId));
-        ShiftEntity shiftEntity = new ShiftEntity(id, driverEntity, zoneEntity, deploymentDate, startTime, endTime);
+        ShiftEntity shiftEntity = new ShiftEntity( driverEntity, zoneEntity, deploymentDate, startTime, endTime);
 
         return ShiftMapper.toDomain(shiftRepository.save(shiftEntity));
     }

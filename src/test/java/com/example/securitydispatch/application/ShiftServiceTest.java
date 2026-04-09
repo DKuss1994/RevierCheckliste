@@ -47,9 +47,8 @@ public class ShiftServiceTest {
         when(driverRepository.findById(1L)).thenReturn(Optional.of(driverEntity));
         when(shiftRepository.save(any())).thenReturn(saved);
         Shift result = shiftService.
-                create(1L, 1L,1L,deploymentDate,startTime,endTime);
+                create( 1L,1L,deploymentDate,startTime,endTime);
 
-        assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getZone().getName()).isEqualTo("Zone 1");
         assertThat(result.getDriver().getFirstName()).isEqualTo("Max");
         assertThat(result.getDeploymentDate()).isEqualTo(LocalDate.of(2024, 3, 11));
@@ -62,7 +61,6 @@ public class ShiftServiceTest {
         when(shiftRepository.findById(1L)).
                 thenReturn(Optional.of(getShiftEntity()));
         Shift result = shiftService.findById(1L);
-        assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getZone().getName()).isEqualTo("Zone 1");
         assertThat(result.getDriver().getFirstName()).isEqualTo("Max");
         assertThat(result.getDeploymentDate()).isEqualTo(LocalDate.of(2024, 3, 11));
@@ -83,8 +81,6 @@ public class ShiftServiceTest {
         );
         List<Shift> result = shiftService.findAll();
         assertThat(result).hasSize(2);
-        assertThat(result.getFirst().getId()).isEqualTo(1L);
-        assertThat(result.get(1).getId()).isEqualTo(2L);
     }
     @Test
     void shouldDeleteShift(){
@@ -99,8 +95,8 @@ public class ShiftServiceTest {
                 .hasMessage("Shift not found: 99");
     }
     private @NonNull ShiftEntity getShiftEntity() {
-        return new ShiftEntity(1L, driverEntity,zoneEntity,deploymentDate,startTime,endTime);
+        return new ShiftEntity( driverEntity,zoneEntity,deploymentDate,startTime,endTime);
     } private @NonNull ShiftEntity getShiftEntity2() {
-        return new ShiftEntity(2L, driverEntity,zoneEntity,deploymentDate,startTime,endTime);
+        return new ShiftEntity( driverEntity,zoneEntity,deploymentDate,startTime,endTime);
     }
 }

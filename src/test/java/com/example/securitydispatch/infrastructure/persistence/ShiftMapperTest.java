@@ -21,7 +21,6 @@ public class ShiftMapperTest {
         Shift shift = new Shift(1L,driver,zone,startDay,startTime,endTime);
         ShiftEntity entity = ShiftMapper.toEntity(shift);
         Shift toDomain = ShiftMapper.toDomain(entity);
-        assertThat(toDomain.getId()).isEqualTo(shift.getId());
         assertThat(toDomain.getDeploymentDate()).isEqualTo(startDay);
         assertThat(toDomain.getDriver().getFirstName()).isEqualTo("Max");
         assertThat(toDomain.getZone().getName()).isEqualTo("Zone 1");

@@ -6,6 +6,7 @@ import java.time.LocalTime;
 @Table(name = "shifts")
 public class ShiftEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
@@ -20,9 +21,8 @@ public class ShiftEntity {
     private LocalTime startTime;
     private LocalTime endTime;
 protected ShiftEntity(){}
-    public ShiftEntity(long id,DriverEntity driver, ZoneEntity zone,LocalDate deploymentDate
+    public ShiftEntity(DriverEntity driver, ZoneEntity zone,LocalDate deploymentDate
     ,LocalTime startTime,LocalTime endTime){
-    this.id = id;
     this.driver = driver;
     this.zone = zone;
     this.deploymentDate = deploymentDate;

@@ -22,7 +22,7 @@ public class ShiftController {
     @PostMapping
     public ResponseEntity<Shift> create(@RequestBody ShiftRequest request){
       Shift shift = shiftService.create(
-              request.getId(),
+
               request.getDriverId(),
               request.getZoneId(),
               request.getDeploymentDate(),

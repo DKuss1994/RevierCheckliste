@@ -44,7 +44,7 @@ public class ShiftControllerTest {
 
     @Test
     void shouldCreateShift() throws Exception {
-        when(shiftService.create(anyLong(), anyLong(), anyLong(), any(), any(), any()))
+        when(shiftService.create( anyLong(), anyLong(), any(), any(), any()))
                 .thenReturn(shift);
 
         mockMvc.perform(post("/shifts")

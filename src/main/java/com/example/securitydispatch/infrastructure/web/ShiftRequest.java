@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ShiftRequest {
-    private long id;
     private long zoneId;
     private long driverId;
     private LocalDate deploymentDate;
@@ -13,9 +12,6 @@ public class ShiftRequest {
 
     public ShiftRequest(){}
 
-    public long getId() {
-        return id;
-    }
 
     public long getZoneId() {
         return zoneId;

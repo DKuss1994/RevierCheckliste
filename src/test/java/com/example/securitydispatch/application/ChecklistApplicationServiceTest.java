@@ -42,7 +42,7 @@ public class ChecklistApplicationServiceTest {
     private final ZoneEntity zoneEntity = new ZoneEntity("Zone 1");
     private final DriverEntity driverEntity = new DriverEntity("Max", "Mustermann");
     private final ShiftEntity shiftEntity = new ShiftEntity(
-            1L,
+
             driverEntity,
             zoneEntity,
             LocalDate.of(2026, 3, 30),

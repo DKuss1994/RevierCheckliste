@@ -9,7 +9,7 @@ public class ShiftMapper {
         DriverEntity driver = DriverMapper.toEntity(shift.getDriver());
         ZoneEntity zone = ZoneMapper.toEntity(shift.getZone());
         return new ShiftEntity
-                (shift.getId(), driver, zone, shift.getDeploymentDate(),
+                ( driver, zone, shift.getDeploymentDate(),
                         shift.getStartTime(), shift.getEndTime());
     }
 
