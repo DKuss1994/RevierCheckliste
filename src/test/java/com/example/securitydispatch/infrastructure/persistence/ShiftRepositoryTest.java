@@ -56,8 +56,8 @@ public class ShiftRepositoryTest {
 
         ShiftEntity shift = new ShiftEntity(
                  driver, zone, startDay, startTime, endTime);
-        shiftRepository.save(shift);
-        Optional<ShiftEntity> found = shiftRepository.findById(1L);
+        ShiftEntity saved = shiftRepository.save(shift);
+        Optional<ShiftEntity> found = shiftRepository.findById(saved.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getDeploymentDate()).isEqualTo(startDay);
     }
