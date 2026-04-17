@@ -41,10 +41,32 @@ public class ChecklistApplicationService {
                         .map(Warning::getMessage)
                         .toList());
     }
+
     private Checklist saveAndReturnWithId(Checklist checklist) {
-        ChecklistEntity saved = checklistRepository.save(
-                ChecklistMapper.toEntity(checklist));
-        // echte ID von der Datenbank
+        ShiftEntity shiftEntity = shiftRepository.findById(
+                        checklist.getShift().getId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Shift not found: " + checklist.getShift().getId()));
+        // ChecklistEntity direkt mit der gespeicherten ShiftEntity erstellen
+        StandardConfiguration config = checklist.getConfiguration();
+        StandardConfigurationEmbeddable configEmbeddable = new StandardConfigurationEmbeddable(
+                config.getInspectionCount().orElse(null),
+                config.getInspectionDays().orElse(null),
+                config.getOpeningTime().orElse(null),
+                config.getOpeningDays().orElse(null),
+                config.getClosingTime().orElse(null),
+                config.getClosingDays().orElse(null),
+                config.getInspectionWindowStart().orElse(null),
+                config.getInspectionWindowEnd().orElse(null),
+                config.getNotes().orElse(null));
+        ChecklistEntity entity = new ChecklistEntity(
+                shiftEntity,
+                configEmbeddable,
+                checklist.getGeneratedAt(),
+                checklist.getWarnings());
+
+        ChecklistEntity saved = checklistRepository.save(entity);
+
         return new Checklist(
                 saved.getId(),
                 checklist.getShift(),
@@ -55,23 +77,24 @@ public class ChecklistApplicationService {
     }
 
 
-    private List<SecurityObject> loadListOfSecurityObjectByZoneId(Long zoneId){
+    private List<SecurityObject> loadListOfSecurityObjectByZoneId(Long zoneId) {
         return securityObjectRepository.findByZoneId(zoneId)
                 .stream().map(SecurityObjectMapper::toDomain)
                 .toList();
     }
+
     private SecurityObject loadSecurityObject(Long id) {
-     return securityObjectRepository.findById(id).
+        return securityObjectRepository.findById(id).
                 map(SecurityObjectMapper::toDomain)
-                .orElseThrow(()-> new IllegalArgumentException("SecurityObject not found: "
+                .orElseThrow(() -> new IllegalArgumentException("SecurityObject not found: "
                         + id));
     }
 
     private Shift loadShift(Long id) {
-        return   shiftRepository.findById(id)
+        return shiftRepository.findById(id)
                 .map(ShiftMapper::toDomain)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Shift not found: "+ id));
+                        "Shift not found: " + id));
 
     }
 

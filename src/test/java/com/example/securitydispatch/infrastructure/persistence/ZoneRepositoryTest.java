@@ -25,10 +25,9 @@ class ZoneRepositoryTest {
 
     @Test
     void shouldDeleteZone() {
-        ZoneEntity zone = new ZoneEntity("Zone 1");
-        zoneRepository.save(zone);
-        zoneRepository.deleteById(1L);
-        Optional<ZoneEntity> found = zoneRepository.findById(1L);
+        ZoneEntity zone = zoneRepository.save(new ZoneEntity("Zone 1"));
+        zoneRepository.deleteById(zone.getId());
+        Optional<ZoneEntity> found = zoneRepository.findById(zone.getId());
 
         assertThat(found).isEmpty();
     }
