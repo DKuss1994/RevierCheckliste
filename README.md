@@ -1,69 +1,81 @@
 # SecurityDispatch — Patrol Checklist Backend
 
-## 🚨 Real-World Problem
+## Overview
 
-In security control centers, patrol checklists are often managed manually using Excel or paper.
+SecurityDispatch is a backend system for generating rule-based patrol checklists in security operations environments.
 
-From my own experience working in a control center, this leads to:
-- Missing or incorrect entries
-- No reliable traceability
-- High coordination effort under time pressure
+The system was developed to address real-world challenges in control centers, where patrol processes are often managed manually and lack consistency, traceability, and reliability.
 
 ---
 
-## 💡 Solution
+## Problem Context
 
-SecurityDispatch is a backend system that generates **rule-based patrol checklists** for security drivers.
+In security control centers, patrol checklists are frequently handled using Excel or paper-based systems.
 
-The system:
-- Automates checklist creation
-- Applies time-based rules
-- Produces an immutable checklist snapshot used during patrols
-
-👉 Goal: reduce errors, improve traceability, and standardize patrol workflows
+This results in:
+- Inconsistent or incomplete documentation
+- Limited traceability of performed inspections
+- Increased coordination effort under time pressure
 
 ---
 
-## ⚙️ Key Features
+## Solution
+
+SecurityDispatch provides a structured backend system that:
+
+- Automates checklist generation
+- Applies time-dependent business rules
+- Produces an immutable checklist snapshot for operational use
+
+The goal is to standardize patrol workflows and reduce operational errors.
+
+---
+
+## Key Features
 
 - Rule-based checklist generation
-- Time-dependent override / additional / reduction rules
+- Time-dependent configuration handling:
+  - Override rules
+  - Additional rules
+  - Reduction rules
 - Immutable checklist snapshots
-- Conflict detection with warnings
-- Full REST API (CRUD + checklist generation)
-- ~160+ automated tests (TDD)
+- Conflict detection with warning generation
+- REST API for all core entities
+- Test-driven development with comprehensive unit test coverage (~160 tests)
 
 ---
 
-## 🧱 Tech Stack
+## Technology Stack
 
 - Java 21
 - Spring Boot
 - Spring Data JPA
-- H2 (dev)
-- JUnit 5 / AssertJ
+- H2 (development)
+- JUnit 5
+- AssertJ
 - Maven
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
-Layered architecture with strict separation:
+The system follows a layered architecture with strict separation of concerns:
 
 domain/          → Business logic (framework-independent)  
-application/     → Use cases  
-infrastructure/  → Spring Boot, REST, persistence  
+application/     → Use case orchestration  
+infrastructure/  → REST API, persistence, Spring Boot integration  
 
-### Key decisions:
+### Design Principles
 
-- Domain model is completely framework-independent  
-- JPA entities separated from domain  
-- Rule engine is deterministic and side-effect free  
-- Business logic fully unit tested  
+- Domain-driven design approach
+- Framework-independent domain layer
+- Separation of JPA entities and domain model
+- Deterministic rule processing without side effects
+- High testability of all business logic
 
 ---
 
-## 🧠 Domain Model
+## Domain Model
 
 Zone  
  └── SecurityObject  
@@ -87,19 +99,21 @@ Checklist (immutable snapshot)
 
 ---
 
-## ⚙️ Rule Engine
+## Rule Engine
 
-The ConfigurationResolver processes rules in this order:
+The ConfigurationResolver applies rules in a defined order:
 
-1. StandardConfiguration (base)  
-2. OverrideRule (replace config)  
-3. AdditionalRule (add services)  
-4. ReductionRule (remove services)  
-5. Conflict detection  
+1. StandardConfiguration (base state)  
+2. OverrideRule (replaces configuration)  
+3. AdditionalRule (adds services)  
+4. ReductionRule (removes services)  
+5. Conflict detection and warning generation  
 
 ---
 
-## 🔌 Example API
+## API Example
+
+Generate a checklist for a shift:
 
 POST /checklists/generate
 
@@ -109,50 +123,48 @@ POST /checklists/generate
 
 ---
 
-## 🧪 Testing
+## Testing Strategy
 
-This project was built using **Test Driven Development (TDD)**.
+The system was developed using Test Driven Development (TDD):
 
-- ~160 tests  
-- Business logic tested independently of framework  
-- Focus on reliability and edge cases  
-
----
-
-## 📄 Output
-
-The system generates a **printable checklist (PDF in progress)**:
-
-- Structured inspection plan  
-- Clear time slots  
-- Designed for handwritten confirmation  
+- ~160 unit tests
+- Business logic tested independently of framework
+- Focus on edge cases and reliability
 
 ---
 
-## 🚀 Project Status
+## Output
 
-Version 1 (completed):  
-- Domain model  
-- Rule engine  
-- REST API  
-- Persistence layer  
+The system generates structured checklist data.
 
-In Progress:  
-- PDF generation  
-
-Planned:  
-- Frontend (Thymeleaf)  
-- MariaDB  
+A printable PDF representation (DIN A4 landscape) is currently in development and is designed for operational use during patrols.
 
 ---
 
-## 👤 About Me
+## Project Status
 
-I built this project based on real-world problems from my work in a security control center.
+Version 1 (completed):
+- Domain model
+- Rule engine
+- REST API
+- Persistence layer
 
-Currently transitioning into backend development with a focus on:
-- Java / Spring Boot  
-- Clean architecture  
-- Test-driven development  
+In progress:
+- PDF generation
+
+Planned:
+- Frontend (Thymeleaf)
+- MariaDB integration
+
+---
+
+## Author
+
+This project was developed based on real-world experience in a security control center environment.
+
+Focus areas:
+- Java backend development
+- Clean architecture
+- Test-driven development
 
 GitHub: https://github.com/DKuss1994
