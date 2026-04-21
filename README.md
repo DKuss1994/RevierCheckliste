@@ -1,215 +1,170 @@
-# SecurityDispatch — Security Patrol Checklist System
+# SecurityDispatch — Patrol Checklist Backend
 
-A backend system for generating rule-based checklists for security patrol drivers.  
-Built as a portfolio project to demonstrate clean Java backend development with Spring Boot.
+## Overview
+
+SecurityDispatch is a backend system for generating rule-based patrol checklists in security operations environments.
+
+The system was developed to address real-world challenges in control centers, where patrol processes are often managed manually and lack consistency, traceability, and reliability.
 
 ---
 
-## What This System Does
+## Problem Context
 
-Security control centers manage multiple patrol drivers across different zones.  
-Each zone contains security objects (buildings, premises) with individual inspection rules.
+In security control centers, patrol checklists are frequently handled using Excel or paper-based systems.
 
-This system automates checklist generation for patrol drivers based on:
-- Standard configurations per security object
-- Time-based override rules
-- Additional service rules
-- Reduction rules
+This results in:
+- Inconsistent or incomplete documentation
+- Limited traceability of performed inspections
+- Increased coordination effort under time pressure
 
-The generated checklist is an **immutable snapshot** — printed once and used as a reference for handwritten entries during the patrol.
+---
+
+## Solution
+
+SecurityDispatch provides a structured backend system that:
+
+- Automates checklist generation
+- Applies time-dependent business rules
+- Produces an immutable checklist snapshot for operational use
+
+The goal is to standardize patrol workflows and reduce operational errors.
+
+---
+
+## Key Features
+
+- Rule-based checklist generation
+- Time-dependent configuration handling:
+  - Override rules
+  - Additional rules
+  - Reduction rules
+- Immutable checklist snapshots
+- Conflict detection with warning generation
+- REST API for all core entities
+- Test-driven development with comprehensive unit test coverage (~160 tests)
+
+---
+
+## Technology Stack
+
+- Java 21
+- Spring Boot
+- Spring Data JPA
+- H2 (development)
+- JUnit 5
+- AssertJ
+- Maven
 
 ---
 
 ## Architecture
 
-The project follows a **layered architecture** with strict separation of concerns:
+The system follows a layered architecture with strict separation of concerns:
 
-```
-domain/          → Pure business logic, no framework dependencies
-application/     → Use cases and orchestration
-infrastructure/  → Spring Boot, JPA, REST controllers
-```
+domain/          → Business logic (framework-independent)  
+application/     → Use case orchestration  
+infrastructure/  → REST API, persistence, Spring Boot integration  
 
-Key design decisions:
-- Domain model is completely framework-independent
-- All business logic is covered by unit tests
-- JPA entities are separate from domain classes
-- Rule engine processes configurations without side effects
+### Design Principles
+
+- Domain-driven design approach
+- Framework-independent domain layer
+- Separation of JPA entities and domain model
+- Deterministic rule processing without side effects
+- High testability of all business logic
 
 ---
 
 ## Domain Model
 
-```
-Zone
- └── SecurityObject
-      ├── StandardConfiguration
-      ├── OverrideRule (replaces config for a time period)
-      ├── AdditionalRule (adds services for a time period)
-      └── ReductionRule (removes services for a time period)
+Zone  
+ └── SecurityObject  
+      ├── StandardConfiguration  
+      ├── OverrideRule  
+      ├── AdditionalRule  
+      └── ReductionRule  
 
-Driver
- └── assignedZones (qualification check)
+Driver  
+ └── assignedZones  
 
-Shift
- ├── Driver
- ├── Zone
- └── deploymentDate
+Shift  
+ ├── Driver  
+ ├── Zone  
+ └── deploymentDate  
 
-Checklist (immutable snapshot)
- ├── Shift
- ├── resolved StandardConfiguration
- └── Warnings
-```
+Checklist (immutable snapshot)  
+ ├── Shift  
+ ├── resolved configuration  
+ └── warnings  
 
 ---
 
 ## Rule Engine
 
-The `ConfigurationResolver` processes rules in this order:
+The ConfigurationResolver applies rules in a defined order:
 
-1. Load `StandardConfiguration` as base
-2. Apply active `OverrideRule` — replaces entire config
-3. Apply active `AdditionalRule` — adds inspection count, opening/closing times
-4. Apply active `ReductionRule` — removes inspection count, opening/closing times
-5. Generate warnings for conflicts (e.g. negative inspection count, removing non-existing services)
-
----
-
-## Tech Stack
-
-| Technology | Version | Purpose |
-|---|---|---|
-| Java | 21 | Language |
-| Spring Boot | 3.4.4 | Framework |
-| Spring Data JPA | — | Persistence |
-| H2 | — | In-memory database (development) |
-| MariaDB | — | Production database (planned) |
-| OpenPDF | — | PDF generation (in progress) |
-| JUnit 5 | — | Testing |
-| AssertJ | — | Test assertions |
-| Maven | — | Build tool |
+1. StandardConfiguration (base state)  
+2. OverrideRule (replaces configuration)  
+3. AdditionalRule (adds services)  
+4. ReductionRule (removes services)  
+5. Conflict detection and warning generation  
 
 ---
 
-## Development Approach
+## API Example
 
-This project was built strictly following **Test Driven Development (TDD)**:
+Generate a checklist for a shift:
 
-1. Write a failing test
-2. Write minimal code to make it pass
-3. Refactor
+POST /checklists/generate
 
-Every feature starts with a test. Business logic is tested independently of the framework.
-
-**Test coverage:** 161 tests — all green.
+{
+  "shiftId": 1
+}
 
 ---
 
-## Getting Started
+## Testing Strategy
 
-### Prerequisites
+The system was developed using Test Driven Development (TDD):
 
-- Java 21
-- Maven
-
-### Run the application
-
-```bash
-./mvnw spring-boot:run
-```
-
-The application starts on `http://localhost:8080`.  
-Test data is loaded automatically from `src/main/resources/data.sql`.
-
-### Run the tests
-
-```bash
-./mvnw test
-```
+- ~160 unit tests
+- Business logic tested independently of framework
+- Focus on edge cases and reliability
 
 ---
 
-## API Endpoints
+## Output
 
-### Zones
-```
-POST   /zones          → Create zone
-GET    /zones          → Get all zones
-GET    /zones/{id}     → Get zone by id
-PUT    /zones/{id}     → Update zone
-DELETE /zones/{id}     → Delete zone
-```
+The system generates structured checklist data.
 
-### Drivers
-```
-POST   /drivers                      → Create driver
-GET    /drivers                      → Get all drivers
-GET    /drivers/{id}                 → Get driver by id
-PUT    /drivers/{id}                 → Update driver
-DELETE /drivers/{id}                 → Delete driver
-POST   /drivers/{id}/zones/{zoneId}  → Assign zone to driver
-```
-
-### Security Objects
-```
-POST   /security-objects          → Create security object
-GET    /security-objects          → Get all security objects
-GET    /security-objects/{id}     → Get security object by id
-PUT    /security-objects/{id}     → Update security object
-DELETE /security-objects/{id}     → Delete security object
-```
-
-### Shifts
-```
-POST   /shifts          → Create shift
-GET    /shifts          → Get all shifts
-GET    /shifts/{id}     → Get shift by id
-DELETE /shifts/{id}     → Delete shift
-```
-
-### Checklists
-```
-POST   /checklists/generate   → Generate checklist for a shift
-```
-
----
-
-## Checklist PDF Layout (in progress)
-
-The generated PDF follows DIN A4 landscape format:
-
-**Header:** Driver name, Zone, Date, Shift time
-
-**Inspections:** Object name with inspection times and one empty checkbox per inspection — the driver fills in the actual time by hand
-
-**Closing:** Object name, scheduled closing time, empty checkbox for handwritten confirmation
-
-**Opening:** Object name, scheduled opening time, empty checkbox — night shifts crossing midnight are handled separately so the driver knows which openings belong to the next morning
+A printable PDF representation (DIN A4 landscape) is currently in development and is designed for operational use during patrols.
 
 ---
 
 ## Project Status
 
-**Version 1 — completed:**
-- ✅ Complete domain model
-- ✅ Rule engine with conflict detection
-- ✅ Checklist generation as immutable snapshot
-- ✅ Full REST API with CRUD for all entities
-- ✅ Persistence layer with JPA
+Version 1 (completed):
+- Domain model
+- Rule engine
+- REST API
+- Persistence layer
 
-**Version 2 — in progress:**
-- 🔄 PDF generation (DIN A4 landscape format)
+In progress:
+- PDF generation
 
-**Version 3 — planned:**
-- ⬜ Frontend (Thymeleaf)
-- ⬜ Production database (MariaDB)
+Planned:
+- Frontend (Thymeleaf)
+- MariaDB integration
 
 ---
 
-## About
+## Author
 
-Built by a career changer transitioning from security operations to software development.  
-Six months of Java experience. Learning by building real-world domain problems.
+This project was developed based on real-world experience in a security control center environment.
 
-GitHub: [github.com/DKuss1994](https://github.com/DKuss1994)
+Focus areas:
+- Java backend development
+- Clean architecture
+- Test-driven development
+
+GitHub: https://github.com/DKuss1994
