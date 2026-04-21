@@ -2,6 +2,8 @@ package com.example.securitydispatch.application;
 
 import com.example.securitydispatch.domain.Checklist;
 
+import com.example.securitydispatch.domain.ChecklistEntry;
+import com.example.securitydispatch.domain.Shift;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
 
@@ -79,27 +81,39 @@ public class PdfService {
     }
 
     private void addInspections(Document document, Checklist checklist)throws Exception  {
-        checklist.getConfiguration().getInspectionCount().ifPresent(count -> {
-            try {
-                document.add(new Paragraph("INSPECTIONS"));
-                for (int i = 1; i <= count; i++) {
-                    document.add(new Paragraph("Inspection " + i + ":  □ ___________"));
-                }
-                document.add(Chunk.NEWLINE);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        if (checklist.getEntries().isEmpty()) {
+            document.add(new Paragraph("No security objects assigned."));
+            return;
+        }
+
+        PdfPTable table = new PdfPTable(2); // erstmal 2 Spalten: Objekt | Kästchen
+        table.setWidthPercentage(100);
+        table.addCell("Security Object");
+        table.addCell("Inspections");
+
+        for (ChecklistEntry entry : checklist.getEntries()) {
+            table.addCell(entry.getSecurityObject().getName());
+            int count = entry.getResolvedConfiguration().getInspectionCount().orElse(0);
+            StringBuilder boxes = new StringBuilder();
+            for (int i = 0; i < count; i++) boxes.append("□ ");
+            table.addCell(boxes.toString());
+        }
+        document.add(table);
+        document.add(Chunk.NEWLINE);
     }
 
     private void addHeader(Document document, Checklist checklist)throws Exception  {
-        document.add(new Paragraph("SecurityDispatch — Patrol Checklist"));
-        document.add(new Paragraph("Driver: " + checklist.getShift().getDriver().getFirstName()
-                + " " + checklist.getShift().getDriver().getLastName()));
-        document.add(new Paragraph("Zone: " + checklist.getShift().getZone().getName()));
-        document.add(new Paragraph("Date: " + checklist.getShift().getDeploymentDate()));
-        document.add(new Paragraph("Shift: " + checklist.getShift().getStartTime()
-                + " → " + checklist.getShift().getEndTime()));
+        Shift shift = checklist.getShift();
+        String header = String.format("Driver: %s %s | Zone: %s | Date: %s | Shift: %s → %s%s",
+                shift.getDriver().getFirstName(),
+                shift.getDriver().getLastName(),
+                shift.getZone().getName(),
+                shift.getDeploymentDate(),
+                shift.getStartTime(),
+                shift.getEndTime(),
+                shift.isNightShift() ? " (Night Shift)" : "");
+        document.add(new Paragraph(header));
         document.add(Chunk.NEWLINE);
+
     }
 }

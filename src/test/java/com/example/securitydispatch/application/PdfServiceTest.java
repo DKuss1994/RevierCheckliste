@@ -67,7 +67,7 @@ public class PdfServiceTest {
         StandardConfiguration configB = new StandardConfiguration.Builder()
                 .inspectionCount(1).build();
         SecurityObject object1 = new SecurityObject(1L, "Object A", zone, address, configA);
-        SecurityObject object2 = new SecurityObject(1L, "Object A", zone, address, configB);
+        SecurityObject object2 = new SecurityObject(2L, "Object B", zone, address, configB);
 
         ChecklistEntry entry1 = new ChecklistEntry(object1, object1.getStandardConfiguration());
         ChecklistEntry entry2 = new ChecklistEntry(object2, object2.getStandardConfiguration());
