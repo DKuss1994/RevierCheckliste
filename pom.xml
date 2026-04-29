@@ -11,8 +11,12 @@
 	<groupId>com.example</groupId>
 	<artifactId>securitydispatch</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>securitydispatch</name>
 	<description>Security dispatch checklist system</description>
+	<modules>
+		<module>docker-compose.yml</module>
+	</modules>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
@@ -40,6 +44,11 @@
 			<artifactId>pdfbox</artifactId>
 			<version>3.0.2</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.librepdf</groupId>
