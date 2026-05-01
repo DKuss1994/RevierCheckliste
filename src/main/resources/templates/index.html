@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SecurityDispatch Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">SecurityDispatch – Leitstellenunterstützung</h1>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Zonen</h5>
+                    <p class="card-text">Zonen verwalten (anlegen, auflisten)</p>
+                    <a href="/zones" class="btn btn-primary">Zonen anzeigen</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Fahrer</h5>
+                    <p class="card-text">Fahrer verwalten</p>
+                    <a href="/drivers" class="btn btn-primary">Fahrer anzeigen</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Objekte</h5>
+                    <p class="card-text">Sicherheitsobjekte verwalten (kommt bald)</p>
+                    <button class="btn btn-secondary" disabled>Objekte anzeigen</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Schichten</h5>
+                    <p class="card-text">Schichten anlegen und verwalten (kommt bald)</p>
+                    <button class="btn btn-secondary" disabled>Schichten anzeigen</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Checkliste drucken</h5>
+                    <p class="card-text">Für eine bestehende Schicht die Checkliste generieren</p>
+                    <a href="/checklists/generate" class="btn btn-success">Checkliste generieren</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
