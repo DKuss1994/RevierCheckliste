@@ -40,7 +40,7 @@ class SecurityObjectControllerTest {
         when(securityObjectService.create( any(), anyLong(), any(), any()))
                 .thenReturn(securityObject);
 
-        mockMvc.perform(post("/security-objects")
+        mockMvc.perform(post("/api/security-objects")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -63,7 +63,7 @@ class SecurityObjectControllerTest {
     void shouldGetSecurityObjectById() throws Exception {
         when(securityObjectService.findById(1L))
                 .thenReturn(securityObject);
-        mockMvc.perform(get("/security-objects/1"))
+        mockMvc.perform(get("/api/security-objects/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Object A"));
@@ -78,7 +78,7 @@ class SecurityObjectControllerTest {
                         securityObject,
                         securityObjectB));
 
-        mockMvc.perform(get("/security-objects"))
+        mockMvc.perform(get("/api/security-objects"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
@@ -88,7 +88,7 @@ class SecurityObjectControllerTest {
         when(securityObjectService.update(anyLong(), any(), anyLong(), any(), any()))
                 .thenReturn(new SecurityObject(1L, "Object A Updated", zone, address, standardConfiguration));
 
-        mockMvc.perform(put("/security-objects/1")
+        mockMvc.perform(put("/api/security-objects/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -106,7 +106,7 @@ class SecurityObjectControllerTest {
 
     @Test
     void shouldDeleteSecurityObject() throws Exception {
-        mockMvc.perform(delete("/security-objects/1"))
+        mockMvc.perform(delete("/api/security-objects/1"))
                 .andExpect(status().isNoContent());
     }
 }

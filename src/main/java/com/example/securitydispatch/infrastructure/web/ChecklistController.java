@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/checklists")
+@RequestMapping("/api/checklists")
 public class ChecklistController {
 
     private final PdfService pdfService;

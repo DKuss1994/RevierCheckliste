@@ -36,10 +36,10 @@ public class ZoneService {
     }
 
     public Zone update(long id, String name) {
-        existZoneById(id);
-        ZoneEntity update = new ZoneEntity(name);
-        return ZoneMapper.toDomain(zoneRepository.save(update));
-
+        ZoneEntity existing = zoneRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Zone not found with id: " + id));
+        existing.setName(name);
+        return ZoneMapper.toDomain(zoneRepository.save(existing));
     }
 
     private void existZoneById(long id) {

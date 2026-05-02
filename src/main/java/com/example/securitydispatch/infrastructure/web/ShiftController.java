@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
-@RequestMapping("/shifts")
+@RequestMapping("/api/shifts")
 public class ShiftController {
     private final ShiftService shiftService;
 

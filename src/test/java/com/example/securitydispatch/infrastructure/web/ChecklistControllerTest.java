@@ -46,7 +46,7 @@ public class ChecklistControllerTest {
         when(checklistApplicationService.generate(any()))
                 .thenReturn(response);
 
-        mockMvc.perform(post("/checklists/generate")
+        mockMvc.perform(post("/api/checklists/generate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"shiftId\": 1, \"securityObjectId\": 1}"))
                 .andExpect(status().isOk())
@@ -68,7 +68,7 @@ public class ChecklistControllerTest {
                 .thenReturn(checklist);
         when(pdfService.generateChecklistPdf(any()))
                 .thenReturn("%PDF-test".getBytes());
-        mockMvc.perform(post("/checklists/generate/pdf")
+        mockMvc.perform(post("/api/checklists/generate/pdf")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {

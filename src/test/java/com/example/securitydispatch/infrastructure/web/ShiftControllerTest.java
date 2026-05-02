@@ -47,7 +47,7 @@ public class ShiftControllerTest {
         when(shiftService.create( anyLong(), anyLong(), any(), any(), any()))
                 .thenReturn(shift);
 
-        mockMvc.perform(post("/shifts")
+        mockMvc.perform(post("/api/shifts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -68,7 +68,7 @@ public class ShiftControllerTest {
     void shouldGetShiftById() throws Exception {
         when(shiftService.findById(1L))
                 .thenReturn(shift);
-        mockMvc.perform(get("/shifts/1"))
+        mockMvc.perform(get("/api/shifts/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.deploymentDate").value("2024-03-11"));
@@ -80,13 +80,13 @@ public class ShiftControllerTest {
                         shift,
                         shiftB));
 
-        mockMvc.perform(get("/shifts"))
+        mockMvc.perform(get("/api/shifts"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
     @Test
     void shouldDeleteSShift() throws Exception {
-        mockMvc.perform(delete("/shifts/1"))
+        mockMvc.perform(delete("/api/shifts/1"))
                 .andExpect(status().isNoContent());
     }
 }

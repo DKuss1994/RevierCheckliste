@@ -33,7 +33,7 @@ public class DriverControllerTest {
         when(driverService.create(any(),any()))
                 .thenReturn(driver);
 
-        mockMvc.perform(post("/drivers")
+        mockMvc.perform(post("/api/drivers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\": 1, \"firstName\": \"Max\", \"lastName\": \"Mustermann\"}"))
                 .andExpect(status().isCreated())
@@ -46,7 +46,7 @@ public class DriverControllerTest {
     void shouldGetDriverById()throws Exception{
         when(driverService.findById(1L))
                 .thenReturn(driver);
-        mockMvc.perform(get("/drivers/1"))
+        mockMvc.perform(get("/api/drivers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.firstName").value("Max"))
@@ -61,7 +61,7 @@ public class DriverControllerTest {
                         driver,
                         new Driver(2L,"David","Langen")));
 
-        mockMvc.perform(get("/drivers"))
+        mockMvc.perform(get("/api/drivers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
@@ -70,7 +70,7 @@ public class DriverControllerTest {
         when(driverService.update(anyLong(),any(),any()))
                 .thenReturn(new Driver(1L,"Max Update","Update"));
 
-        mockMvc.perform(put("/drivers/1")
+        mockMvc.perform(put("/api/drivers/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
 {
@@ -84,7 +84,7 @@ public class DriverControllerTest {
     }
     @Test
     void shouldDeleteDriver() throws Exception{
-        mockMvc.perform(delete("/drivers/1"))
+        mockMvc.perform(delete("/api/drivers/1"))
                 .andExpect(status().isNoContent());
     }
     @Test
@@ -93,7 +93,7 @@ public class DriverControllerTest {
         driverWithZone.addAssignedZone(new Zone(1L,"Zone 1"));
         when(driverService.assignZone(1L,1L)).thenReturn(driverWithZone);
 
-        mockMvc.perform(post("/drivers/1/zones/1"))
+        mockMvc.perform(post("/api/drivers/1/zones/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1));
 

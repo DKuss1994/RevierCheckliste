@@ -29,7 +29,7 @@ class ZoneControllerTest {
         when(zoneService.create(any()))
                 .thenReturn(new Zone(1L,"Zone 1"));
 
-        mockMvc.perform(post("/zones")
+        mockMvc.perform(post("/api/zones")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\": 1, \"name\": \"Zone 1\"}"))
                 .andExpect(status().isCreated())
@@ -41,7 +41,7 @@ class ZoneControllerTest {
     void shouldGetZoneById()throws Exception{
         when(zoneService.findById(1L))
                 .thenReturn(new Zone(1L,"Zone 1"));
-        mockMvc.perform(get("/zones/1"))
+        mockMvc.perform(get("/api/zones/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Zone 1"));
@@ -55,7 +55,7 @@ class ZoneControllerTest {
                         new Zone(1L,"Zone 1"),
                         new Zone(2L,"Zone 2")));
 
-        mockMvc.perform(get("/zones"))
+        mockMvc.perform(get("/api/zones"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
@@ -64,7 +64,7 @@ class ZoneControllerTest {
         when(zoneService.update(anyLong(),any()))
                 .thenReturn(new Zone(1L,"Zone 1 Updated"));
 
-        mockMvc.perform(put("/zones/1")
+        mockMvc.perform(put("/api/zones/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"Zone 1 Updated\"}"))
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ class ZoneControllerTest {
     }
     @Test
     void shouldDeleteZone() throws Exception{
-        mockMvc.perform(delete("/zones/1"))
+        mockMvc.perform(delete("/api/zones/1"))
                 .andExpect(status().isNoContent());
     }
 }
