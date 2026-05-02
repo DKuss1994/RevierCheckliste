@@ -22,9 +22,20 @@ public class ZoneWebController {
 
         return "zone-form";
     }
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Zone zone = zoneService.findById(id); // erwartet, dass ZoneService diese Methode hat
+        model.addAttribute("zone", zone);
+        return "zone-form";
+    }
     @PostMapping
     public String createZone(Model model, @RequestParam String name){
         zoneService.create(name);
+        return "redirect:/zones";
+    }
+    @PostMapping("/{id}")
+    public String updateZone(@PathVariable Long id, @RequestParam String name) {
+        zoneService.update(id, name);
         return "redirect:/zones";
     }
 }
