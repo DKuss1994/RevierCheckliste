@@ -61,4 +61,11 @@ class DriverWebControllerTest {
                 .andExpect(redirectedUrl("/drivers"));
         verify(driverService).update(eq(1L), eq("Maximilian"),eq("Mustermann"));
     }
+    @Test
+    void shouldAssignZoneToDriver() throws Exception {
+        mockMvc.perform(post("/drivers/1/zones/2"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/drivers/1"));
+        verify(driverService).assignZone(1L, 2L);
+    }
 }
