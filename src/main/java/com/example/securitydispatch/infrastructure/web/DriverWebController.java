@@ -38,8 +38,15 @@ public class DriverWebController {
     }
 
     @PostMapping
-    public String createZone(Model model, @RequestParam String firstName, @RequestParam String lastName) {
+    public String createDriver(Model model, @RequestParam String firstName, @RequestParam String lastName) {
         driverService.create(firstName,lastName);
+        return "redirect:/drivers";
+    }
+    @PostMapping("/{id}")
+    public String updateDriver(@PathVariable Long id
+            , @RequestParam String firstName
+            ,@RequestParam String lastName) {
+        driverService.update(id, firstName,lastName);
         return "redirect:/drivers";
     }
 }
