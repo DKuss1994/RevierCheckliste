@@ -2,12 +2,11 @@ package com.example.securitydispatch.infrastructure.web;
 
 import com.example.securitydispatch.application.DriverService;
 import com.example.securitydispatch.application.ZoneService;
+import com.example.securitydispatch.domain.Driver;
+import com.example.securitydispatch.domain.Zone;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/drivers")
@@ -29,6 +28,12 @@ public class DriverWebController {
     @GetMapping("/new")
     public String showCreateFrom() {
 
+        return "driver-form";
+    }
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Driver driver = driverService.findById(id);
+        model.addAttribute("driver", driver);
         return "driver-form";
     }
 
