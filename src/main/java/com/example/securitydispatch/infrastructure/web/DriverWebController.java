@@ -49,6 +49,11 @@ public class DriverWebController {
         driverService.update(id, firstName,lastName);
         return "redirect:/drivers";
     }
+    @PostMapping("/{driverId}/zones/{zoneId}")
+    public String assignZone(@PathVariable Long driverId, @PathVariable Long zoneId) {
+        driverService.assignZone(driverId, zoneId);
+        return "redirect:/drivers/" + driverId;
+    }
 }
 
 
