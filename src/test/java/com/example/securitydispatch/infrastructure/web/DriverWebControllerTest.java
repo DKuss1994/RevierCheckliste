@@ -13,7 +13,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @WebMvcTest(DriverWebController.class)
 class DriverWebControllerTest {
@@ -48,5 +51,14 @@ class DriverWebControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("driver-form"))
                 .andExpect(model().attributeExists("driver"));
+    }
+    @Test
+    void shouldUpdateDriver() throws Exception {
+        mockMvc.perform(post("/drivers/1")
+                        .param("firstName", "Maximilian")
+                        .param("lastName", "Mustermann"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/drivers"));
+        verify(driverService).update(eq(1L), eq("Maximilian"),eq("Mustermann"));
     }
 }
