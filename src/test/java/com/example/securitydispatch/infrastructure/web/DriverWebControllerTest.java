@@ -41,7 +41,7 @@ class DriverWebControllerTest {
                 .andExpect(view().name("driver-form"));
     }
 
-   /* @Test
+    @Test
     void shouldShowEditForm() throws Exception {
         Driver driver = new Driver(1L, "Max", "Mustermann");
         when(driverService.findById(1L)).thenReturn(driver);
@@ -49,5 +49,5 @@ class DriverWebControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("driver-form"))
                 .andExpect(model().attributeExists("driver"));
-    }*/
+    }
 }
