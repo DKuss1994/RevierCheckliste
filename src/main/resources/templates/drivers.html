@@ -13,6 +13,7 @@
             <th>ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -20,6 +21,9 @@
             <td th:text="${driver.id}"></td>
             <td th:text="${driver.firstName}"></td>
             <td th:text="${driver.lastName}"></td>
+            <td>
+            <a th:href="@{/drivers/{id}/edit(id=${driver.id})}" class="btn btn-sm btn-primary">Edit</a>
+            </td>
         </tr>
         </tbody>
     </table>

@@ -6,17 +6,15 @@
 </head>
 <body>
 <div class="container mt-4">
-    <h1>New Driver</h1>
-    <form action="/drivers" method="post">
+    <h1 th:if="${driver == null}">New Driver</h1>
+    <h1 th:if="${driver != null}">Edit Driver</h1>
+    <form th:action="${driver != null ? '/drivers/' + driver.id : '/drivers'}" method="post">
         <div class="mb-3">
-            <label class="form-label">First Name</label>
-            <input type="text" name="firstName" class="form-control" required/>
+            <label class="form-label">Name</label>
+        <input type="text" name="firstName" th:value="${driver != null ? driver.firstName : ''}" required />
+        <input type="text" name="lastName" th:value="${driver != null ? driver.lastName : ''}" required />
         </div>
-        <div class="mb-3">
-            <label class="form-label">Last Name</label>
-            <input type="text" name="lastName" class="form-control" required/>
-        </div>
-        <button type="submit" class="btn btn-success">Save</button>
+        <button type="submit" class="btn btn-success" th:text="${driver != null ? 'Update' : 'Save'}">Save</button>
         <a href="/drivers" class="btn btn-secondary">Back</a>
     </form>
 </div>

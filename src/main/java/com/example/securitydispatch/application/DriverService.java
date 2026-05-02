@@ -30,10 +30,12 @@ public class DriverService {
         return driverRepository.findAll().stream().map(DriverMapper::toDomain).toList();
     }
 
-    public Driver update(long id, String firstName, String lastName) {
-        existDriverById(id);
-        DriverEntity update = new DriverEntity(firstName, lastName);
-        return DriverMapper.toDomain(driverRepository.save(update));
+    public Driver update(long id, String firstName,String lastName) {
+        DriverEntity existing = driverRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Driver not found with id: " + id));
+        existing.setFirstName(firstName);
+        existing.setLastName(lastName);
+        return DriverMapper.toDomain(driverRepository.save(existing));
     }
 
     public void delete(long id) {
