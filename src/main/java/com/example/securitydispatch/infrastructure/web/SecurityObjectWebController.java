@@ -38,6 +38,7 @@ public class SecurityObjectWebController {
         model.addAttribute("zones", zoneService.findAll());
         return "security-object-form";
     }
+
     @PostMapping
     public String create(@RequestParam String name,
                          @RequestParam Long zoneId,
@@ -47,6 +48,7 @@ public class SecurityObjectWebController {
                          @RequestParam(required = false) Integer inspectionCount,
                          @RequestParam(required = false) String closingTime,
                          @RequestParam(required = false) String openingTime) {
+
 
         Zone zone = zoneService.findById(zoneId);
         Address address = new Address(street, city, zip);

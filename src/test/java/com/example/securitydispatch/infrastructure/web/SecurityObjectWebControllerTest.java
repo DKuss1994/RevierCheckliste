@@ -7,6 +7,8 @@ import com.example.securitydispatch.domain.Address;
 import com.example.securitydispatch.domain.SecurityObject;
 import com.example.securitydispatch.domain.StandardConfiguration;
 import com.example.securitydispatch.domain.Zone;
+import com.example.securitydispatch.infrastructure.persistence.AddressEmbeddable;
+import com.example.securitydispatch.infrastructure.persistence.StandardConfigurationEmbeddable;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,9 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(SecurityObjectWebController.class)
@@ -72,11 +76,11 @@ public class SecurityObjectWebControllerTest {
     }
     @Test
     void shouldCreateSecurityObject() throws Exception {
+        when(zoneService.findById(1L)).thenReturn(new Zone(1L, "Nord"));
         mockMvc.perform(post("/security-objects")
                         .param("name", "Tor 1")
                         .param("zoneId", "1")
                         .param("street", "Hauptstr")
-                        .param("number", "1")
                         .param("city", "Berlin")
                         .param("zip", "10115")
                         .param("inspectionCount", "2")
@@ -85,6 +89,5 @@ public class SecurityObjectWebControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/security-objects"));
 
-        verify(securityObjectService).create(any(SecurityObject.class));
-    }
+        verify(securityObjectService).create(eq("Tor 1"), anyLong(), any(AddressEmbeddable.class), any(StandardConfigurationEmbeddable.class));}
 }
