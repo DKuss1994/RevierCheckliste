@@ -24,6 +24,13 @@ public class DriverWebController {
         model.addAttribute("drivers", driverService.findAll());
         return "drivers";
     }
+    @GetMapping("/{id}")
+    public String showDetail(@PathVariable Long id, Model model) {
+        Driver driver = driverService.findById(id);
+        model.addAttribute("driver", driver);
+        model.addAttribute("assignedZones", driverService.findAssignedZones(id));
+        return "driver-detail";
+    }
 
     @GetMapping("/new")
     public String showCreateFrom() {

@@ -62,4 +62,12 @@ public class DriverService {
                 (firstName,lastName).stream().map(DriverMapper::toDomain)
                 .toList();
     }
+    public List<Zone> findAssignedZones(Long driverId) {
+        return driverRepository.findById(driverId)
+                .map(DriverEntity::getAssignedZones)
+                .orElse(List.of())
+                .stream()
+                .map(ZoneMapper::toDomain)
+                .toList();
+    }
 }
