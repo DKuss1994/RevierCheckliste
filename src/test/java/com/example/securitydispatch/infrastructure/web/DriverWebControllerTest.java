@@ -65,7 +65,8 @@ class DriverWebControllerTest {
     }
     @Test
     void shouldAssignZoneToDriver() throws Exception {
-        mockMvc.perform(post("/drivers/1/zones/2"))
+        mockMvc.perform(post("/drivers/1/zones")
+                .param("zoneId", "2"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/drivers/1"));
         verify(driverService).assignZone(1L, 2L);
@@ -80,4 +81,6 @@ class DriverWebControllerTest {
                 .andExpect(view().name("driver-detail"))
                 .andExpect(model().attributeExists("driver", "assignedZones"));
     }
+
+
 }

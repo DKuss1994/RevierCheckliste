@@ -22,7 +22,8 @@
             <td th:text="${driver.firstName}"></td>
             <td th:text="${driver.lastName}"></td>
             <td>
-            <a th:href="@{/drivers/{id}/edit(id=${driver.id})}" class="btn btn-sm btn-primary">Edit</a>
+                <a th:href="@{/drivers/{id}(id=${driver.id})}" class="btn btn-sm btn-info">Details</a>
+                <a th:href="@{/drivers/{id}/edit(id=${driver.id})}" class="btn btn-sm btn-primary">Edit</a>
             </td>
         </tr>
         </tbody>

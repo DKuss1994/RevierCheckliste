@@ -6,23 +6,25 @@
 </head>
 <body>
 <div class="container mt-4">
-    <h1>Driver: <span th:text="${driver.firstName + ' ' + driver.lastName}"></span></h1>
+    <h1 th:text="'Driver: ' + ${driver.firstName} + ' ' + ${driver.lastName}"></h1>
+
     <h3>Assigned Zones</h3>
     <ul class="list-group mb-3">
         <li th:each="zone : ${assignedZones}" class="list-group-item" th:text="${zone.name}"></li>
         <li th:if="${assignedZones.empty}" class="list-group-item">No zones assigned</li>
     </ul>
 
-    <h3>Add Zone</h3>
+    <h3>Assign New Zone</h3>
     <form th:action="@{/drivers/{id}/zones(id=${driver.id})}" method="post">
         <div class="mb-3">
-            <select name="zoneId" class="form-select">
+            <select name="zoneId" class="form-select" required>
                 <option th:each="zone : ${availableZones}" th:value="${zone.id}" th:text="${zone.name}"></option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Assign Zone</button>
     </form>
-    <a href="/drivers" class="btn btn-secondary">Back to List</a>
+
+    <a href="/drivers" class="btn btn-secondary mt-3">Back to List</a>
 </div>
 </body>
 </html>

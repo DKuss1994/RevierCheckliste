@@ -8,15 +8,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/drivers")
 public class DriverWebController {
 
 
     private final DriverService driverService;
+    private final ZoneService zoneService;
 
-    public DriverWebController(DriverService driverService) {
+    public DriverWebController(DriverService driverService, ZoneService zoneService) {
         this.driverService = driverService;
+        this.zoneService = zoneService;
     }
 
     @GetMapping
@@ -27,8 +31,14 @@ public class DriverWebController {
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
         Driver driver = driverService.findById(id);
+        List<Zone> assignedZones = driverService.findAssignedZones(id);
+        List<Zone> allZones = zoneService.findAll();
+        List<Zone> availableZones = allZones.stream()
+                .filter(z -> !assignedZones.contains(z))
+                .toList();
         model.addAttribute("driver", driver);
-        model.addAttribute("assignedZones", driverService.findAssignedZones(id));
+        model.addAttribute("assignedZones", assignedZones);
+        model.addAttribute("availableZones", availableZones);
         return "driver-detail";
     }
 
@@ -56,8 +66,8 @@ public class DriverWebController {
         driverService.update(id, firstName,lastName);
         return "redirect:/drivers";
     }
-    @PostMapping("/{driverId}/zones/{zoneId}")
-    public String assignZone(@PathVariable Long driverId, @PathVariable Long zoneId) {
+    @PostMapping("/{driverId}/zones")
+    public String assignZone(@PathVariable Long driverId, @RequestParam Long zoneId) {
         driverService.assignZone(driverId, zoneId);
         return "redirect:/drivers/" + driverId;
     }
