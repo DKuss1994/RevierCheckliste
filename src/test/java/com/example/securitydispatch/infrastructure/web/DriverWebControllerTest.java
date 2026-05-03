@@ -4,6 +4,7 @@ import com.example.securitydispatch.application.DriverService;
 import com.example.securitydispatch.application.ZoneService;
 import com.example.securitydispatch.domain.Driver;
 
+import com.example.securitydispatch.domain.Zone;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -67,5 +68,15 @@ class DriverWebControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/drivers/1"));
         verify(driverService).assignZone(1L, 2L);
+    }
+    @Test
+    void shouldShowDriverDetails() throws Exception {
+        Driver driver = new Driver(1L, "Max", "Mustermann");
+        when(driverService.findById(1L)).thenReturn(driver);
+        when(driverService.findAssignedZones(1L)).thenReturn(List.of(new Zone(1L, "Nord")));
+        mockMvc.perform(get("/drivers/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("driver-detail"))
+                .andExpect(model().attributeExists("driver", "assignedZones"));
     }
 }
