@@ -59,6 +59,6 @@ public class SecurityObjectWebControllerTest {
         mockMvc.perform(get("/security-objects"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("security-objects"))
-                .andExpect(model().attributeExists("security-objects"));
+                .andExpect(model().attributeExists("objects"));
     }
 }
