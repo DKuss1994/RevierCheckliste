@@ -1,0 +1,14 @@
+<form th:action="@{/security-objects}" method="post">
+    <input type="text" name="name" placeholder="Name" required/>
+    <select name="zoneId" required>
+        <option th:each="zone : ${zones}" th:value="${zone.id}" th:text="${zone.name}"></option>
+    </select>
+    <input type="text" name="street" placeholder="Street" required/>
+    <input type="text" name="number" placeholder="Number" required/>
+    <input type="text" name="city" placeholder="City" required/>
+    <input type="text" name="zip" placeholder="ZIP" required/>
+    <input type="number" name="inspectionCount" placeholder="Inspections"/>
+    <input type="time" name="closingTime" placeholder="Closing Time"/>
+    <input type="time" name="openingTime" placeholder="Opening Time"/>
+    <button type="submit">Save</button>
+</form>

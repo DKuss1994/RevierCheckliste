@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -68,5 +69,22 @@ public class SecurityObjectWebControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("security-object-form"))
                 .andExpect(model().attributeExists("zones"));
+    }
+    @Test
+    void shouldCreateSecurityObject() throws Exception {
+        mockMvc.perform(post("/security-objects")
+                        .param("name", "Tor 1")
+                        .param("zoneId", "1")
+                        .param("street", "Hauptstr")
+                        .param("number", "1")
+                        .param("city", "Berlin")
+                        .param("zip", "10115")
+                        .param("inspectionCount", "2")
+                        .param("closingTime", "22:00")
+                        .param("openingTime", "06:00"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/security-objects"));
+
+        verify(securityObjectService).create(any(SecurityObject.class));
     }
 }
