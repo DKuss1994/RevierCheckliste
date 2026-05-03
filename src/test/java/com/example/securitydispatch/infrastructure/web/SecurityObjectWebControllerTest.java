@@ -61,4 +61,12 @@ public class SecurityObjectWebControllerTest {
                 .andExpect(view().name("security-objects"))
                 .andExpect(model().attributeExists("objects"));
     }
+    @Test
+    void shouldShowCreateForm() throws Exception {
+        when(zoneService.findAll()).thenReturn(List.of(new Zone(1L, "Nord")));
+        mockMvc.perform(get("/security-objects/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("security-object-form"))
+                .andExpect(model().attributeExists("zones"));
+    }
 }
