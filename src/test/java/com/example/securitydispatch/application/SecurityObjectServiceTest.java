@@ -1,8 +1,10 @@
 package com.example.securitydispatch.application;
 
 
+import com.example.securitydispatch.domain.Address;
 import com.example.securitydispatch.domain.SecurityObject;
 
+import com.example.securitydispatch.domain.StandardConfiguration;
 import com.example.securitydispatch.domain.Zone;
 import com.example.securitydispatch.infrastructure.persistence.*;
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,11 @@ public class SecurityObjectServiceTest {
     private final AddressEmbeddable address = new AddressEmbeddable("Musterstraße 1", "Musterstadt", "123456");
     private final StandardConfigurationEmbeddable standardConfiguration = new StandardConfigurationEmbeddable(2,
             null, null, null, null, null, null, null, null);
-
+private final Zone zone = new Zone(1L, "Zone 1");
+private final Address addressSecurityObject = new Address("Musterstraße 1", "Musterstadt", "123456");
+private final StandardConfiguration configuration = new StandardConfiguration.Builder().inspectionCount(2).build();
+    private final SecurityObject securityObject = new SecurityObject
+            (1L,"Object A",zone,addressSecurityObject,configuration);
     @Test
     void shouldCreateSecurityObject() {
         SecurityObjectEntity saved =
@@ -43,12 +49,7 @@ public class SecurityObjectServiceTest {
         when(zoneRepository.findById(1L)).thenReturn(Optional.of(zoneEntity));
         when(securityObjectRepository.save(any())).thenReturn(saved);
 
-        SecurityObject result = securityObjectService.create(
-
-                "Object A",
-                1L,
-                address,
-                standardConfiguration);
+        SecurityObject result = securityObjectService.create(securityObject);
         assertThat(result.getName()).isEqualTo("Object A");
     }
 

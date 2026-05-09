@@ -31,6 +31,21 @@ public class SecurityObjectEntity {
         this.standardConfiguration = standardConfiguration;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setZone(ZoneEntity zone) {
+        this.zone = zone;
+    }
+
+    public void setAddress(AddressEmbeddable address) {
+        this.address = address;
+    }
+
+    public void setStandardConfiguration(StandardConfigurationEmbeddable standardConfiguration) {
+        this.standardConfiguration = standardConfiguration;
+    }
 
     public String getName() {
         return name;

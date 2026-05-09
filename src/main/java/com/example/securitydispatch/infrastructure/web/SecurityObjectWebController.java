@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/security-objects")
@@ -35,13 +37,13 @@ public class SecurityObjectWebController {
     }
     @GetMapping("/new")
     public String createForm(Model model) {
-        model.addAttribute("zones", zoneService.findAll());
+        List<Zone> zones = zoneService.findAll();
+        model.addAttribute("zones", zones);
         return "security-object-form";
     }
-
     @PostMapping
     public String create(@RequestParam String name,
-                         @RequestParam Long zoneId,
+                         @RequestParam long zoneId,
                          @RequestParam String street,
                          @RequestParam String city,
                          @RequestParam String zip,
@@ -50,18 +52,54 @@ public class SecurityObjectWebController {
                          @RequestParam(required = false) String openingTime) {
 
 
+            Zone zone = zoneService.findById(zoneId);
+            Address address = new Address(street, city, zip);
+            StandardConfiguration config = new StandardConfiguration.Builder()
+                    .inspectionCount(inspectionCount)
+                    .closingTime(closingTime != null && !closingTime.isEmpty() ? LocalTime.parse(closingTime) : null)
+                    .openingTime(openingTime != null && !openingTime.isEmpty() ? LocalTime.parse(openingTime) : null)
+                    .build();
+            SecurityObject newObj = new SecurityObject(0L, name, zone, address, config);
+            securityObjectService.create(newObj);   // RUFT DIE NEUE METHODE AUF
+            return "redirect:/security-objects";
+
+    }
+
+    @PostMapping("/{id}")
+    public String update(@PathVariable long id,
+                         @RequestParam String name,
+                         @RequestParam long zoneId,
+                         @RequestParam String street,
+                         @RequestParam String city,
+                         @RequestParam String zip,
+                         @RequestParam(required = false) Integer inspectionCount,
+                         @RequestParam(required = false) String closingTime,
+                         @RequestParam(required = false) String openingTime) {
+
         Zone zone = zoneService.findById(zoneId);
         Address address = new Address(street, city, zip);
         StandardConfiguration config = new StandardConfiguration.Builder()
                 .inspectionCount(inspectionCount)
-                .closingTime(closingTime != null ? LocalTime.parse(closingTime) : null)
-                .openingTime(openingTime != null ? LocalTime.parse(openingTime) : null)
+                .closingTime(closingTime != null && !closingTime.isEmpty() ? LocalTime.parse(closingTime) : null)
+                .openingTime(openingTime != null && !openingTime.isEmpty() ? LocalTime.parse(openingTime) : null)
                 .build();
-        SecurityObject newObj = new SecurityObject(0L, name, zone, address, config);
+        SecurityObject updated = new SecurityObject(id, name, zone, address, config);
+        SecurityObjectEntity entity = SecurityObjectMapper.toEntity(updated);
+        securityObjectService.update(id,name,zone.getId(),entity.getAddress(),entity.getStandardConfiguration());
+        return "redirect:/security-objects";
+    }
 
-        SecurityObjectEntity securityObjectEntity = SecurityObjectMapper.toEntity(newObj);
-        securityObjectService.create(securityObjectEntity.getName(),securityObjectEntity.getZone().getId(),
-                securityObjectEntity.getAddress(),securityObjectEntity.getStandardConfiguration());
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        SecurityObject obj = securityObjectService.findById(id);
+        model.addAttribute("object", obj);
+        model.addAttribute("zones", zoneService.findAll());
+        return "security-object-form";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        securityObjectService.delete(id);
         return "redirect:/security-objects";
     }
 }

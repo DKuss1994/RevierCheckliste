@@ -89,5 +89,5 @@ public class SecurityObjectWebControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/security-objects"));
 
-        verify(securityObjectService).create(eq("Tor 1"), anyLong(), any(AddressEmbeddable.class), any(StandardConfigurationEmbeddable.class));}
+        verify(securityObjectService).create(any(SecurityObject.class));}
 }

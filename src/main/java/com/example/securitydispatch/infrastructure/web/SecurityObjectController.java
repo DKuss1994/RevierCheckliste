@@ -1,10 +1,10 @@
 package com.example.securitydispatch.infrastructure.web;
 import com.example.securitydispatch.application.SecurityObjectService;
 
+import com.example.securitydispatch.application.ZoneService;
 import com.example.securitydispatch.domain.SecurityObject;
 import com.example.securitydispatch.domain.Zone;
-import com.example.securitydispatch.infrastructure.persistence.AddressEmbeddable;
-import com.example.securitydispatch.infrastructure.persistence.StandardConfigurationEmbeddable;
+import com.example.securitydispatch.infrastructure.persistence.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +13,23 @@ import java.util.List;
 @RequestMapping("/api/security-objects")
 public class SecurityObjectController {
     private final SecurityObjectService securityObjectService;
+    private final ZoneService zoneService;
 
-    public SecurityObjectController(SecurityObjectService securityObjectService) {
+    public SecurityObjectController(SecurityObjectService securityObjectService, ZoneService zoneService) {
         this.securityObjectService = securityObjectService;
+        this.zoneService = zoneService;
     }
     @PostMapping
     public ResponseEntity<SecurityObject> create(@RequestBody SecurityObjectRequest request){
         AddressEmbeddable addressEmbeddable = getAddressEmbeddable(request);
         StandardConfigurationEmbeddable standardConfigurationEmbeddable = getStandardConfigurationEmbeddable(request);
+        Zone zone = zoneService.findById(request.getZoneId());
+        ZoneEntity zoneEntity = ZoneMapper.toEntity(zone);
+        SecurityObjectEntity securityObjectEntity = new SecurityObjectEntity
+                (request.getName(),zoneEntity,addressEmbeddable,standardConfigurationEmbeddable);
+        SecurityObject object = SecurityObjectMapper.toDomain(securityObjectEntity);
         SecurityObject securityObject = securityObjectService.create
-                (request.getName(),request.getZoneId(),addressEmbeddable,standardConfigurationEmbeddable);
+                (object);
         return ResponseEntity.status(HttpStatus.CREATED).body(securityObject);
     }
 

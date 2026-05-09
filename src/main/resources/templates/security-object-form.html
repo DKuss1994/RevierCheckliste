@@ -1,14 +1,54 @@
-<form th:action="@{/security-objects}" method="post">
-    <input type="text" name="name" placeholder="Name" required/>
-    <select name="zoneId" required>
-        <option th:each="zone : ${zones}" th:value="${zone.id}" th:text="${zone.name}"></option>
-    </select>
-    <input type="text" name="street" placeholder="Street" required/>
-    <input type="text" name="number" placeholder="Number" required/>
-    <input type="text" name="city" placeholder="City" required/>
-    <input type="text" name="zip" placeholder="ZIP" required/>
-    <input type="number" name="inspectionCount" placeholder="Inspections"/>
-    <input type="time" name="closingTime" placeholder="Closing Time"/>
-    <input type="time" name="openingTime" placeholder="Opening Time"/>
-    <button type="submit">Save</button>
-</form>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sicherheitsobjekt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1 th:if="${object == null}">Neues Objekt</h1>
+    <h1 th:if="${object != null}">Objekt bearbeiten</h1>
+
+    <form th:action="${object != null ? '/security-objects/' + object.id : '/security-objects'}" method="post">
+        <div class="mb-3">
+            <label>Name</label>
+            <input type="text" name="name" th:value="${object != null ? object.name : ''}" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label>Zone</label>
+            <select name="zoneId" class="form-select" required>
+                <option value="" disabled selected>-- Bitte Zone wählen --</option>
+                <option th:each="z : ${zones}" th:value="${z.id}" th:text="${z.name}"
+                        th:selected="${object != null && object.zone.id == z.id}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Straße</label>
+            <input type="text" name="street" th:value="${object != null ? object.address.street : ''}" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label>Stadt</label>
+            <input type="text" name="city" th:value="${object != null ? object.address.city : ''}" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label>PLZ</label>
+            <input type="text" name="zip" th:value="${object != null ? object.address.zip : ''}" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label>Anzahl Kontrollen</label>
+            <input type="number" name="inspectionCount" th:value="${object != null ? object.standardConfiguration.inspectionCount : ''}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label>Schließzeit</label>
+            <input type="time" name="closingTime" th:value="${object != null ? object.standardConfiguration.closingTime : ''}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label>Öffnungszeit</label>
+            <input type="time" name="openingTime" th:value="${object != null ? object.standardConfiguration.openingTime : ''}" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-primary">Speichern</button>
+        <a href="/security-objects" class="btn btn-secondary">Abbrechen</a>
+    </form>
+</div>
+</body>
+</html>

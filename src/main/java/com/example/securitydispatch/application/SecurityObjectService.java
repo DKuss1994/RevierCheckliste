@@ -17,13 +17,32 @@ public class SecurityObjectService {
         this.securityObjectRepository = securityObjectRepository;
     }
 
-    public SecurityObject create(String name, long zoneId, AddressEmbeddable address, StandardConfigurationEmbeddable standardConfiguration) {
-        ZoneEntity zoneEntity = zoneRepository.findById(zoneId)
-                .orElseThrow(()->new IllegalArgumentException("Zone not found: " + zoneId));
+    public SecurityObject create(SecurityObject object) {
+        ZoneEntity zoneEntity = zoneRepository.findById(object.getZone().getId())
+                .orElseThrow(()->new IllegalArgumentException("Zone not found: " + object.getZone().getId()));
+        // Baue AddressEmbeddable aus dem Domain-Objekt
+        AddressEmbeddable address = new AddressEmbeddable(
+                object.getAddress().getStreet(),
+                object.getAddress().getCity(),
+                object.getAddress().getZIPCode()
+        );
 
-        SecurityObjectEntity objectEntity = new SecurityObjectEntity(name,zoneEntity,address,standardConfiguration);
-        return SecurityObjectMapper.toDomain(securityObjectRepository.save(objectEntity));
+        // Baue StandardConfigurationEmbeddable aus dem Domain-Objekt (nur die Felder, die du brauchst)
+        StandardConfigurationEmbeddable config = new StandardConfigurationEmbeddable(
+                object.getStandardConfiguration().getInspectionCount().orElse(null),
+                object.getStandardConfiguration().getInspectionDays().orElse(null),
+                object.getStandardConfiguration().getOpeningTime().orElse(null),
+                object.getStandardConfiguration().getOpeningDays().orElse(null),
+                object.getStandardConfiguration().getClosingTime().orElse(null),
+                object.getStandardConfiguration().getClosingDays().orElse(null),
+                object.getStandardConfiguration().getInspectionWindowStart().orElse(null),
+                object.getStandardConfiguration().getInspectionWindowEnd().orElse(null),
+                object.getStandardConfiguration().getNotes().orElse(null)
+        );
+        SecurityObjectEntity entity = new SecurityObjectEntity(object.getName(), zoneEntity, address, config);
+        return SecurityObjectMapper.toDomain(securityObjectRepository.save(entity));
     }
+
     public SecurityObject findById(long id){
         return securityObjectRepository.findById(id).map(
                 SecurityObjectMapper::toDomain
@@ -42,10 +61,11 @@ public class SecurityObjectService {
                 .orElseThrow(()-> new IllegalArgumentException("SecurityObject not found: "+ id));
         ZoneEntity zoneEntity = zoneRepository.findById(zoneId)
                 .orElseThrow(()->new IllegalArgumentException("Zone not found: " + zoneId));
-        SecurityObjectEntity securityObject = new SecurityObjectEntity(
-                name,zoneEntity,address,standardConfiguration
-        );
-        return SecurityObjectMapper.toDomain(securityObjectRepository.save(securityObject));
+        oldSecurity.setName(name);
+        oldSecurity.setZone(zoneEntity);
+        oldSecurity.setAddress(address);
+        oldSecurity.setStandardConfiguration(standardConfiguration);
+        return SecurityObjectMapper.toDomain(securityObjectRepository.save(oldSecurity));
     }
 
     public void delete(long id) {
