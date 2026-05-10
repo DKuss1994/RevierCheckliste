@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkliste generieren</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Checkliste für eine Schicht generieren</h1>
+    <form action="/checklists/generate/pdf" method="post">
+        <div class="mb-3">
+            <label class="form-label">Schicht auswählen</label>
+            <select name="shiftId" class="form-select" required>
+                <option value="" disabled selected>-- Bitte wählen --</option>
+                <option th:each="shift : ${shifts}"
+                        th:value="${shift.id}"
+                        th:text="'ID: ' + ${shift.id} + ' | ' + ${shift.driver.firstName} + ' ' + ${shift.driver.lastName} + ' - ' + ${shift.zone.name} + ' (' + ${shift.deploymentDate} + ')'">
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">PDF herunterladen</button>
+        <a href="/" class="btn btn-secondary">Zurück</a>
+    </form>
+</div>
+</body>
+</html>
