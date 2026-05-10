@@ -120,7 +120,7 @@ public class PdfServiceTest {
     void pdfShouldContainOpeningTable() throws Exception {
         // Objekt mit openingTime
         StandardConfiguration config = new StandardConfiguration.Builder()
-                .openingTime(LocalTime.of(23, 0))
+                .openingTime(LocalTime.of(23, 5))
                 .build();
         SecurityObject object = new SecurityObject(1L, "Object A", zone, address, config);
         ChecklistEntry entry = new ChecklistEntry(object, config);
@@ -131,7 +131,7 @@ public class PdfServiceTest {
             PdfTextExtractor extractor = new PdfTextExtractor(reader);
             String text = extractor.getTextFromPage(1);
             assertThat(text).contains("OPENING");
-            assertThat(text).contains("23:00");
+            assertThat(text).contains("23:05");
         }
     }
 
