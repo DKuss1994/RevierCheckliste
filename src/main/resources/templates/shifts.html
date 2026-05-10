@@ -9,7 +9,7 @@
     <h1>Shifts</h1>
     <table class="table table-striped">
         <thead>
-        <tr><th>ID</th><th>Driver</th><th>Zone</th><th>Date</th><th>Start</th><th>End</th><th>Aktion</th></tr>
+        <tr><th>ID</th><th>Driver</th><th>Zone</th><th>Date</th><th>Start</th><th>End</th><th>Aktionen</th></tr>
         </thead>
         <tbody>
         <tr th:each="shift : ${shifts}">
@@ -27,7 +27,7 @@
         </tr>
         </tbody>
     </table>
-    <a href="/shifts/new" class="btn btn-primary">New Shift</a>
+    <a href="/shifts/new" class="btn btn-primary">Neue Schicht</a>
     <a href="/" class="btn btn-secondary">Dashboard</a>
 </div>
 </body>
