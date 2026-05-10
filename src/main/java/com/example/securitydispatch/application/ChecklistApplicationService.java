@@ -98,10 +98,11 @@ public class ChecklistApplicationService {
 
     }
 
-    public Checklist generateChecklist(ChecklistRequest checklistRequest) {
-        Shift shift = loadShift(checklistRequest.getShiftId());
+    public Checklist generateChecklist(Long shiftId) {
+        Shift shift = loadShift(shiftId);
         List<SecurityObject> securityObjects = loadListOfSecurityObjectByZoneId(shift.getZone().getId());
         Checklist checklist = checklistGenerationService.generate(shift, securityObjects);
         return saveAndReturnWithId(checklist);
     }
+
 }

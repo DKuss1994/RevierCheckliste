@@ -130,8 +130,7 @@ public class ChecklistApplicationServiceTest {
         ChecklistEntity savedEntity = new ChecklistEntity( shiftEntity,
                 configurationEmbeddable, LocalDateTime.now(), List.of());
         when(checklistRepository.save(any())).thenReturn(savedEntity);
-        Checklist result = checklistApplicationService.generateChecklist(
-                new ChecklistRequest(1L, 1L));
+        Checklist result = checklistApplicationService.generateChecklist(1L);
 
 
         assertThat(result.getConfiguration().getInspectionCount()).hasValue(2);

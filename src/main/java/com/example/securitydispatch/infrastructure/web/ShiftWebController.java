@@ -1,9 +1,11 @@
 package com.example.securitydispatch.infrastructure.web;
 
-import com.example.securitydispatch.application.ShiftService;
-import com.example.securitydispatch.application.ZoneService;
-import com.example.securitydispatch.application.DriverService;
+import com.example.securitydispatch.application.*;
+import com.example.securitydispatch.domain.Checklist;
 import com.example.securitydispatch.domain.Shift;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +19,18 @@ public class ShiftWebController {
     private final ShiftService shiftService;
     private final ZoneService zoneService;
     private final DriverService driverService;
+    private final ChecklistApplicationService checklistService;
+    private final PdfService pdfService = new PdfService();
 
 
     public ShiftWebController(ShiftService shiftService,
                               ZoneService zoneService,
-                              DriverService driverService) {
+                              DriverService driverService, ChecklistGenerationService checklistGenerationService, ChecklistApplicationService checklistService) {
         this.shiftService = shiftService;
         this.zoneService = zoneService;
         this.driverService = driverService;
+        this.checklistService = checklistService;
+
     }
     @GetMapping
     public String listShifts(Model model) {
@@ -54,4 +60,19 @@ public class ShiftWebController {
         shiftService.delete(id);
         return "redirect:/shifts";
     }
-}
+    @GetMapping("/generate")
+    public String showGenerateForm(Model model) {
+        model.addAttribute("shifts", shiftService.findAll());
+        return "generate-checklist";
+    }
+
+    @PostMapping("/generate/pdf")
+    public ResponseEntity<byte[]> generatePdf(@RequestParam Long shiftId) {
+        Checklist checklist = checklistService.generateChecklist(shiftId);
+        byte[] pdf = pdfService.generateChecklistPdf(checklist);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=checklist.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+    }

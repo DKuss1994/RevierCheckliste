@@ -6,46 +6,57 @@
 </head>
 <body>
 <div class="container mt-4">
-    <h1 th:if="${object == null}">Neues Objekt</h1>
-    <h1 th:if="${object != null}">Objekt bearbeiten</h1>
+    <h1 th:if="${object == null}">Neues Sicherheitsobjekt</h1>
+    <h1 th:if="${object != null}">Sicherheitsobjekt bearbeiten</h1>
 
+    <!-- Dynamische action: bei Bearbeitung mit ID, sonst ohne -->
     <form th:action="${object != null ? '/security-objects/' + object.id : '/security-objects'}" method="post">
+        <!-- Name -->
         <div class="mb-3">
-            <label>Name</label>
+            <label class="form-label">Name</label>
             <input type="text" name="name" th:value="${object != null ? object.name : ''}" class="form-control" required/>
         </div>
+
+        <!-- Zone -->
         <div class="mb-3">
-            <label>Zone</label>
+            <label class="form-label">Zone</label>
             <select name="zoneId" class="form-select" required>
                 <option value="" disabled selected>-- Bitte Zone wählen --</option>
                 <option th:each="z : ${zones}" th:value="${z.id}" th:text="${z.name}"
                         th:selected="${object != null && object.zone.id == z.id}"></option>
             </select>
         </div>
+
+        <!-- Adresse -->
         <div class="mb-3">
-            <label>Straße</label>
+            <label class="form-label">Straße</label>
             <input type="text" name="street" th:value="${object != null ? object.address.street : ''}" class="form-control" required/>
         </div>
         <div class="mb-3">
-            <label>Stadt</label>
+            <label class="form-label">Stadt</label>
             <input type="text" name="city" th:value="${object != null ? object.address.city : ''}" class="form-control" required/>
         </div>
         <div class="mb-3">
-            <label>PLZ</label>
-            <input type="text" name="zip" th:value="${object != null ? object.address.zip : ''}" class="form-control" required/>
+            <label class="form-label">PLZ</label>
+            <!-- Der Parameter-Name muss 'zip' sein, der Wert kommt aus object.address.ZIPCode -->
+            <input type="text" name="zip" th:value="${object != null ? object.address.ZIPCode : ''}" class="form-control" required/>
         </div>
+
+        <!-- Optionale Felder der StandardConfiguration -->
         <div class="mb-3">
-            <label>Anzahl Kontrollen</label>
+            <label class="form-label">Anzahl Kontrollen</label>
             <input type="number" name="inspectionCount" th:value="${object != null ? object.standardConfiguration.inspectionCount : ''}" class="form-control"/>
         </div>
         <div class="mb-3">
-            <label>Schließzeit</label>
+            <label class="form-label">Schließzeit</label>
             <input type="time" name="closingTime" th:value="${object != null ? object.standardConfiguration.closingTime : ''}" class="form-control"/>
         </div>
         <div class="mb-3">
-            <label>Öffnungszeit</label>
+            <label class="form-label">Öffnungszeit</label>
             <input type="time" name="openingTime" th:value="${object != null ? object.standardConfiguration.openingTime : ''}" class="form-control"/>
         </div>
+
+        <!-- Buttons -->
         <button type="submit" class="btn btn-primary">Speichern</button>
         <a href="/security-objects" class="btn btn-secondary">Abbrechen</a>
     </form>

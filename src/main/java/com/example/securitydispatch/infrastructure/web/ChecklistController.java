@@ -29,8 +29,8 @@ public class ChecklistController {
         return ResponseEntity.ok(checklistApplicationService.generate(request));
     }
     @PostMapping("/generate/pdf")
-    public ResponseEntity<byte[]> generatePdf(@RequestBody ChecklistRequest request) {
-        Checklist checklist = checklistApplicationService.generateChecklist(request);
+    public ResponseEntity<byte[]> generatePdf(@RequestBody Long shiftId) {
+        Checklist checklist = checklistApplicationService.generateChecklist(shiftId);
         byte[] pdf = pdfService.generateChecklistPdf(checklist);
         return ResponseEntity.ok()
                 .header("Content-Type", "application/pdf")
