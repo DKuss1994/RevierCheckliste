@@ -92,6 +92,47 @@ public class PdfServiceTest {
             // Kästchenanzahl
             assertThat(pageContent).containsPattern("Object A.*□.*□");
             assertThat(pageContent).containsPattern("Object B.*□");
+
+            assertThat(pageContent).contains("Time Window");
+            assertThat(pageContent).contains("22:00 → 06:00"); // oder die tatsächlichen Schichtzeiten
+        }
+
+    }
+    @Test
+    void pdfShouldContainClosingTable() throws Exception {
+        // Objekt mit closingTime
+        StandardConfiguration config = new StandardConfiguration.Builder()
+                .closingTime(LocalTime.of(23, 0))
+                .build();
+        SecurityObject object = new SecurityObject(1L, "Object A", zone, address, config);
+        ChecklistEntry entry = new ChecklistEntry(object, config);
+        Checklist testChecklist = new Checklist(1L, shift, new StandardConfiguration.Builder().build(),
+                LocalDateTime.now(), List.of(), List.of(entry));
+        byte[] pdfBytes = pdfService.generateChecklistPdf(testChecklist);
+        try (PdfReader reader = new PdfReader(new ByteArrayInputStream(pdfBytes))) {
+            PdfTextExtractor extractor = new PdfTextExtractor(reader);
+            String text = extractor.getTextFromPage(1);
+            assertThat(text).contains("CLOSING");
+            assertThat(text).contains("23:00");
         }
     }
+    @Test
+    void pdfShouldContainOpeningTable() throws Exception {
+        // Objekt mit openingTime
+        StandardConfiguration config = new StandardConfiguration.Builder()
+                .openingTime(LocalTime.of(23, 0))
+                .build();
+        SecurityObject object = new SecurityObject(1L, "Object A", zone, address, config);
+        ChecklistEntry entry = new ChecklistEntry(object, config);
+        Checklist testChecklist = new Checklist(1L, shift, new StandardConfiguration.Builder().build(),
+                LocalDateTime.now(), List.of(), List.of(entry));
+        byte[] pdfBytes = pdfService.generateChecklistPdf(testChecklist);
+        try (PdfReader reader = new PdfReader(new ByteArrayInputStream(pdfBytes))) {
+            PdfTextExtractor extractor = new PdfTextExtractor(reader);
+            String text = extractor.getTextFromPage(1);
+            assertThat(text).contains("OPENING");
+            assertThat(text).contains("23:00");
+        }
+    }
+
 }
