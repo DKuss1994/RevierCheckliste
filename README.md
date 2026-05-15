@@ -3,7 +3,7 @@
 ## Live Demo
 
 The application is deployed on Railway and can be accessed here:  
-👉 [https://reviercheckliste.up.railway.app](reviercheckliste-production.up.railway.app)
+👉 [reviercheckliste-production.up.railway.app](reviercheckliste-production.up.railway.app)
 
 *Note: The first request may take a few seconds because the service spins up from idle.*
 
