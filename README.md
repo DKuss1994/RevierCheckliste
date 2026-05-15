@@ -1,4 +1,15 @@
-# SecurityDispatch — Patrol Checklist Backend
+markdown
+
+# SecurityDispatch — Patrol Checklist System
+
+## Live Demo
+
+The application is deployed on Railway and can be accessed here:  
+👉 [https://reviercheckliste.up.railway.app](https://reviercheckliste.up.railway.app)
+
+*Note: The first request may take a few seconds because the service spins up from idle.*
+
+---
 
 ## Overview
 
@@ -26,6 +37,8 @@ SecurityDispatch provides a structured backend system that:
 - Automates checklist generation
 - Applies time-dependent business rules
 - Produces an immutable checklist snapshot for operational use
+- Provides a web‑based user interface for all core entities
+- Generates a formatted PDF for printing
 
 The goal is to standardize patrol workflows and reduce operational errors.
 
@@ -33,15 +46,13 @@ The goal is to standardize patrol workflows and reduce operational errors.
 
 ## Key Features
 
-- Rule-based checklist generation
-- Time-dependent configuration handling:
-  - Override rules
-  - Additional rules
-  - Reduction rules
+- Rule‑based checklist generation (Override, Additional, Reduction)
 - Immutable checklist snapshots
 - Conflict detection with warning generation
-- REST API for all core entities
-- Test-driven development with comprehensive unit test coverage (~160 tests)
+- Web frontend with Bootstrap 5 (CRUD for zones, drivers, security objects, shifts)
+- PDF checklist generation (landscape, inspection table, closing/opening tables)
+- Docker containerization and PostgreSQL production setup
+- Test‑driven development with comprehensive test coverage (~200 tests)
 
 ---
 
@@ -50,9 +61,13 @@ The goal is to standardize patrol workflows and reduce operational errors.
 - Java 21
 - Spring Boot
 - Spring Data JPA
-- H2 (development)
-- JUnit 5
-- AssertJ
+- PostgreSQL (production) / H2 (development)
+- Thymeleaf (frontend templates)
+- Bootstrap 5 (styling)
+- OpenPDF (PDF generation)
+- Docker / Docker Compose
+- Railway (deployment)
+- JUnit 5, AssertJ, Mockito
 - Maven
 
 ---
@@ -61,14 +76,15 @@ The goal is to standardize patrol workflows and reduce operational errors.
 
 The system follows a layered architecture with strict separation of concerns:
 
-domain/          → Business logic (framework-independent)  
-application/     → Use case orchestration  
-infrastructure/  → REST API, persistence, Spring Boot integration  
+domain/ → Business logic (framework-independent)
+application/ → Use case orchestration
+infrastructure/ → REST API, persistence, web controllers, Spring Boot integration
+
 
 ### Design Principles
 
-- Domain-driven design approach
-- Framework-independent domain layer
+- Domain‑driven design approach
+- Framework‑independent domain layer
 - Separation of JPA entities and domain model
 - Deterministic rule processing without side effects
 - High testability of all business logic
@@ -77,94 +93,138 @@ infrastructure/  → REST API, persistence, Spring Boot integration
 
 ## Domain Model
 
-Zone  
- └── SecurityObject  
-      ├── StandardConfiguration  
-      ├── OverrideRule  
-      ├── AdditionalRule  
-      └── ReductionRule  
+Zone
+└── SecurityObject
+├── StandardConfiguration
+├── OverrideRule
+├── AdditionalRule
+└── ReductionRule
 
-Driver  
- └── assignedZones  
+Driver
+└── assignedZones
 
-Shift  
- ├── Driver  
- ├── Zone  
- └── deploymentDate  
+Shift
+├── Driver
+├── Zone
+└── deploymentDate
 
-Checklist (immutable snapshot)  
- ├── Shift  
- ├── resolved configuration  
- └── warnings  
+Checklist (immutable snapshot)
+├── Shift
+├── List<ChecklistEntry> (each with resolved configuration)
+└── warnings
+
 
 ---
 
 ## Rule Engine
 
-The ConfigurationResolver applies rules in a defined order:
+The `ConfigurationResolver` applies rules in a defined order:
 
-1. StandardConfiguration (base state)  
-2. OverrideRule (replaces configuration)  
-3. AdditionalRule (adds services)  
-4. ReductionRule (removes services)  
-5. Conflict detection and warning generation  
+1. **StandardConfiguration** – base state
+2. **OverrideRule** – replaces entire configuration
+3. **AdditionalRule** – adds services (inspectionCount, openingTime, closingTime)
+4. **ReductionRule** – removes services
+5. Conflict detection and warning generation
+
+---
+
+## Web Interface
+
+The application provides a complete web frontend for all core entities:
+
+- Dashboard with quick access to zones, drivers, security objects, shifts, and checklist generation
+- Create, edit, list and delete entities
+- Bootstrap responsive design
+
+### Checklist Generation
+
+1. Go to `/checklists/generate`
+2. Select a shift from the dropdown
+3. Click "PDF herunterladen" – the checklist is generated and downloaded
 
 ---
 
 ## API Example
 
-Generate a checklist for a shift:
+Generate a checklist for a shift (REST):
 
-POST /checklists/generate
+```http
+POST /api/checklists/generate
+Content-Type: application/json
 
 {
   "shiftId": 1
 }
+```
 
----
+# Testing Strategy
 
-## Testing Strategy
+The system was developed using Test‑Driven Development (TDD):
 
-The system was developed using Test Driven Development (TDD):
+    ~200 unit and integration tests
 
-- ~160 unit tests
-- Business logic tested independently of framework
-- Focus on edge cases and reliability
+    Business logic tested independently of framework
 
----
+    Focus on edge cases and reliability
 
-## Output
+Output
 
-The system generates structured checklist data.
+The system generates a DIN A4 landscape PDF checklist containing:
 
-A printable PDF representation (DIN A4 landscape) is currently in development and is designed for operational use during patrols.
+    One‑line header: driver, zone, date, shift start/end (night shift indicator)
 
----
+    Inspection table: security objects, time window, checkboxes (one per required inspection)
 
-## Project Status
+    Closing table: only for objects with a closing time
+
+    Opening table: only for objects with an opening time (next day displayed for night shifts)
+
+    Warnings section for any rule conflicts or inconsistencies
+
+Project Status
 
 Version 1 (completed):
-- Domain model
-- Rule engine
-- REST API
-- Persistence layer
 
-In progress:
-- PDF generation
+    ✅ Domain model with all rules
 
-Planned:
-- Frontend (Thymeleaf)
-- MariaDB integration
+    ✅ Rule engine and conflict detection
 
----
+    ✅ Immutable checklist snapshots
 
-## Author
+    ✅ REST API for all entities (/api/...)
 
-This project was developed based on real-world experience in a security control center environment.
+    ✅ Web frontend with Thymeleaf (zones, drivers, security objects, shifts)
+
+    ✅ PDF checklist generation (full layout as described)
+
+    ✅ Docker containerization
+
+    ✅ Deployment on Railway with PostgreSQL
+
+    ✅ Comprehensive test suite (~200 tests)
+
+Planned for future versions:
+
+    Advanced search / wildcard support in REST API
+
+    Service-level documentation (OpenAPI)
+
+    OAuth2 login (optional)
+
+Author
+
+This project was developed based on real‑world experience in a security control center environment.
 
 Focus areas:
-- Java backend development
-- Clean architecture
-- Test-driven development
+
+    Java backend development
+
+    Clean architecture and domain‑driven design
+
+    Test‑driven development (TDD)
+
+    Full‑stack web applications with Thymeleaf
 
 GitHub: https://github.com/DKuss1994
+
+Live Demo: https://reviercheckliste-production.up.railway.app
